@@ -1,0 +1,219 @@
+/* ==========================================================================
+   RESPONSIVE — each breakpoint is a deliberate composition, not a stack.
+   Checked at 1920 / 1440 / 1366 / 1040 / 768 / 430 / 390 / 375.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1600px and up — the container stops growing; whitespace grows instead.
+   -------------------------------------------------------------------------- */
+@media (min-width: 1600px) {
+  .hero { padding-top: 176px; }
+  .eco__map { height: 620px; }
+}
+
+/* --------------------------------------------------------------------------
+   ≤ 1180 — the header runs out of room before anything else does.
+   -------------------------------------------------------------------------- */
+@media (max-width: 1180px) {
+  .wordmark__sub { display: none; }
+  .nav__link { padding: 9px 11px; font-size: var(--t-subtext); }
+  .btn__long { display: none; }
+}
+
+/* --------------------------------------------------------------------------
+   ≤ 1040 — desktop/tablet hybrid. Hero becomes vertical, dense grids relax.
+   -------------------------------------------------------------------------- */
+@media (max-width: 1040px) {
+  html { scroll-padding-top: 84px; }
+
+  .hero { min-height: clamp(560px, 76vh, 760px); padding-top: clamp(112px, 14vw, 140px); }
+  .hero .display { max-width: 17ch; }
+
+  /* Two-column heads go single file; their side paddings and the bottom
+     alignment only make sense while the columns sit next to each other. */
+  .sec-head { grid-template-columns: 1fr; row-gap: var(--sp-stack); }
+  .sec-head > .lead { max-width: none; }
+
+  .reveal-statement { grid-template-columns: 1fr; align-items: start; }
+  .reveal-statement > .h2   { grid-column: 1; padding-right: 0; }
+  .reveal-statement > .body {
+    grid-column: 1;
+    padding-left: 0;
+    max-width: none;
+    margin-top: var(--sp-stack);
+  }
+
+  .sequence { grid-template-columns: repeat(3, 1fr); }
+  .sequence__step:nth-child(3n+1) { border-left: 0; padding-left: 0; }
+  .sequence__step:nth-child(n+4) { border-top: 1px solid var(--c-line); }
+
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .stat:nth-child(odd) { border-left: 0; padding-left: 0; }
+  .stat:nth-child(n+3) { border-top: 1px solid var(--c-line); }
+
+  .founder__facts { grid-template-columns: repeat(2, 1fr); }
+  .founder__fact:not(:nth-child(3n+1)) { border-left: 1px solid var(--c-line); }
+  .founder__fact:nth-child(odd) { border-left: 0; padding-left: 0; }
+  .founder__fact:nth-child(n+3) { border-top: 1px solid var(--c-line); }
+
+  .eco__node { font-size: var(--t-subtext); padding: 7px 10px; min-height: 32px; }
+
+  .riskfield { min-height: 400px; }
+
+  /* Four scenarios go two-up before they go single-file. */
+  .scens { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* The spatial map only has a fixed height while it IS spatial (≥901px). */
+@media (min-width: 901px) and (max-width: 1040px) {
+  .eco__map { height: 480px; }
+}
+
+/* --------------------------------------------------------------------------
+   ≤ 900 — navigation collapses; spatial diagrams become linear.
+   -------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .nav { display: none; }
+  .header__actions .btn--primary { display: none; }
+  .burger { display: inline-flex; }
+
+  /* Risk field: from spatial field to weighted flow */
+  .riskfield {
+    min-height: 0; display: flex; flex-wrap: wrap; gap: 8px;
+    align-items: baseline; justify-content: flex-start;
+  }
+  .riskfield__svg { display: none; }
+  .riskfield__core { order: -1; width: 100%; text-align: left; margin-bottom: 8px; }
+  .risk { position: static; transform: none; padding: 5px 0; background: none; }
+  .risk::after { content: "·"; margin-left: 10px; color: var(--c-line-strong); }
+  .risk:last-child::after { display: none; }
+  .risk__note { display: none; }
+
+  .pillar { grid-template-columns: 64px 1fr; }
+  .pillar__d { grid-column: 2; padding-top: 4px; }
+
+  .week__head { grid-template-columns: 64px 1fr auto; }
+  .week__content { grid-template-columns: 64px minmax(0, 1fr); }
+
+  .finalcta__grid { grid-template-columns: 1fr; gap: 32px; align-items: start; }
+  .tiers { grid-template-columns: 1fr; }
+
+  /* The editorial 12-column grid collapses to a single column. Column spans are
+     set inline per section, so they are overridden here rather than in markup. */
+  .grid { grid-template-columns: 1fr; }
+  .grid > * { grid-column: 1 / -1 !important; }
+  .col-half, .col-third, .col-two-thirds { grid-column: 1 / -1; }
+}
+
+/* --------------------------------------------------------------------------
+   ≤ 768 — tablet portrait. Two-column editorial pairs go single.
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  /* Single column: drop the shared row track, let each block stack on its own. */
+  .bounds { grid-template-columns: 1fr; grid-template-rows: none; gap: 36px; }
+  .bounds > * { grid-row: auto; display: flex; flex-direction: column; gap: 20px; }
+
+  /* Stacked, the column gap is far too tight: one card's copy would sit right
+     on the next card's art panel. */
+  .scens { grid-template-columns: 1fr; row-gap: var(--sp-tight); }
+  .scen { min-height: 0; }
+
+  .outcome__list { column-count: 1 !important; }
+
+  .sequence { grid-template-columns: repeat(2, 1fr); }
+  .sequence__step { padding-right: 16px; }
+  .sequence__step:nth-child(n) { border-left: 0; padding-left: 0; border-top: 1px solid var(--c-line); }
+  .sequence__step:nth-child(-n+2) { border-top: 0; }
+  .sequence__step:nth-child(even) { border-left: 1px solid var(--c-line); padding-left: 16px; }
+
+  .founder__facts { grid-template-columns: 1fr; }
+  .founder__fact { border-left: 0 !important; padding-left: 0 !important; border-top: 1px solid var(--c-line); }
+  .founder__fact:first-child { border-top: 0; }
+
+}
+
+/* --------------------------------------------------------------------------
+   ≤ 600 — phone. Sticky CTA appears; the compare split stays but tightens.
+   -------------------------------------------------------------------------- */
+@media (max-width: 600px) {
+  html { scroll-padding-top: 76px; }
+
+  .stickycta { display: block; }
+  body { padding-bottom: 0; }
+
+  .compare { grid-template-columns: 1fr 1fr; }
+  .compare__col:first-child { padding-right: 14px; }
+  .compare__col + .compare__col { padding-left: 14px; }
+  .compare__list li { padding: 8px 0; }
+  .compare__head { flex-direction: column; align-items: flex-start; gap: 4px; }
+
+  .stats { grid-template-columns: 1fr; }
+  .stat { border-left: 0 !important; padding-left: 0 !important; border-top: 1px solid var(--c-line); }
+  .stat:first-child { border-top: 0; }
+
+  .sequence { grid-template-columns: 1fr; }
+  .sequence__step { border-left: 0 !important; padding-left: 0 !important; padding-right: 0; }
+
+  .pillar { grid-template-columns: 1fr; gap: 10px; }
+  .pillar__d { grid-column: 1; }
+
+  .week__head { grid-template-columns: 48px 1fr auto; gap: 14px; }
+  .week__content { grid-template-columns: minmax(0, 1fr); gap: 18px; padding-left: 0; }
+  .week__content > * { grid-column: 1; }
+
+  .tier__cta { justify-self: stretch; }
+
+  .footer__top { flex-direction: column; gap: 24px; }
+
+  /* Comfortable touch targets and no microtext on phones */
+  .eco__node { min-height: 42px; padding: 10px 13px; }
+  .tag { padding: 6px 11px; }
+}
+
+/* --------------------------------------------------------------------------
+   ≤ 430 — small phones. Nothing shrinks below a comfortable reading size.
+   -------------------------------------------------------------------------- */
+@media (max-width: 430px) {
+  .hero .display, .h2 { max-width: 100%; }
+  .btn { width: 100%; }
+  .cta-row { flex-direction: column; align-items: stretch; }
+  .header__actions .btn { width: auto; }
+  .drawer__foot .btn { width: 100%; }
+}
+
+/* --------------------------------------------------------------------------
+   Short landscape phones — never trap content behind a tall hero.
+   -------------------------------------------------------------------------- */
+@media (max-height: 560px) and (orientation: landscape) {
+  .hero { padding-top: 96px; }
+  .drawer { overflow-y: auto; }
+  .drawer__link { font-size: var(--t-h4); padding: 9px 0; }
+}
+
+/* --------------------------------------------------------------------------
+   Coarse pointers — hover-only affordances get a permanent state.
+   -------------------------------------------------------------------------- */
+@media (hover: none) {
+  .eco__node:hover { border-color: var(--c-line-strong); color: var(--c-ink); }
+  .eco__node.is-sel { border-color: var(--c-accent); color: var(--c-on-accent); }
+}
+
+/* --------------------------------------------------------------------------
+   Print — a readable document, not a screenshot of a website.
+   -------------------------------------------------------------------------- */
+@media print {
+  .header, .drawer, .stickycta { display: none !important; }
+  body { background: #fff; color: #000; }
+  .section { padding-block: 24pt; break-inside: avoid; }
+  [data-reveal] { opacity: 1 !important; transform: none !important; }
+}
+
+/* The mini mocks need their own column; below the tablet break the parts stack
+   so the panel sits above its text instead of squeezing it. */
+@media (max-width: 900px) {
+  .part { grid-template-columns: 116px 1fr; column-gap: 20px; }
+}
+@media (max-width: 600px) {
+  .part { grid-template-columns: 1fr; row-gap: 16px; }
+  .mock { height: 96px; max-width: 220px; }
+}
