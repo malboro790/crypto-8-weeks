@@ -24,6 +24,12 @@
   var gl, canvas, program, texture, raf = null;
   var uniforms = {};
   var pointer = { x: 0.5, y: 0.5, active: 0 };
+
+  /* Заголовок искажается только под курсором. В покое он должен быть просто
+     текстом: постоянное дрожание мешает его читать — а читают его в первую
+     очередь. Значение набирается и гаснет плавно, рывок был бы заметнее
+     самой анимации. */
+  var ambient = 0;
   var start = performance.now();
 
   /* --- параметры: значения по умолчанию из оригинала -------------------- */
@@ -54,7 +60,7 @@
     'uniform vec2 uResolution;',
     'uniform vec2 uPointer;',
     'uniform float uPointerActive, uTime, uWarpStrength, uWarpScale, uSpeed;',
-    'uniform float uPointerInfluence, uPointerStrength, uRefraction, uRipple, uMotion;',
+    'uniform float uPointerInfluence, uPointerStrength, uRefraction, uRipple, uMotion, uAmbient;',
     'in vec2 vUv;',
     'out vec4 fragColor;',
 
@@ -90,7 +96,7 @@
     '  vec2 drift = vec2(time * 0.055, -time * 0.045);',
     '  float n1 = fbm(uv * scale * 3.1 + drift);',
     '  float n2 = fbm((uv + 19.17) * scale * 3.4 - drift.yx);',
-    '  vec2 ambient = (vec2(n1, n2) - 0.5) * uWarpStrength * 0.045 * uMotion;',
+    '  vec2 ambient = (vec2(n1, n2) - 0.5) * uWarpStrength * 0.045 * uMotion * uAmbient;',
 
     /* линза под курсором */
     '  vec2 pd = uv - uPointer;',
@@ -111,7 +117,9 @@
     '  vec2 sd = ambient + pw;',
     '  float sl = length(sd);',
     '  sd = sl > 0.00001 ? sd / sl : vec2(0.7071);',
-    '  vec2 split = sd * uRefraction * 0.16 * (0.35 + lens * 1.65);',
+    '  /* Хроматическое расслоение гаснет вместе с искажением: иначе в покое',
+'     у букв остаётся цветная бахрома и текст читается хуже. */',
+'  vec2 split = sd * uRefraction * 0.16 * (0.35 + lens * 1.65) * uAmbient;',
 
     '  vec4 base = sampleText(displaced);',
     '  float r = sampleText(displaced + split).r;',
@@ -216,13 +224,23 @@
   }
 
   function frame() {
+    var target = pointer.active ? 1 : 0;
+    ambient += (target - ambient) * (target ? 0.09 : 0.06);   /* гаснет медленнее, чем набирает */
+    if (!target && ambient < 0.002) ambient = 0;
+
     gl.uniform1f(uniforms.uTime, (performance.now() - start) / 1000);
     gl.uniform2f(uniforms.uPointer, pointer.x, pointer.y);
     gl.uniform1f(uniforms.uPointerActive, pointer.active);
+    gl.uniform1f(uniforms.uAmbient, ambient);
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+    /* Всё замерло и курсора нет — цикл останавливаем совсем: ни кадров,
+       ни расхода батареи, пока на заголовок не наведут снова. */
+    if (!pointer.active && ambient === 0) { raf = null; return; }
     raf = requestAnimationFrame(frame);
   }
+  function wake() { if (!raf && !reduceMotion) raf = requestAnimationFrame(frame); }
 
   function init() {
     canvas = document.createElement('canvas');
@@ -252,7 +270,7 @@
     gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
 
     ['uTex','uResolution','uPointer','uPointerActive','uTime','uWarpStrength','uWarpScale',
-     'uSpeed','uPointerInfluence','uPointerStrength','uRefraction','uRipple','uMotion']
+     'uSpeed','uPointerInfluence','uPointerStrength','uRefraction','uRipple','uMotion','uAmbient']
       .forEach(function (n) { uniforms[n] = gl.getUniformLocation(program, n); });
 
     texture = gl.createTexture();
@@ -268,6 +286,7 @@
     gl.uniform1f(uniforms.uRefraction, P.refraction);
     gl.uniform1f(uniforms.uRipple, P.ripple);
     gl.uniform1f(uniforms.uMotion, reduceMotion ? 0 : 1);
+    gl.uniform1f(uniforms.uAmbient, 0);
 
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
@@ -284,8 +303,9 @@
   var ready = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
   ready.then(function () {
     if (!init()) return;
-    if (!reduceMotion) raf = requestAnimationFrame(frame);
-    else { gl.clear(gl.COLOR_BUFFER_BIT); gl.drawArrays(gl.TRIANGLES, 0, 3); }
+    /* Первый кадр — неискажённый: ambient равен нулю, пока не наведут курсор. */
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
 
     var hero = host.closest('.hero') || document.body;
     hero.addEventListener('pointermove', function (e) {
@@ -293,8 +313,9 @@
       pointer.x = (e.clientX - r.left) / r.width;
       pointer.y = 1 - (e.clientY - r.top) / r.height;
       pointer.active = 1;
+      wake();
     }, { passive: true });
-    hero.addEventListener('pointerleave', function () { pointer.active = 0; });
+    hero.addEventListener('pointerleave', function () { pointer.active = 0; wake(); });
 
     var rt;
     window.addEventListener('resize', function () {
@@ -306,7 +327,7 @@
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(function (entries) {
         entries.forEach(function (en) {
-          if (en.isIntersecting) { if (!raf && !reduceMotion) raf = requestAnimationFrame(frame); }
+          if (en.isIntersecting) { if (pointer.active || ambient) wake(); }
           else if (raf) { cancelAnimationFrame(raf); raf = null; }
         });
       }, { threshold: 0 }).observe(canvas);
