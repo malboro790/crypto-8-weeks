@@ -389,6 +389,11 @@
   .section--sunk.relocation .story__turn,
   .section--sunk.relocation .bounds__list li { max-width: 76%; }
 
+  /* Разделители убираем: текст ограничен по ширине, а линия шла на всю
+     колонку и торчала правее строк, к которым относится. Пункты и без неё
+     разделены отступом и крестиком в начале. */
+  .section--sunk.relocation .bounds__list li { border-bottom: 0; padding: 9px 0; }
+
   /* Отступы, выставленные под широкий экран, на телефоне превращаются
      в пустые полосы высотой в треть экрана. */
   .section[style*="200px"] { padding-top: var(--sp-section) !important; padding-bottom: var(--sp-section) !important; }
