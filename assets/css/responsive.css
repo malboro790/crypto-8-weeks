@@ -170,6 +170,11 @@
      каждый пункт ломался на три-четыре строки и переставал читаться. */
   .outcome { grid-template-columns: 1fr; }
 
+  /* Сужаем только текст: padding-right упирает строку раньше правого края,
+     а разделительная линия рисуется по padding-box и остаётся во всю ширину
+     плашки — как и просили. */
+  .outcome__list li { padding-right: 16%; }
+
   .sequence { grid-template-columns: repeat(2, 1fr); }
   .sequence__step { padding-right: 16px; }
   .sequence__step:nth-child(n) { border-left: 0; padding-left: 0; border-top: 1px solid var(--c-line); }
