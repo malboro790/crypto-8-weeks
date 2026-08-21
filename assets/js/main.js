@@ -266,23 +266,15 @@
   }
 
   /* ---------------------------------------------------------------------- */
-  /* Header: stuck state + sticky mobile CTA                                */
+  /* Header: stuck state                                                    */
   /* ---------------------------------------------------------------------- */
   (function chrome() {
     var header = $('#header');
-    var sticky = $('#stickycta');
-    var hero = $('.hero');
     var ticking = false;
 
     function update() {
       var y = window.scrollY;
       if (header) header.classList.toggle('is-stuck', y > 24);
-
-      if (sticky) {
-        var heroBottom = hero ? hero.offsetTop + hero.offsetHeight : 600;
-        var docEnd = document.documentElement.scrollHeight - window.innerHeight - 320;
-        sticky.classList.toggle('is-on', y > heroBottom && y < docEnd);
-      }
       ticking = false;
     }
     function onScroll() {
@@ -359,21 +351,34 @@
     var svg = $('.riskfield__svg', field);
     var risks = $$('.risk', field);
 
+    var core = $('.riskfield__core', field);
+
+    /* Раньше координаты брались из инлайновых --x/--y, поэтому на мобильной
+       раскладке, где положение задаётся из CSS, лучи было нечем построить —
+       и схема там вырождалась в список. Теперь позиции измеряются по факту:
+       одна логика на все ширины. */
     function draw() {
       svg.innerHTML = '';
-      if (window.innerWidth <= 900) return;
+      var fr = field.getBoundingClientRect();
+      if (!fr.width || !fr.height) return;
+      var cr = core.getBoundingClientRect();
+      var cx = (cr.left + cr.width / 2 - fr.left) / fr.width * 100;
+      var cy = (cr.top + cr.height / 2 - fr.top) / fr.height * 100;
+
       risks.forEach(function (r) {
-        var x = parseFloat(r.style.getPropertyValue('--x'));
-        var y = parseFloat(r.style.getPropertyValue('--y'));
-        if (isNaN(x) || isNaN(y)) return;
+        var rr = r.getBoundingClientRect();
+        if (!rr.width) return;
+        var x = (rr.left + rr.width / 2 - fr.left) / fr.width * 100;
+        var y = (rr.top + rr.height / 2 - fr.top) / fr.height * 100;
         var ln = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        ln.setAttribute('x1', '50'); ln.setAttribute('y1', '50');
-        ln.setAttribute('x2', x);    ln.setAttribute('y2', y);
+        ln.setAttribute('x1', cx.toFixed(2)); ln.setAttribute('y1', cy.toFixed(2));
+        ln.setAttribute('x2', x.toFixed(2));  ln.setAttribute('y2', y.toFixed(2));
         svg.appendChild(ln);
       });
     }
     draw();
     window.addEventListener('resize', draw);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
   })();
 
   /* ---------------------------------------------------------------------- */

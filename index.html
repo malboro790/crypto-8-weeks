@@ -16,9 +16,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap">
 
-<link rel="stylesheet" href="assets/css/tokens.css?v=159">
-<link rel="stylesheet" href="assets/css/styles.css?v=159">
-<link rel="stylesheet" href="assets/css/responsive.css?v=159">
+<link rel="stylesheet" href="assets/css/tokens.css?v=169">
+<link rel="stylesheet" href="assets/css/styles.css?v=169">
+<link rel="stylesheet" href="assets/css/responsive.css?v=169">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='none' stroke='%23EDECFB' stroke-width='2'/><circle cx='16' cy='16' r='6' fill='%235266EB'/></svg>">
 </head>
 <body>
@@ -368,7 +368,7 @@
      ====================================================================== -->
 <section class="section section--cinematic section--light" style="padding-bottom: calc(var(--sp-cinematic) * 2)">
   <div class="container">
-    <h2 class="h2" data-reveal>
+    <h2 class="h2 h2--narrow" data-reveal>
       Здесь не будут учить, как <span class="hl hl--flat">быстро заработать</span> на крипте.
     </h2>
 
@@ -888,11 +888,28 @@
       </div>
     </div>
 
-    <div class="grid" style="margin-top: var(--sp-block); row-gap: 16px">
-      <p class="small" data-reveal style="grid-column: span 4">Записи всех групповых занятий остаются у вас.</p>
-      <p class="small" data-reveal style="grid-column: span 4; --reveal-delay:60ms">Персональные домашние задания под вашу ситуацию.</p>
-      <p class="small" data-reveal style="grid-column: span 4; --reveal-delay:120ms">Группа — максимум 5–7 человек.</p>
-    </div>
+    <ul class="perks" style="margin-top: var(--sp-block)">
+      <li class="perk" data-reveal>
+        <span class="perk__art perk__art--rec" aria-hidden="true">
+          <span class="perk__row"></span><span class="perk__row"></span><span class="perk__row"></span>
+        </span>
+        <span class="perk__t">Записи всех групповых занятий остаются у вас.</span>
+      </li>
+      <li class="perk" data-reveal style="--reveal-delay:60ms">
+        <span class="perk__art perk__art--task" aria-hidden="true">
+          <span class="perk__row"></span><span class="perk__row perk__row--hot"></span>
+        </span>
+        <span class="perk__t">Персональные домашние задания под вашу ситуацию.</span>
+      </li>
+      <li class="perk" data-reveal style="--reveal-delay:120ms">
+        <span class="perk__art perk__art--group" aria-hidden="true">
+          <span class="perk__dot"></span><span class="perk__dot"></span>
+          <span class="perk__dot"></span><span class="perk__dot"></span>
+          <span class="perk__dot"></span><span class="perk__dot perk__dot--me"></span>
+        </span>
+        <span class="perk__t">Группа — максимум 5–7 человек.</span>
+      </li>
+    </ul>
   </div>
 </section>
 
@@ -1237,9 +1254,6 @@
   </div>
 </footer>
 
-<div class="stickycta" id="stickycta">
-  <a class="btn btn--primary" data-cta href="#call">Записаться на личный звонок <span class="btn__arrow" aria-hidden="true">→</span></a>
-</div>
 
 
 <!-- ======================================================================
@@ -1292,8 +1306,8 @@
   </form>
 </dialog>
 
-<script src="assets/js/coinpit.js?v=159"></script>
-<script src="assets/js/warptext.js?v=159"></script>
-<script src="assets/js/main.js?v=159"></script>
+<script src="assets/js/coinpit.js?v=169"></script>
+<script src="assets/js/warptext.js?v=169"></script>
+<script src="assets/js/main.js?v=169"></script>
 </body>
 </html>

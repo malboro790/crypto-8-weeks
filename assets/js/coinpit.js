@@ -371,10 +371,19 @@
 
   document.addEventListener('visibilitychange', function () { if (document.hidden) stop(); });
 
-  var rt;
+  /* На телефоне адресная строка прячется при первом же скролле — это приходит
+     как resize и высота экрана меняется на сотню пикселей. Пересобирать по
+     нему кучу нельзя: монеты перескакивают на новое место прямо во время
+     чтения. Реагируем только на смену ширины, то есть на поворот экрана и на
+     настоящее изменение окна; высоту canvas подтягиваем без пересборки. */
+  var rt, lastW = window.innerWidth;
   window.addEventListener('resize', function () {
     clearTimeout(rt);
-    rt = setTimeout(function () { resize(); build(false); settle(); draw(); }, 180);
+    rt = setTimeout(function () {
+      if (window.innerWidth === lastW) { resize(); settle(); draw(); return; }
+      lastW = window.innerWidth;
+      resize(); build(false); settle(); draw();
+    }, 180);
   });
   }
 
