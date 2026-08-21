@@ -78,11 +78,20 @@ const server = http.createServer(async (req, res) => {
 
   /* Render пингует сервис, и страница будит его при открытии формы:
      на бесплатном тарифе инстанс засыпает без нагрузки. */
-  if (req.method === 'GET') return send(res, 200, 'ok');
+  if (req.method === 'GET') {
+    /* Значения не отдаём — только факт наличия, чтобы можно было проверить
+       настройку, не заходя в панель. */
+    return send(res, 200, BOT_TOKEN && CHAT_ID ? 'ok' : 'ok (no credentials)');
+  }
 
   if (req.method !== 'POST') return send(res, 405, 'Method not allowed');
-  if (!BOT_TOKEN || !CHAT_ID) return send(res, 500, 'Not configured');
+  /* Origin проверяем до всего остального: иначе посторонний узнаёт по ответу,
+     настроен сервис или нет. */
   if (origin && !ORIGINS.includes(origin)) return send(res, 403, 'Forbidden');
+  if (!BOT_TOKEN || !CHAT_ID) {
+    console.error('BOT_TOKEN или CHAT_ID не заданы в окружении');
+    return send(res, 500, 'Not configured');
+  }
 
   const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() ||
              req.socket.remoteAddress || 'unknown';
