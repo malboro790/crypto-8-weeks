@@ -1,0 +1,13 @@
+# Что не должно попасть в раздачу. Секретов здесь нет — токены живут
+# в переменных окружения, — но исходники сервисов и служебные файлы
+# публичному сайту не нужны.
+.git
+.gitignore
+.assetsignore
+wrangler.jsonc
+render.yaml
+README.md
+build-single.py
+dist
+server
+worker
