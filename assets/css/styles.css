@@ -953,6 +953,17 @@ p { margin: 0; max-width: 62ch; }
   transition: color var(--d-fast) var(--e-out);
 }
 .week__head:hover { color: var(--c-accent); }
+
+/* The global focus ring is sized for compact controls: 3px of offset and a 4px
+   radius. On a full-width accordion row that reads as a rounded box floating
+   free of the row — and once the week is open it frames the header alone while
+   the content hangs outside it. Keep the ring (a keyboard user has to see where
+   they are) but pull it inside the row's own bounds and square it off, so it
+   lines up with the hairline separators instead of fighting them. */
+.week__head:focus-visible {
+  outline-offset: -3px;
+  border-radius: 0;
+}
 .week__n { font-family: var(--f-mono); font-size: var(--t-subtext); letter-spacing: .1em; color: var(--c-ink-faint); }
 .week__t {
   font-family: var(--f-display); font-weight: var(--w-display);
