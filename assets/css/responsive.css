@@ -118,7 +118,9 @@
   .scens { grid-template-columns: 1fr; row-gap: var(--sp-tight); }
   .scen { min-height: 0; }
 
-  .outcome__list { column-count: 1 !important; }
+  /* Две плашки итогов держались в два столбца до самого узкого экрана:
+     каждый пункт ломался на три-четыре строки и переставал читаться. */
+  .outcome { grid-template-columns: 1fr; }
 
   .sequence { grid-template-columns: repeat(2, 1fr); }
   .sequence__step { padding-right: 16px; }
@@ -225,4 +227,23 @@
 }
 @media (max-width: 600px) {
   .week__list { columns: 1; }
+}
+
+/* --------------------------------------------------------------------------
+   Мобильные правки по записям с реального устройства
+   -------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  /* Поле монет во внутренних секциях на узком экране налезает на текст:
+     содержимое занимает почти всю высоту, а монеты лежат по нижнему краю.
+     На первом экране пит остаётся — там он ничего не перекрывает. */
+  .relocation .pit { display: none; }
+
+  /* Отступы, выставленные под широкий экран, на телефоне превращаются
+     в пустые полосы высотой в треть экрана. */
+  .section[style*="200px"] { padding-top: var(--sp-section) !important; padding-bottom: var(--sp-section) !important; }
+  .section[style*="* 1.5"], .section[style*="* 2"] { padding-top: var(--sp-cinematic) !important; padding-bottom: var(--sp-cinematic) !important; }
+
+  /* Секции высотой в экран на телефоне только добавляют пустоты:
+     содержимое всё равно выше экрана либо намного ниже его. */
+  .section--screen { min-height: 0; }
 }

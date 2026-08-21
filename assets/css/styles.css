@@ -504,6 +504,16 @@ p { margin: 0; max-width: 62ch; }
   line-height: 1.6;
 }
 .hero .cta-row { margin-top: 48px; justify-content: center; gap: 16px; }
+/* Над полем монет полупрозрачная заливка вторичной кнопки исчезает: на пёстром
+   фоне 7% белого не читаются, и остаётся текст, висящий поверх монет.
+   Здесь ей нужен собственный непрозрачный корпус. */
+.hero .btn--ghost {
+  background: color-mix(in srgb, var(--c-paper) 82%, transparent);
+  border-color: var(--c-line-strong);
+  -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
+}
+.hero .btn--ghost:hover { background: color-mix(in srgb, var(--c-paper) 94%, transparent); }
 
 /* ==========================================================================
    SCENARIOS
