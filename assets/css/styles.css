@@ -1055,10 +1055,13 @@ p { margin: 0; max-width: 62ch; }
   font-size: var(--t-h2);
   letter-spacing: -.025em; line-height: .95; font-variant-numeric: tabular-nums;
 }
+/* «до» и «недель» при 0.3em превращались в нечитаемые 12px самым бледным
+   цветом палитры. Это часть смысла числа, а не сноска: без «до» шестнадцать
+   созвонов читаются как обещание ровно шестнадцати. */
 .stat__n sup {
-  font-size: .3em; vertical-align: super; letter-spacing: 0;
-  color: var(--c-ink-faint); font-weight: var(--w-text);
-  margin-inline: .16em; font-family: var(--f-text);
+  font-size: .48em; vertical-align: super; letter-spacing: 0;
+  color: var(--c-ink-muted); font-weight: var(--w-medium);
+  margin-inline: .18em; font-family: var(--f-text);
 }
 .stat__t { font-family: var(--f-display); font-weight: var(--w-medium); font-size: var(--t-text); margin-top: 12px; letter-spacing: var(--ls-h4); }
 .stat__d { font-size: var(--t-subtext); color: var(--c-ink-muted); margin-top: 6px; line-height: var(--lh-subtext); }
