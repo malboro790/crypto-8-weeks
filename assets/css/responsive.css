@@ -154,6 +154,8 @@
     flex: 0 0 88%;
     scroll-snap-align: center;
   }
+  .tier__more-sum { display: flex; }
+  .tier__more[open] .tier__list { margin-top: var(--sp-stack); }
 
   /* Дорогой тариф впереди и заметнее: чуть шире и с одной мягкой тенью.
      Одна тень, а не набор — на светлом фоне несколько слоёв дают грязь. */

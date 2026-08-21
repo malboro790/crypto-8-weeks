@@ -187,6 +187,14 @@
     });
   })();
 
+  /* Списки тарифов приходят раскрытыми — так их видят поисковики и читалки,
+     и так они работают без JS. На узком экране схлопываем: раскрытая карточка
+     иначе занимает полтора экрана. */
+  (function collapseTiers() {
+    if (!window.matchMedia('(max-width: 768px)').matches) return;
+    $$('.tier__more').forEach(function (d) { d.removeAttribute('open'); });
+  })();
+
   var yearEl = $('#year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 

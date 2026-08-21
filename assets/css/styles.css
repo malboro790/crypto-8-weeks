@@ -1340,6 +1340,45 @@ p { margin: 0; max-width: 62ch; }
 .tier__vol-x { color: var(--c-ink-faint); margin: 0 4px; }
 .tier__vol--lead b { color: var(--c-accent); }
 
+/* Список входящего сворачивается на телефоне: карточка иначе уезжает на
+   полтора экрана. На широком экране раскрыт всегда — там места хватает,
+   а прятать содержание тарифа за кликом незачем. */
+/* Раскладку задаём явно: после того как список уехал внутрь <details>,
+   автоматическое размещение перестало держать ключевые строки на одном
+   уровне — а именно на них строится сравнение тарифов. */
+.tier > .label      { grid-row: 1; }
+.tier__price        { grid-row: 2; }
+.tier__sum          { grid-row: 3; }
+.tier__vol          { grid-row: 4; }
+.tier__more         { grid-row: 5; }
+.tier__key          { grid-row: 6; }
+.tier__note         { grid-row: 7; }
+.tier__cta          { grid-row: 8; }
+.tier__more-sum {
+  display: none;
+  cursor: pointer;
+  list-style: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 0;
+  border-top: 1px solid var(--c-line);
+  border-bottom: 1px solid var(--c-line);
+  font-size: var(--t-h4);
+  font-weight: var(--w-medium);
+  color: var(--c-ink);
+}
+.tier__more-sum::-webkit-details-marker { display: none; }
+.tier__more-sum::after {
+  content: "";
+  width: 9px; height: 9px;
+  border-right: 1.5px solid var(--c-ink-faint);
+  border-bottom: 1.5px solid var(--c-ink-faint);
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform var(--d-fast) var(--e-out);
+}
+.tier__more[open] .tier__more-sum::after { transform: rotate(-135deg) translate(-2px, -2px); }
+
 .tier__list {
   list-style: none; margin: var(--sp-block) 0 0; padding: 0;
   align-self: start;
@@ -1362,6 +1401,11 @@ p { margin: 0; max-width: 62ch; }
 
 /* The one line that decides the choice. */
 .tier__key {
+  /* Место под две строки: в одной карточке фраза переносится, в другой нет,
+     и без запаса ключевые строки вставали на разной высоте — а сравнивают
+     тарифы именно по ним. */
+  min-height: calc(2 * var(--lh-h3) * 1em);
+  align-content: center;
   margin-top: var(--sp-block);
   display: flex; gap: 10px; align-items: baseline;
   font-family: var(--f-display);
@@ -1388,6 +1432,9 @@ p { margin: 0; max-width: 62ch; }
 .tier__key--yes::before { background-color: var(--c-pos); }
 
 .tier__note {
+  /* Та же логика, что у ключевой строки: сноски разной длины сдвигали её
+     по вертикали, потому что кнопка прижата к низу карточки. */
+  min-height: calc(2 * var(--lh-subtext) * 1em);
   margin-top: 10px;
   font-size: var(--t-subtext);
   line-height: var(--lh-subtext);
