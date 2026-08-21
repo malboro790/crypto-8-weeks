@@ -63,6 +63,8 @@ button { font: inherit; color: inherit; }
    сетку, обрезается здесь, а не растягивает документ. clip, а не hidden —
    hidden создал бы контейнер прокрутки и сломал бы прилипание. */
 main { overflow-x: clip; }
+/* Блок внутри грида по умолчанию не может стать уже своего содержимого. */
+.container { min-width: 0; }
 
 .container {
   width: 100%;
@@ -94,7 +96,12 @@ main { overflow-x: clip; }
 .section--sunk { background: var(--c-paper-sunk); }
 /* Fills the viewport with its content on the vertical centre. `svh` so mobile
    browser chrome cannot push the block taller than the screen. */
+/* minmax(0, 1fr), а не автоматическая колонка: у грида колонка `auto` растёт
+   под минимальную ширину содержимого, и горизонтальная лента внутри распирала
+   секцию до 878px при экране 375 — вместе с ней уезжала вся страница.
+   Ноль в минимуме запрещает колонке вылезать за контейнер. */
 .section--screen {
+  grid-template-columns: minmax(0, 1fr);
   min-height: 100svh;
   display: grid;
   align-content: center;
