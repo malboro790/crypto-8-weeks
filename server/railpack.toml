@@ -1,0 +1,5 @@
+[build]
+providers = ["node"]
+
+[deploy]
+start = "npm start"
