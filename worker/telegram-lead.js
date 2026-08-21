@@ -7,13 +7,14 @@
    webhook. Поэтому токен живёт здесь, в секретах воркера, а страница знает
    только адрес воркера.
 
-   Развёртывание — Cloudflare Workers, бесплатного тарифа хватает с запасом:
+   Развёртывание — Cloudflare Workers, бесплатного тарифа хватает с запасом.
+   Настройки лежат в wrangler.toml рядом:
 
      npm i -g wrangler
      wrangler login
-     wrangler deploy worker/telegram-lead.js --name crypto-8-weeks-leads
-     wrangler secret put BOT_TOKEN   --name crypto-8-weeks-leads
-     wrangler secret put CHAT_ID     --name crypto-8-weeks-leads
+     wrangler deploy
+     wrangler secret put BOT_TOKEN
+     wrangler secret put CHAT_ID
 
    BOT_TOKEN — то, что выдал @BotFather.
    CHAT_ID   — куда слать. Свой id можно узнать у @userinfobot.
@@ -22,13 +23,20 @@
    впишите в LEAD_ENDPOINT в assets/js/main.js.
    ========================================================================== */
 
-const ALLOWED_ORIGIN = 'https://malboro790.github.io';
+/* Домены, с которых принимаем заявки. Добавьте свой, когда прикрутите его
+   к сайту, иначе форма начнёт получать 403. */
+const ALLOWED_ORIGINS = [
+  'https://malboro790.github.io',
+  // 'https://ваш-домен.ru',
+  // 'https://www.ваш-домен.ru',
+];
 
-const cors = {
-  'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+const corsFor = (origin) => ({
+  'Access-Control-Allow-Origin': ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0],
+  'Vary': 'Origin',
+  'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
   'Access-Control-Allow-Headers': 'Content-Type',
-};
+});
 
 /* Telegram разбирает HTML в сообщениях, поэтому пользовательский текст
    экранируем — иначе имя с «<» уронит отправку, а то и подставит разметку. */
@@ -37,9 +45,17 @@ const esc = (s) =>
 
 export default {
   async fetch(request, env) {
+    const origin = request.headers.get('Origin');
+    const cors = corsFor(origin);
+
     if (request.method === 'OPTIONS') return new Response(null, { headers: cors });
+    /* Страница пингует адрес при открытии формы — отвечаем и не более того. */
+    if (request.method === 'GET') return new Response('ok', { headers: cors });
     if (request.method !== 'POST') {
       return new Response('Method not allowed', { status: 405, headers: cors });
+    }
+    if (origin && !ALLOWED_ORIGINS.includes(origin)) {
+      return new Response('Forbidden', { status: 403, headers: cors });
     }
 
     let data;

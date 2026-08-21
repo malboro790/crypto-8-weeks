@@ -1,0 +1,26 @@
+# Cloudflare Pages / Netlify читают этот файл при раздаче.
+# Монеты и картинки версионируются именем файла и не меняются — год в кэше.
+/assets/coins/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/img/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# CSS и JS подключены с ?v=N: правит его сборка страницы, поэтому кэшируем
+# надолго, но с revalidate — иначе номер версии перестанет что-либо значить.
+/assets/css/*
+  Cache-Control: public, max-age=604800, must-revalidate
+
+/assets/js/*
+  Cache-Control: public, max-age=604800, must-revalidate
+
+# Саму страницу не кэшируем: в ней живут номера версий ассетов.
+/
+  Cache-Control: public, max-age=0, must-revalidate
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin

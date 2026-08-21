@@ -1,0 +1,15 @@
+# Разворачивание сервиса заявок:
+#
+#   npm i -g wrangler
+#   wrangler login
+#   wrangler deploy
+#   wrangler secret put BOT_TOKEN
+#   wrangler secret put CHAT_ID
+#
+# BOT_TOKEN и CHAT_ID хранятся в секретах Cloudflare и в репозиторий не попадают.
+name = "crypto-8-weeks-leads"
+main = "telegram-lead.js"
+compatibility_date = "2026-08-01"
+
+[observability]
+enabled = true
