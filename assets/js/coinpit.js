@@ -335,11 +335,28 @@
   function stop() { running = false; if (rafId) cancelAnimationFrame(rafId); rafId = null; }
 
   /* --- pointer ---------------------------------------------------------- */
+  /* Верхняя граница кучи: выше неё монет нет, и трогать там нечего. */
+  function pileTop() {
+    var t = h;
+    for (var i = 0; i < balls.length; i++) {
+      var top = balls[i].y - balls[i].r;
+      if (top < t) t = top;
+    }
+    return t;
+  }
+
   function movePointer(e) {
     var rect = canvas.getBoundingClientRect();
     var p = e.touches ? e.touches[0] : e;
+    var y = p.clientY - rect.top;
+
+    /* Взаимодействие живёт только там, где лежат монеты. Раньше канвас во весь
+       первый экран реагировал и на касания заголовка с кнопками — палец возле
+       текста расталкивал кучу и мешал попасть по ссылке. */
+    if (y < pileTop() - 48) { pointer.active = false; return; }
+
     pointer.x = p.clientX - rect.left;
-    pointer.y = p.clientY - rect.top;
+    pointer.y = y;
     pointer.active = true;
     pointer.moved = performance.now();
     start();

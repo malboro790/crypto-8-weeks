@@ -476,7 +476,11 @@ p { margin: 0; max-width: 62ch; }
      intrinsic size and ignores `bottom`, so the floor has to be stated. */
   height: 100%;
   z-index: 1;
-  touch-action: none;
+  /* pan-y, а не none: none означает «все жесты обрабатываю сам», и на телефоне
+     страница переставала прокручиваться свайпом по первому экрану — а он во
+     весь экран. Теперь вертикальный свайп всегда достаётся странице, а канвас
+     продолжает получать координаты указателя. */
+  touch-action: pan-y;
 }
 .hero__inner {
   position: relative; z-index: 3;
