@@ -148,6 +148,17 @@
 
   function wake(b) { b.asleep = false; b.rest = 0; }
 
+  /* Вернуть в поле тех, кто вышел за границы после смены размера холста. */
+  function clampToBounds() {
+    for (var i = 0; i < balls.length; i++) {
+      var b = balls[i];
+      if (b.x < b.r) b.x = b.r;
+      if (b.x > w - b.r) b.x = w - b.r;
+      if (b.y > h - b.r) b.y = h - b.r;
+      if (b.y < b.r) b.y = b.r;
+    }
+  }
+
   /* --- physics ---------------------------------------------------------- */
   function step() {
     var i, j, a, b;
@@ -388,18 +399,37 @@
 
   document.addEventListener('visibilitychange', function () { if (document.hidden) stop(); });
 
-  /* На телефоне адресная строка прячется при первом же скролле — это приходит
-     как resize и высота экрана меняется на сотню пикселей. Пересобирать по
-     нему кучу нельзя: монеты перескакивают на новое место прямо во время
-     чтения. Реагируем только на смену ширины, то есть на поворот экрана и на
-     настоящее изменение окна; высоту canvas подтягиваем без пересборки. */
-  var rt, lastW = window.innerWidth;
+  /* На телефоне адресная строка прячется при первом же скролле, и браузер шлёт
+     resize. Раньше по нему прогонялись 1400 шагов физики — куча укладывалась
+     заново и заметно перескакивала прямо во время чтения.
+
+     Смотрим на сам холст, а не на окно: если его коробка не изменилась,
+     делать нечего вообще. Если поменялась только высота — подтягиваем размер
+     и перерисовываем, не трогая положение монет. Пересобираем кучу лишь при
+     смене ширины: там прежняя раскладка действительно не годится. */
+  var rt, lastW = Math.round(canvas.getBoundingClientRect().width);
+  var lastH = Math.round(canvas.getBoundingClientRect().height);
   window.addEventListener('resize', function () {
     clearTimeout(rt);
     rt = setTimeout(function () {
-      if (window.innerWidth === lastW) { resize(); settle(); draw(); return; }
-      lastW = window.innerWidth;
-      resize(); build(false); settle(); draw();
+      var box = canvas.getBoundingClientRect();
+      var w2 = Math.round(box.width), h2 = Math.round(box.height);
+      if (w2 === lastW && h2 === lastH) return;
+
+      /* Порог в пару пикселей: дробные значения высоты на телефоне прыгают
+         сами по себе, и без него холст «дёргался» на ровном месте. */
+      var widthChanged = Math.abs(w2 - lastW) > 2;
+      lastW = w2; lastH = h2;
+      resize();
+      if (widthChanged) {
+        build(false); settle();
+      } else {
+        /* Высота изменилась — не пересобираем кучу, а лишь возвращаем в поле
+           тех, кто оказался за новой границей. Пересчёт физики уложил бы
+           монеты заново, и они прыгали бы в другое положение. */
+        clampToBounds();
+      }
+      draw();
     }, 180);
   });
   }
