@@ -7,27 +7,177 @@
   'use strict';
 
   /* ------------------------------------------------------------------------
-     CONFIGURATION — put your booking link here (Telegram, Calendly, etc.)
-     Every CTA on the page picks it up.
+     CONFIGURATION
+
+     LEAD_ENDPOINT — URL of the worker that forwards a lead into Telegram.
+     It must NOT be the Telegram API directly: the bot token would then sit in
+     this file, readable by anyone, and anyone could post as the bot. Deploy
+     worker/telegram-lead.js (see README) and paste its address here.
+
+     TG_FALLBACK — your personal Telegram, used when the endpoint is missing or
+     the request fails, so a lead is never simply lost.
      ---------------------------------------------------------------------- */
-  var CTA_URL = '#call';
+  var LEAD_ENDPOINT = '';
+  var TG_FALLBACK   = '';
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var $  = function (s, c) { return (c || document).querySelector(s); };
   var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
 
   /* ---------------------------------------------------------------------- */
-  /* CTA links                                                              */
+  /* Lead form                                                              */
   /* ---------------------------------------------------------------------- */
-  if (CTA_URL && CTA_URL !== '#call') {
+  (function leadForm() {
+    var dialog = $('#leadDialog');
+    if (!dialog || typeof dialog.showModal !== 'function') return;  /* no <dialog>: links stay links */
+
+    var form   = $('.lead__box', dialog);
+    var note   = $('[data-lead-note]', dialog);
+    var pack   = $('[data-lead-pack]', dialog);
+    var submit = $('.lead__submit', dialog);
+    var label  = $('[data-lead-label]', dialog);
+    var opener = null;
+
+    function setNote(text, kind) {
+      note.textContent = text || '';
+      note.className = 'lead__note' + (kind ? ' is-' + kind : '');
+    }
+
+    function open(trigger) {
+      opener = trigger || null;
+      var p = trigger && trigger.getAttribute('data-package');
+      pack.textContent = p || '';
+      pack.hidden = !p;
+      dialog.showModal();
+      /* Focus the first field, not the close button: the visitor came here to
+         type, and <dialog> would otherwise land on whatever is first in DOM. */
+      var first = $('.field__input', form);
+      if (first) first.focus();
+    }
+
     $$('[data-cta]').forEach(function (a) {
-      a.setAttribute('href', CTA_URL);
-      if (/^https?:/.test(CTA_URL)) {
-        a.setAttribute('target', '_blank');
-        a.setAttribute('rel', 'noopener');
-      }
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        open(a);
+      });
     });
-  }
+
+    $$('[data-lead-close]', dialog).forEach(function (b) {
+      b.addEventListener('click', function () { dialog.close(); });
+    });
+
+    /* Click on the backdrop closes: the backdrop is part of <dialog>'s own box,
+       so a click landing outside the form's rectangle is a click on it. */
+    dialog.addEventListener('click', function (e) {
+      if (e.target !== dialog) return;
+      var r = form.getBoundingClientRect();
+      var inside = e.clientX >= r.left && e.clientX <= r.right &&
+                   e.clientY >= r.top  && e.clientY <= r.bottom;
+      if (!inside) dialog.close();
+    });
+
+    dialog.addEventListener('close', function () {
+      form.classList.remove('is-done');
+      form.reset();
+      $$('.field', form).forEach(function (f) { f.classList.remove('is-bad'); });
+      setNote('');
+      submit.disabled = false;
+      label.textContent = 'Отправить заявку';
+      if (opener && opener.focus) opener.focus();   /* return focus where it came from */
+    });
+
+    /* --- validation ------------------------------------------------------ */
+    var RULES = {
+      name: function (v) {
+        if (v.length < 2) return 'Напишите, как к вам обращаться.';
+        return '';
+      },
+      telegram: function (v) {
+        /* @name, t.me/name, or a bare handle. Telegram handles are 5–32 chars
+           of a–z, 0–9 and underscore. A phone number is accepted too — some
+           people have no username at all. */
+        var handle = v.replace(/^https?:\/\//i, '').replace(/^t\.me\//i, '').replace(/^@/, '');
+        if (/^\+?[\d\s()-]{10,20}$/.test(v)) return '';
+        if (!/^[a-zA-Z0-9_]{5,32}$/.test(handle)) return 'Похоже на опечатку. Например: @username';
+        return '';
+      }
+    };
+
+    function validate() {
+      var ok = true;
+      Object.keys(RULES).forEach(function (name) {
+        var input = form.elements[name];
+        var field = input.closest('.field');
+        var msg = RULES[name](input.value.trim());
+        field.classList.toggle('is-bad', !!msg);
+        $('[data-err-for="' + name + '"]', form).textContent = msg;
+        if (msg && ok) { input.focus(); ok = false; }
+      });
+      return ok;
+    }
+
+    $$('.field__input', form).forEach(function (input) {
+      input.addEventListener('input', function () {
+        var field = input.closest('.field');
+        if (field.classList.contains('is-bad')) field.classList.remove('is-bad');
+      });
+    });
+
+    /* --- submit ---------------------------------------------------------- */
+    function tgLink(text) {
+      if (!TG_FALLBACK) return null;
+      var handle = TG_FALLBACK.replace(/^@/, '');
+      return 'https://t.me/' + handle + (text ? '?text=' + encodeURIComponent(text) : '');
+    }
+
+    function failed(payload) {
+      var link = tgLink('Заявка: ' + payload.name + ', ' + payload.telegram);
+      if (link) {
+        setNote('Не получилось отправить. ', 'bad');
+        var a = document.createElement('a');
+        a.href = link; a.target = '_blank'; a.rel = 'noopener';
+        a.textContent = 'Напишите мне напрямую в Telegram';
+        note.appendChild(a);
+      } else {
+        setNote('Не получилось отправить. Попробуйте ещё раз через минуту.', 'bad');
+      }
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!validate()) return;
+
+      var payload = {
+        name:     form.elements.name.value.trim(),
+        telegram: form.elements.telegram.value.trim(),
+        package:  pack.hidden ? '' : pack.textContent,
+        page:     location.href,
+        website:  form.elements.website.value
+      };
+
+      if (!LEAD_ENDPOINT) { failed(payload); return; }
+
+      submit.disabled = true;
+      label.textContent = 'Отправляю…';
+      setNote('');
+
+      fetch(LEAD_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+        .then(function (r) { if (!r.ok) throw new Error(r.status); return r; })
+        .then(function () {
+          form.classList.add('is-done');
+          setNote('Заявка отправлена. Я напишу вам в Telegram в ближайшее время.', 'ok');
+        })
+        .catch(function () { failed(payload); })
+        .then(function () {
+          submit.disabled = false;
+          label.textContent = 'Отправить заявку';
+        });
+    });
+  })();
 
   var yearEl = $('#year');
   if (yearEl) yearEl.textContent = new Date().getFullYear();

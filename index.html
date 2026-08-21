@@ -16,9 +16,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap">
 
-<link rel="stylesheet" href="assets/css/tokens.css?v=145">
-<link rel="stylesheet" href="assets/css/styles.css?v=145">
-<link rel="stylesheet" href="assets/css/responsive.css?v=145">
+<link rel="stylesheet" href="assets/css/tokens.css?v=146">
+<link rel="stylesheet" href="assets/css/styles.css?v=146">
+<link rel="stylesheet" href="assets/css/responsive.css?v=146">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='none' stroke='%23EDECFB' stroke-width='2'/><circle cx='16' cy='16' r='6' fill='%235266EB'/></svg>">
 </head>
 <body>
@@ -343,8 +343,9 @@
 
 <!-- ======================================================================
      VIDEO — 16:9, poster only for now
+     Временно скрыт: снимите атрибут hidden, когда появится ролик.
      ====================================================================== -->
-<section class="section section--light">
+<section class="section section--light" hidden>
   <div class="container">
     <div class="sec-head" data-reveal>
       <h2 class="h2">Как это выглядит на практике.</h2>
@@ -994,7 +995,7 @@
           Личные вопросы, разбор вашей ситуации и закрытый чат в этот формат не входят.
         </p>
 
-        <a class="btn btn--ghost tier__cta" data-cta href="#call">Выбрать базовый</a>
+        <a class="btn btn--ghost tier__cta" data-cta data-package="Базовый · $190" href="#call">Выбрать базовый</a>
       </article>
 
       <!-- С личным сопровождением -->
@@ -1023,7 +1024,7 @@
           в небольшой группе.
         </p>
 
-        <a class="btn btn--primary tier__cta" data-cta href="#call">Записаться на звонок <span class="btn__arrow" aria-hidden="true">→</span></a>
+        <a class="btn btn--primary tier__cta" data-cta data-package="С личным сопровождением · $1 990" href="#call">Записаться на звонок <span class="btn__arrow" aria-hidden="true">→</span></a>
       </article>
 
     </div>
@@ -1097,7 +1098,58 @@
   <a class="btn btn--primary" data-cta href="#call">Записаться на личный звонок <span class="btn__arrow" aria-hidden="true">→</span></a>
 </div>
 
-<script src="assets/js/coinpit.js?v=145"></script>
-<script src="assets/js/main.js?v=145"></script>
+
+<!-- ======================================================================
+     LEAD FORM — native <dialog>: focus trap, Esc and the backdrop come free
+     ====================================================================== -->
+<dialog class="lead" id="leadDialog" aria-labelledby="leadTitle">
+  <form class="lead__box" method="dialog" novalidate>
+    <button class="lead__close" type="button" data-lead-close aria-label="Закрыть">
+      <span aria-hidden="true">×</span>
+    </button>
+
+    <p class="label">Заявка на звонок</p>
+    <h2 class="lead__title" id="leadTitle">Оставьте контакт — <span class="hl hl--flat">я напишу сам</span>.</h2>
+    <p class="lead__sub">
+      Ни к чему не обязывает. Созвон на 30–60 минут, чтобы понять вашу ситуацию
+      и подходит ли вам программа.
+    </p>
+
+    <p class="lead__pack" data-lead-pack hidden></p>
+
+    <label class="field">
+      <span class="field__label">Как вас зовут</span>
+      <input class="field__input" name="name" type="text" autocomplete="name"
+             placeholder="Сергей" required minlength="2" maxlength="80">
+      <span class="field__err" data-err-for="name"></span>
+    </label>
+
+    <label class="field">
+      <span class="field__label">Telegram</span>
+      <input class="field__input" name="telegram" type="text" autocomplete="username"
+             placeholder="@username" required maxlength="80" inputmode="text">
+      <span class="field__err" data-err-for="telegram"></span>
+    </label>
+
+    <!-- Приманка для ботов: настоящий человек её не видит и не заполнит.
+         tabindex=-1 и autocomplete=off, чтобы не поймать автозаполнение. -->
+    <input class="lead__hp" name="website" type="text" tabindex="-1"
+           autocomplete="off" aria-hidden="true">
+
+    <button class="btn btn--primary lead__submit" type="submit">
+      <span data-lead-label>Отправить заявку</span>
+    </button>
+
+    <p class="lead__note" data-lead-note role="status" aria-live="polite"></p>
+
+    <p class="lead__legal">
+      Отправляя заявку, вы соглашаетесь, что я свяжусь с вами в Telegram.
+      Ничего, кроме имени и контакта, не передаётся.
+    </p>
+  </form>
+</dialog>
+
+<script src="assets/js/coinpit.js?v=146"></script>
+<script src="assets/js/main.js?v=146"></script>
 </body>
 </html>

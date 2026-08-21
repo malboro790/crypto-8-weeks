@@ -1637,3 +1637,151 @@ p { margin: 0; max-width: 62ch; }
   height: 100%;
   z-index: 1;
 }
+
+/* ==========================================================================
+   LEAD FORM — a modal <dialog>
+   Native <dialog> rather than a hand-rolled overlay: focus is trapped, Esc
+   closes, the rest of the page goes inert, and the backdrop is a real
+   pseudo-element. All of that would otherwise be a hundred lines of JS to get
+   wrong.
+   ========================================================================== */
+
+.lead {
+  width: min(440px, calc(100vw - 2 * var(--gutter)));
+  max-height: calc(100svh - 2 * var(--gutter));
+  padding: 0;
+  border: 0;
+  background: none;
+  overflow: visible;
+  color: var(--c-ink);
+}
+.lead::backdrop {
+  background: rgba(8, 6, 12, .72);
+  -webkit-backdrop-filter: blur(6px);
+          backdrop-filter: blur(6px);
+}
+
+.lead__box {
+  position: relative;
+  display: grid;
+  gap: 14px;
+  padding: clamp(24px, 3vw, 34px);
+  border: 1px solid transparent;
+  border-radius: var(--r-xl);
+  /* Same opaque-fill-plus-gradient-edge trick the plates use. */
+  background-image:
+    linear-gradient(var(--c-plate), var(--c-plate)),
+    linear-gradient(135deg,
+      var(--c-accent) 0%,
+      color-mix(in srgb, var(--c-accent) 55%, transparent) 26%,
+      transparent 58%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  box-shadow: var(--sh-lg);
+  max-height: inherit;
+  overflow-y: auto;
+}
+
+.lead__close {
+  position: absolute; top: 12px; right: 12px;
+  width: 34px; height: 34px;
+  display: grid; place-items: center;
+  border: 1px solid var(--c-line);
+  border-radius: 50%;
+  background: var(--c-neutral-tint);
+  color: var(--c-ink-muted);
+  font-size: 1.125rem; line-height: 1;
+  cursor: pointer;
+  transition: color var(--d-fast) var(--e-out), background var(--d-fast) var(--e-out);
+}
+.lead__close:hover { background: var(--c-neutral-line); color: var(--c-ink); }
+
+.lead__title {
+  font-family: var(--f-display);
+  font-size: var(--t-h3);
+  line-height: var(--lh-h3);
+  letter-spacing: var(--ls-h3);
+  font-weight: var(--w-h3);
+  margin-top: 6px;
+}
+.lead__sub {
+  font-size: var(--t-subtext);
+  line-height: var(--lh-subtext);
+  color: var(--c-ink-muted);
+}
+
+/* Which package the visitor came from — set from the button they pressed. */
+.lead__pack {
+  justify-self: start;
+  font-family: var(--f-mono);
+  font-size: var(--t-subtext);
+  padding: 7px 12px;
+  border-radius: var(--r-md);
+  background: var(--c-accent-tint);
+  border: 1px solid var(--c-accent-line);
+  color: var(--c-accent);
+}
+
+.field { display: grid; gap: 6px; }
+.field__label {
+  font-size: var(--t-subtext);
+  color: var(--c-ink-muted);
+}
+.field__input {
+  font: inherit;
+  font-size: var(--t-h4);
+  color: var(--c-ink);
+  padding: 12px 14px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--c-line-strong);
+  background: var(--c-surface);
+  transition: border-color var(--d-fast) var(--e-out), background var(--d-fast) var(--e-out);
+}
+.field__input::placeholder { color: var(--c-ink-faint); }
+.field__input:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 1px;
+  border-color: transparent;
+}
+.field.is-bad .field__input { border-color: var(--c-neg); }
+.field__err {
+  font-size: var(--t-subtext);
+  color: var(--c-neg);
+  display: none;
+}
+.field.is-bad .field__err { display: block; }
+
+.lead__submit { width: 100%; margin-top: 4px; }
+.lead__submit[disabled] { opacity: .6; cursor: progress; }
+
+.lead__note {
+  font-size: var(--t-subtext);
+  line-height: var(--lh-subtext);
+  color: var(--c-ink-muted);
+  min-height: 0;
+}
+.lead__note:empty { display: none; }
+.lead__note.is-bad { color: var(--c-neg); }
+.lead__note.is-ok  { color: var(--c-pos); }
+.lead__note a { color: inherit; }
+
+.lead__legal {
+  font-size: .75rem;
+  line-height: 1.5;
+  color: var(--c-ink-faint);
+}
+
+/* The done state replaces the form rather than sitting under it: nothing left
+   to fill in, so nothing should look fillable. */
+.lead__box.is-done > *:not(.lead__close):not([data-lead-note]) { display: none; }
+.lead__box.is-done .lead__note { font-size: var(--t-h4); }
+
+/* Honeypot: off-screen rather than display:none — some bots skip anything the
+   browser reports as hidden. */
+.lead__hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px; height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
