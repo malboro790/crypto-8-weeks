@@ -168,11 +168,37 @@
 
   /* Две плашки итогов держались в два столбца до самого узкого экрана:
      каждый пункт ломался на три-четыре строки и переставал читаться. */
-  .outcome { grid-template-columns: 1fr; }
+  /* Две плашки сливаются в одну: в столбик они читались как два разных
+     списка, хотя это один перечень умений. Оболочку берёт на себя .outcome,
+     а сами списки теряют вид плашки — иначе получилась бы рамка в рамке. */
+  .outcome {
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding: clamp(20px, 4vw, 28px);
+    border: 1px solid transparent;
+    border-radius: var(--r-lg);
+    background-image:
+      linear-gradient(var(--c-plate), var(--c-plate)),
+      linear-gradient(45deg,
+        var(--c-accent) 0%,
+        color-mix(in srgb, var(--c-accent) 55%, transparent) 26%,
+        transparent 58%);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .06), 0 18px 40px -24px rgba(0, 0, 0, .38);
+  }
+  .outcome .plate {
+    background: none;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+  }
+  /* Стык двух списков не должен выдавать себя двойной линией. */
+  .outcome .plate:first-child li:last-child { border-bottom: 0; }
 
   /* Сужаем только текст: padding-right упирает строку раньше правого края,
-     а разделительная линия рисуется по padding-box и остаётся во всю ширину
-     плашки — как и просили. */
+     а разделительная линия рисуется по padding-box и остаётся во всю ширину. */
   .outcome__list li { padding-right: 16%; }
 
   .sequence { grid-template-columns: repeat(2, 1fr); }
