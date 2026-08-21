@@ -1367,6 +1367,18 @@ p { margin: 0; max-width: 62ch; }
 .footer__bottom { padding-top: 28px; display: flex; flex-wrap: wrap; gap: 20px 40px; justify-content: space-between; }
 .footer__legal { font-size: var(--t-subtext); color: var(--c-dark-muted); max-width: 68ch; line-height: 1.55; }
 .footer__copy { font-family: var(--f-mono); font-size: var(--t-subtext); color: var(--c-dark-muted); letter-spacing: .04em; }
+/* Подпись студии: подчёркивание рисуем сами, чтобы отвести его от базовой
+   линии — стандартное перечёркивает выносные элементы в моноширинном. */
+.footer__by {
+  color: var(--c-dark-ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--c-dark-line);
+  transition: text-decoration-color var(--d-fast) var(--e-out);
+}
+.footer__by:hover { text-decoration-color: currentColor; }
+.footer__sep { margin: 0 8px; color: var(--c-dark-line); }
 .footer .wordmark { color: var(--c-dark-ink); }
 .footer .wordmark__sub { color: var(--c-dark-muted); }
 
