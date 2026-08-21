@@ -1587,16 +1587,6 @@ p { margin: 0; max-width: 62ch; }
   border-width: 11px 0 11px 18px;
   border-color: transparent transparent transparent #FFFFFF;
 }
-.video__cap {
-  position: absolute; left: 0; right: 0; bottom: 0;
-  padding: 14px 18px;
-  font-family: var(--f-mono);
-  font-size: var(--t-subtext);
-  letter-spacing: var(--ls-label);
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, .62);
-  background: linear-gradient(transparent, rgba(0, 0, 0, .55));
-}
 
 
 /* ==========================================================================
