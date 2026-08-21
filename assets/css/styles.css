@@ -93,6 +93,10 @@ main { overflow-x: clip; }
 .section .container > :first-child { margin-top: 0 !important; }
 .section--cinematic { padding-block: var(--sp-cinematic); }
 .section--tight { padding-block: var(--sp-tight); }
+/* Две светлые секции подряд перекрываем на пиксель. Секции одного цвета, но
+   при дробной высоте на плотных экранах между ними проступает тёмный фон
+   страницы — тонкой полосой во всю ширину. */
+.section--light + .section--light { margin-top: -1px; }
 .section--sunk { background: var(--c-paper-sunk); }
 /* Fills the viewport with its content on the vertical centre. `svh` so mobile
    browser chrome cannot push the block taller than the screen. */
@@ -1913,23 +1917,5 @@ p { margin: 0; max-width: 62ch; }
   }
   .perk__t { font-size: var(--t-h4); color: var(--c-ink); }
 
-  .perk__art {
-    display: flex; flex-direction: column; justify-content: center;
-    height: 74px; padding: 10px;
-    border-radius: var(--r-md);
-    gap: 5px;
-    overflow: hidden;
-  }
-  .perk__art--rec   { background: #C4B5FD; }
-  .perk__art--task  { background: #14111C; }
-  .perk__art--group { background: #7C3AED; flex-direction: row; flex-wrap: wrap; align-content: center; gap: 6px; }
-
-  .perk__row { height: 10px; border-radius: 3px; background: rgba(255, 255, 255, .82); }
-  .perk__art--rec .perk__row:nth-child(2) { width: 74%; }
-  .perk__art--rec .perk__row:nth-child(3) { width: 52%; }
-  .perk__art--task .perk__row { background: rgba(255, 255, 255, .16); }
-  .perk__row--hot { background: #7C3AED; width: 68%; }
-
-  .perk__dot { width: 13px; height: 13px; border-radius: 50%; background: rgba(255, 255, 255, .28); }
-  .perk__dot--me { background: #FFFFFF; }
+  .perk__art { display: flex; height: 74px; margin-bottom: 0; }
 }

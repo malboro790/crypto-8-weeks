@@ -92,6 +92,9 @@
     max-width: 45%;
     padding: 7px 10px;
     font-size: .8125rem;
+    /* Плашка в две строки: наследованный интерлиньяж 1.6 разводил их слишком
+       далеко — подпись переставала читаться как одно название. */
+    line-height: 1.25;
     white-space: normal;
     text-align: left;
   }
@@ -135,7 +138,7 @@
     align-items: stretch;
     margin-inline: calc(var(--gutter) * -1);
     padding-inline: var(--gutter);
-    padding-block: 6px 10px;   /* место под тень, иначе она срезается */
+    padding-block: 10px 30px;  /* место под тень: размытие 44px, иначе срезается */
     /* Зазор от заголовка сокращаем: --sp-tight рассчитан на десктоп, где над
        карточками стоит двухколоночная шапка. Здесь она в одну колонку и
        такая пауза выглядит провалом. */
@@ -153,7 +156,7 @@
   .tier--lead {
     order: -1;
     flex-basis: 92%;
-    box-shadow: 0 20px 44px -22px rgba(39, 39, 53, .34);
+    box-shadow: 0 14px 32px -18px rgba(39, 39, 53, .30);
   }
 
   /* The editorial 12-column grid collapses to a single column. Column spans are
@@ -186,17 +189,20 @@
         transparent 58%);
   }
 
-  /* В блоке «здесь не будут учить» плашки убираем совсем: на узком экране они
-     дают двойную рамку вокруг и без того обрамлённого списка и сдвигают текст
-     от левого края сетки, ломая общую вертикаль страницы. */
+  /* Плашки в блоке «здесь не будут учить» возвращаются, но с едва заметной
+     кромкой: акцент взят на трети силы и гаснет уже к четверти длины —
+     на белом фоне полноценная кромка спорила бы с содержимым списка. */
   .bounds .plate {
-    background: none;
-    border: 0;
-    border-radius: 0;
-    box-shadow: none;
-    padding: 0;
+    padding: clamp(18px, 4vw, 24px);
+    box-shadow: 0 1px 2px rgba(39, 39, 53, .04);
+    background-image:
+      linear-gradient(var(--c-plate), var(--c-plate)),
+      linear-gradient(45deg,
+        color-mix(in srgb, var(--c-accent) 34%, transparent) 0%,
+        color-mix(in srgb, var(--c-accent) 12%, transparent) 22%,
+        transparent 46%);
   }
-  .bounds { gap: 32px; }
+  .bounds { gap: 12px; }
   .bounds > * { grid-row: auto; display: flex; flex-direction: column; gap: 20px; }
 
   /* Stacked, the column gap is far too tight: one card's copy would sit right
@@ -278,43 +284,35 @@
     background: var(--c-surface);
   }
 
-  /* Картинка рисуется фоном: шесть отдельных блоков разметки ради декора
-     здесь не нужны. */
-  .founder__fact::before {
-    content: "";
-    display: block;
+  /* Картинка у каждой карточки говорит, о чём она: не абстрактные полосы,
+     а те самые слова, набранные тем же моношрифтом, что и чипы на странице. */
+  .fact__art {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    gap: 6px;
     height: 88px;
     margin-bottom: 14px;
+    padding: 12px;
     border-radius: var(--r-sm);
-    background-repeat: no-repeat;
+    overflow: hidden;
   }
-  .founder__fact:nth-child(3n+1)::before { background-color: #C4B5FD; }
-  .founder__fact:nth-child(3n+2)::before { background-color: #14111C; }
-  .founder__fact:nth-child(3n+3)::before { background-color: #7C3AED; }
-
-  /* Полосы: у светлых плиток белые, у тёмных — полупрозрачные. */
-  .founder__fact:nth-child(3n+1)::before {
-    background-image:
-      linear-gradient(rgba(255,255,255,.85) 0 0),
-      linear-gradient(rgba(255,255,255,.85) 0 0),
-      linear-gradient(rgba(255,255,255,.85) 0 0);
-    background-size: 62% 12px, 44% 12px, 30% 12px;
-    background-position: 14px 18px, 14px 38px, 14px 58px;
+  .fact__art i {
+    font-family: var(--f-mono);
+    font-size: .625rem;
+    font-style: normal;
+    letter-spacing: .02em;
+    padding: 5px 8px;
+    border-radius: 5px;
   }
-  .founder__fact:nth-child(3n+2)::before {
-    background-image:
-      linear-gradient(rgba(255,255,255,.16) 0 0),
-      linear-gradient(#7C3AED 0 0);
-    background-size: 70% 14px, 50% 14px;
-    background-position: 14px 22px, 14px 50px;
-  }
-  .founder__fact:nth-child(3n+3)::before {
-    background-image:
-      linear-gradient(rgba(255,255,255,.28) 0 0),
-      linear-gradient(#FFFFFF 0 0);
-    background-size: 34px 34px, 34px 34px;
-    background-position: 14px 27px, 58px 27px;
-  }
+  .fact__art--a { background: #C4B5FD; }
+  .fact__art--a i { background: rgba(255, 255, 255, .82); color: #1E1633; }
+  .fact__art--b { background: #14111C; }
+  .fact__art--b i { background: rgba(255, 255, 255, .12); color: rgba(255, 255, 255, .82); }
+  .fact__art--b i:first-child { background: #7C3AED; color: #FFFFFF; }
+  .fact__art--c { background: #7C3AED; }
+  .fact__art--c i { background: rgba(255, 255, 255, .20); color: #FFFFFF; }
+  .fact__art--c i:first-child { background: #FFFFFF; color: #2E1065; }
 
 }
 
@@ -476,9 +474,40 @@
      :has здесь уже используется в проекте, отдельной поддержки не требует. */
   .section:has(.share) .body { max-width: 85% !important; }
 
-  /* В блоке про сопровождение подводка и подписи под цифрами шли тремя
-     разными кеглями — 17, 15 и 13. На узком экране это читается как сбой,
-     а не как иерархия: сводим к одному размеру. */
+  /* ------------------------------------------------------------------
+     Шкала на телефоне сведена к двум текстовым размерам: 15 и 13.
+     Аудит показал 44 сочетания «размер + вес + интерлиньяж» при шести
+     объявленных ролях; больше всего мусора давали 17 и 12 — оба почти
+     неотличимы от соседей, но плодят варианты.
+     11px оставлен: это подписи внутри мини-визуализаций, отдельный слой.
+     ------------------------------------------------------------------ */
+  :root {
+    --t-text: 0.9375rem;   /* 17 → 15 */
+    --t-h4:   0.9375rem;   /* 15, без изменений */
+  }
+  /* Размеры, прописанные литералом мимо токенов. */
+  .pillar__d { font-size: var(--t-text); }                 /* было 16 */
+  .tag,
+  .part__i,
+  .scen__i,
+  .eco__group-h,
+  .art-note,
+  .compare__num,
+  .week__n,
+  .art-nets span,
+  .label { font-size: var(--t-subtext); }                  /* было 12 */
+
+  /* Остатки семнадцатого: заголовки внутри карточек и подписи в макете
+     экрана. Ниже — к пятнадцати, как весь остальной текст. */
+  .part__t,
+  .riskfield__core .mono,
+  .art-pill--hot,
+  .art-row--hot b { font-size: var(--t-text); }
+
+  /* Подписи внутри мини-визуализаций — единственный слой мельче тринадцати.
+     Держим их на одиннадцати, а не на десяти: десятый появился случайно. */
+  .fact__art i { font-size: 0.6875rem; }
+
   #how .body,
   #how .stat__d { font-size: var(--t-h4); line-height: 1.6; }
 

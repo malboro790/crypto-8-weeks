@@ -16,9 +16,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap">
 
-<link rel="stylesheet" href="assets/css/tokens.css?v=190">
-<link rel="stylesheet" href="assets/css/styles.css?v=190">
-<link rel="stylesheet" href="assets/css/responsive.css?v=190">
+<link rel="stylesheet" href="assets/css/tokens.css?v=196">
+<link rel="stylesheet" href="assets/css/styles.css?v=196">
+<link rel="stylesheet" href="assets/css/responsive.css?v=196">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='none' stroke='%23EDECFB' stroke-width='2'/><circle cx='16' cy='16' r='6' fill='%235266EB'/></svg>">
 </head>
 <body>
@@ -340,10 +340,11 @@
   </div>
 </section>
 
-<!-- ======================================================================
+<!-- ВИДЕОБЛОК ВРЕМЕННО ОТКЛЮЧЁН. Раскомментируйте, когда появится ролик.
+<!- - ======================================================================
      VIDEO — 16:9, poster only for now
      Временно скрыт: снимите атрибут hidden, когда появится ролик.
-     ====================================================================== -->
+     ====================================================================== - ->
 <section class="section section--light" hidden>
   <div class="container">
     <div class="sec-head" data-reveal>
@@ -351,9 +352,9 @@
       <p class="lead">Короткая запись: разбираем реальный перевод шаг за шагом.</p>
     </div>
 
-    <!-- Swap this <figure> for the real player when the video is ready: keep the
+    <!- - Swap this <figure> for the real player when the video is ready: keep the
          same wrapper, put an <iframe> or <video> inside — the 16:9 box, the
-         radius and the clipping already come from .video. -->
+         radius and the clipping already come from .video. - ->
     <figure class="video" data-reveal style="margin-top: var(--sp-tight)">
       <img class="video__poster" src="assets/img/video-poster.svg" alt="" width="1600" height="900">
       <button class="video__play" type="button" aria-label="Видео появится позже" disabled>
@@ -362,6 +363,7 @@
     </figure>
   </div>
 </section>
+-->
 
 <!-- ======================================================================
      PHILOSOPHY / ANTI-INFOBUSINESS
@@ -890,22 +892,20 @@
 
     <ul class="perks" style="margin-top: var(--sp-block)">
       <li class="perk" data-reveal>
-        <span class="perk__art perk__art--rec" aria-hidden="true">
-          <span class="perk__row"></span><span class="perk__row"></span><span class="perk__row"></span>
+        <span class="fact__art fact__art--a perk__art" aria-hidden="true">
+          <i>неделя 01</i><i>запись</i><i>остаётся у вас</i>
         </span>
         <span class="perk__t">Записи всех групповых занятий остаются у вас.</span>
       </li>
       <li class="perk" data-reveal style="--reveal-delay:60ms">
-        <span class="perk__art perk__art--task" aria-hidden="true">
-          <span class="perk__row"></span><span class="perk__row perk__row--hot"></span>
+        <span class="fact__art fact__art--b perk__art" aria-hidden="true">
+          <i>задание</i><i>под вашу ситуацию</i>
         </span>
         <span class="perk__t">Персональные домашние задания под вашу ситуацию.</span>
       </li>
       <li class="perk" data-reveal style="--reveal-delay:120ms">
-        <span class="perk__art perk__art--group" aria-hidden="true">
-          <span class="perk__dot"></span><span class="perk__dot"></span>
-          <span class="perk__dot"></span><span class="perk__dot"></span>
-          <span class="perk__dot"></span><span class="perk__dot perk__dot--me"></span>
+        <span class="fact__art fact__art--c perk__art" aria-hidden="true">
+          <i>вы</i><i>+5–7</i><i>закрытый чат</i>
         </span>
         <span class="perk__t">Группа — максимум 5–7 человек.</span>
       </li>
@@ -1054,12 +1054,12 @@
     </div>
 
     <ul class="founder__facts" data-reveal style="margin-top: var(--sp-block)">
-      <li class="founder__fact"><div class="founder__k">11+ лет</div><p class="founder__v">В digital и технологиях: продукт, интерфейсы, запуски.</p></li>
-      <li class="founder__fact"><div class="founder__k">4–5 лет</div><p class="founder__v">Непосредственно внутри Web3 — как специалист, а не как наблюдатель.</p></li>
-      <li class="founder__fact"><div class="founder__k">KERBER</div><p class="founder__v">Агентство: брендинг, стратегия и UI/UX для технологических компаний.</p></li>
-      <li class="founder__fact"><div class="founder__k">TON</div><p class="founder__v">Работа с экосистемой TON и создание собственного продукта внутри неё.</p></li>
-      <li class="founder__fact"><div class="founder__k">Startup studios</div><p class="founder__v">Опыт взаимодействия со стартап-студиями и венчурной средой.</p></li>
-      <li class="founder__fact"><div class="founder__k">Практика</div><p class="founder__v">Product, UX, механика кошельков, пользовательские сценарии, основы безопасности.</p></li>
+      <li class="founder__fact"><span class="fact__art fact__art--a" aria-hidden="true"><i>продукт</i><i>интерфейсы</i><i>запуски</i></span><div class="founder__k">11+ лет</div><p class="founder__v">В digital и технологиях: продукт, интерфейсы, запуски.</p></li>
+      <li class="founder__fact"><span class="fact__art fact__art--b" aria-hidden="true"><i>Web3</i><i>кошельки</i><i>сети</i></span><div class="founder__k">4–5 лет</div><p class="founder__v">Непосредственно внутри Web3 — как специалист, а не как наблюдатель.</p></li>
+      <li class="founder__fact"><span class="fact__art fact__art--c" aria-hidden="true"><i>бренд</i><i>UI/UX</i><i>стратегия</i></span><div class="founder__k">KERBER</div><p class="founder__v">Агентство: брендинг, стратегия и UI/UX для технологических компаний.</p></li>
+      <li class="founder__fact"><span class="fact__art fact__art--a" aria-hidden="true"><i>TON</i><i>свой продукт</i></span><div class="founder__k">TON</div><p class="founder__v">Работа с экосистемой TON и создание собственного продукта внутри неё.</p></li>
+      <li class="founder__fact"><span class="fact__art fact__art--b" aria-hidden="true"><i>стартапы</i><i>венчур</i></span><div class="founder__k">Startup studios</div><p class="founder__v">Опыт взаимодействия со стартап-студиями и венчурной средой.</p></li>
+      <li class="founder__fact"><span class="fact__art fact__art--c" aria-hidden="true"><i>UX</i><i>безопасность</i></span><div class="founder__k">Практика</div><p class="founder__v">Product, UX, механика кошельков, пользовательские сценарии, основы безопасности.</p></li>
     </ul>
 
     <!-- Real agency cases, kerber.agency. Names are text marks, not logos. -->
@@ -1305,7 +1305,7 @@
   </form>
 </dialog>
 
-<script src="assets/js/coinpit.js?v=190"></script>
-<script src="assets/js/main.js?v=190"></script>
+<script src="assets/js/coinpit.js?v=196"></script>
+<script src="assets/js/main.js?v=196"></script>
 </body>
 </html>
