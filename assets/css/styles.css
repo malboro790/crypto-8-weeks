@@ -482,6 +482,10 @@ p { margin: 0; max-width: 62ch; }
 }
 /* One phrase carries the accent, with a soft bar sitting under it. */
 .hl { color: var(--c-accent); position: relative; white-space: nowrap; }
+/* Запрет переноса на .hl нужен ради подчёркивания: разорванная строка дала бы
+   две отдельные полосы. У плоского акцента полосы нет, а запрет остаётся и
+   выталкивает длинную фразу за пределы колонки — поэтому снимаем его. */
+.hl--flat { white-space: normal; }
 .hl--flat::after { display: none; }
 .hl::after {
   content: ""; position: absolute; left: -.04em; right: -.04em; bottom: .04em;
