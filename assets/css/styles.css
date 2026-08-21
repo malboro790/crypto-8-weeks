@@ -59,6 +59,11 @@ button { font: inherit; color: inherit; }
 
 /* The gutter sits OUTSIDE the declared width, so `--container` is the width of
    the content grid itself (1280px), not of the box including its padding. */
+/* Страховка от горизонтальной прокрутки: любой блок, случайно вылезший за
+   сетку, обрезается здесь, а не растягивает документ. clip, а не hidden —
+   hidden создал бы контейнер прокрутки и сломал бы прилипание. */
+main { overflow-x: clip; }
+
 .container {
   width: 100%;
   max-width: calc(var(--container) + var(--gutter) * 2);
