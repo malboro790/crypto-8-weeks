@@ -1924,5 +1924,6 @@ p { margin: 0; max-width: 62ch; }
   }
   .perk__t { font-size: var(--t-h4); color: var(--c-ink); }
 
-  .perk__art { display: flex; height: 74px; margin-bottom: 0; }
+  .perk__art { display: flex; min-height: 74px; height: auto; margin-bottom: 0; padding: 10px; }
+  .perk { grid-template-columns: 104px minmax(0, 1fr); align-items: center; }
 }

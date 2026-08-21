@@ -291,7 +291,9 @@
     flex-wrap: wrap;
     align-content: center;
     gap: 6px;
-    height: 88px;
+    /* Высота по содержимому с нижней границей: жёсткие 88px обрезали третий
+       чип в узкой колонке строк сопровождения — там ширина всего 96px. */
+    min-height: 88px;
     margin-bottom: 14px;
     padding: 12px;
     border-radius: var(--r-sm);
