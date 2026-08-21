@@ -311,7 +311,9 @@
   .fact__art--b i { background: rgba(255, 255, 255, .12); color: rgba(255, 255, 255, .82); }
   .fact__art--b i:first-child { background: #7C3AED; color: #FFFFFF; }
   .fact__art--c { background: #7C3AED; }
-  .fact__art--c i { background: rgba(255, 255, 255, .20); color: #FFFFFF; }
+  /* Затемняем, а не осветляем: белая подложка на фиолетовом делает фон светлее
+     и белый текст на нём падает до 3.97. Тёмная подложка работает наоборот. */
+  .fact__art--c i { background: rgba(0, 0, 0, .26); color: #FFFFFF; }
   .fact__art--c i:first-child { background: #FFFFFF; color: #2E1065; }
 
 }

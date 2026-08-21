@@ -325,6 +325,8 @@ p { margin: 0; max-width: 62ch; }
 
 .wordmark {
   display: inline-flex; align-items: center; gap: 10px;
+  /* Тап-цель: сама марка 26px, вертикальные поля добирают до сорока. */
+  padding-block: 7px;
   text-decoration: none; font-family: var(--f-display);
   font-weight: var(--w-display); font-size: var(--t-h4); letter-spacing: var(--ls-h4);
   white-space: nowrap; flex: none;
@@ -612,14 +614,14 @@ p { margin: 0; max-width: 62ch; }
   background: #4C1D95; color: #FFFFFF;
   font-size: 1.0625rem; letter-spacing: -.02em; padding: 13px 14px;
 }
-.art-pill--hot i { font-style: normal; opacity: .6; font-size: .7em; margin-left: .35em; }
+.art-pill--hot i { font-style: normal; opacity: .75; font-size: .78em; margin-left: .35em; }
 .art-arrow { font-family: var(--f-mono); font-size: .875rem; opacity: .5; padding-left: 14px; line-height: 1; }
 
 .art-bal {
   font-family: var(--f-display); font-weight: 600;
   font-size: clamp(1.75rem, 2.4vw, 2.25rem); letter-spacing: -.04em; line-height: 1;
 }
-.art-bal i { font-style: normal; font-size: .38em; opacity: .55; margin-left: .4em; letter-spacing: 0; }
+.art-bal i { font-style: normal; font-size: .44em; opacity: .55; margin-left: .4em; letter-spacing: 0; }
 .art-nets { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
 .art-nets span {
   font-family: var(--f-mono); font-size: .75rem;
@@ -648,7 +650,9 @@ p { margin: 0; max-width: 62ch; }
 .art-grid span {
   font-family: var(--f-mono); font-size: .8125rem; font-weight: 500;
   padding: 18px 10px; border-radius: var(--r-md); text-align: center;
-  background: rgba(255, 255, 255, .16);
+  /* Тёмная подложка, а не светлая: белый на осветлённом фиолетовом даёт 4.28,
+     ниже порога для мелкого текста. */
+  background: rgba(0, 0, 0, .20);
 }
 
 /* ==========================================================================
@@ -855,7 +859,7 @@ p { margin: 0; max-width: 62ch; }
   align-self: flex-start; max-width: 92%;
   padding: 7px 10px;
   border-radius: var(--r-sm) var(--r-sm) var(--r-sm) 2px;
-  background: rgba(255, 255, 255, .18);
+  background: rgba(0, 0, 0, .24);
 }
 /* The reply comes from the other side, so it hangs off the opposite corner. */
 .mock__bub--me {
@@ -1905,8 +1909,11 @@ p { margin: 0; max-width: 62ch; }
 .perk { display: grid; gap: 12px; align-content: start; }
 .perk__t { font-size: var(--t-subtext); line-height: var(--lh-subtext); color: var(--c-ink-muted); }
 
-/* Картинки показываем только там, где для них есть место по вертикали. */
-.perk__art { display: none; }
+/* Картинки показываем только там, где для них есть место по вертикали.
+   На широком экране карточки стоят в ряд и живут подписями, а чипы внутри
+   .fact__art без своих стилей вываливались курсивным текстом поверх названия. */
+.perk__art,
+.fact__art { display: none; }
 
 @media (max-width: 768px) {
   .perks { grid-template-columns: 1fr; gap: 20px; }
