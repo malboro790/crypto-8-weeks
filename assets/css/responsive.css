@@ -116,7 +116,36 @@
   .week__content { grid-template-columns: 64px minmax(0, 1fr); }
 
   .finalcta__grid { grid-template-columns: 1fr; gap: 32px; align-items: start; }
-  .tiers { grid-template-columns: 1fr; }
+  /* Тарифы — лента с прилипанием. В столбик дорогой тариф оказывался
+     «вторым и ниже», хотя именно он основной; в ленте он идёт первым и
+     виден сразу. */
+  .tiers {
+    display: flex;
+    grid-template-columns: none;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    align-items: stretch;
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+    padding-block: 6px 10px;   /* место под тень, иначе она срезается */
+  }
+  .tiers::-webkit-scrollbar { display: none; }
+
+  .tier {
+    flex: 0 0 88%;
+    scroll-snap-align: center;
+  }
+
+  /* Дорогой тариф впереди и заметнее: чуть шире и с одной мягкой тенью.
+     Одна тень, а не набор — на светлом фоне несколько слоёв дают грязь. */
+  .tier--lead {
+    order: -1;
+    flex-basis: 92%;
+    box-shadow: 0 20px 44px -22px rgba(39, 39, 53, .34);
+  }
 
   /* The editorial 12-column grid collapses to a single column. Column spans are
      set inline per section, so they are overridden here rather than in markup. */
