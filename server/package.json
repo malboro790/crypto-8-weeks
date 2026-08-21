@@ -1,0 +1,13 @@
+{
+  "name": "crypto-8-weeks-leads",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Приём заявок с сайта в Telegram",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

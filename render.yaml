@@ -1,0 +1,46 @@
+# ==========================================================================
+# Render Blueprint: сайт и приём заявок одним разворачиванием.
+# В дашборде: New → Blueprint → выбрать этот репозиторий.
+#
+# Значения BOT_TOKEN, CHAT_ID и ALLOWED_ORIGINS помечены sync: false —
+# Render спросит их при создании и сохранит в секретах. В репозиторий
+# они не попадают.
+# ==========================================================================
+services:
+  # --- статический сайт -------------------------------------------------
+  # Не засыпает и раздаётся с CDN: сборки нет, публикуем корень репозитория.
+  - type: web
+    runtime: static
+    name: crypto-8-weeks
+    buildCommand: ""
+    staticPublishPath: .
+    headers:
+      - path: /assets/coins/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /assets/img/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+
+  # --- приём заявок в Telegram ------------------------------------------
+  # Внимание: на бесплатном тарифе web service засыпает после ~15 минут
+  # простоя и просыпается около минуты. Страница будит его в момент
+  # открытия формы, пока посетитель печатает имя.
+  - type: web
+    runtime: node
+    name: crypto-8-weeks-leads
+    plan: free
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: BOT_TOKEN
+        sync: false
+      - key: CHAT_ID
+        sync: false
+      - key: ALLOWED_ORIGINS
+        sync: false

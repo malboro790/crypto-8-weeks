@@ -9,13 +9,13 @@
   /* ------------------------------------------------------------------------
      CONFIGURATION
 
-     LEAD_ENDPOINT — URL of the worker that forwards a lead into Telegram.
-     It must NOT be the Telegram API directly: the bot token would then sit in
-     this file, readable by anyone, and anyone could post as the bot. Deploy
-     worker/telegram-lead.js (see README) and paste its address here.
+     LEAD_ENDPOINT — адрес сервиса, который передаёт заявку в Telegram.
+     Это не может быть API Telegram напрямую: токен бота оказался бы в этом
+     файле, доступном любому, и писать от имени бота смог бы кто угодно.
+     Разверните server/ на Render (см. README) и впишите сюда его адрес.
 
-     TG_FALLBACK — your personal Telegram, used when the endpoint is missing or
-     the request fails, so a lead is never simply lost.
+     TG_FALLBACK — ваш Telegram: используется, если адрес не задан или запрос
+     не прошёл, чтобы заявка не потерялась.
      ---------------------------------------------------------------------- */
   var LEAD_ENDPOINT = '';
   var TG_FALLBACK   = '';
@@ -48,6 +48,14 @@
       var p = trigger && trigger.getAttribute('data-package');
       pack.textContent = p || '';
       pack.hidden = !p;
+      /* Будим сервис приёма заявок заранее: на бесплатном тарифе Render
+         инстанс засыпает после простоя и просыпается около минуты. Пока
+         посетитель печатает имя, он успевает подняться. Ответ не нужен,
+         поэтому и ошибку глотаем молча. */
+      if (LEAD_ENDPOINT) {
+        try { fetch(LEAD_ENDPOINT, { method: 'GET', mode: 'no-cors', cache: 'no-store' }).catch(function () {}); }
+        catch (e) { /* старый браузер без fetch — не страшно */ }
+      }
       dialog.showModal();
       /* Focus the first field, not the close button: the visitor came here to
          type, and <dialog> would otherwise land on whatever is first in DOM. */
