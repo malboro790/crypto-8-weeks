@@ -26,9 +26,9 @@
 /* Домены, с которых принимаем заявки. Добавьте свой, когда прикрутите его
    к сайту, иначе форма начнёт получать 403. */
 const ALLOWED_ORIGINS = [
+  'https://8weekscrypto.com',
+  'https://www.8weekscrypto.com',
   'https://malboro790.github.io',
-  // 'https://ваш-домен.ru',
-  // 'https://www.ваш-домен.ru',
 ];
 
 const corsFor = (origin) => ({

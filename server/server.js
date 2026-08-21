@@ -18,7 +18,8 @@ const BOT_TOKEN = process.env.BOT_TOKEN;
 const CHAT_ID = process.env.CHAT_ID;
 
 /* Кто имеет право слать заявки. Через запятую, если адресов несколько. */
-const ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://malboro790.github.io')
+const ORIGINS = (process.env.ALLOWED_ORIGINS ||
+  'https://8weekscrypto.com,https://www.8weekscrypto.com,https://malboro790.github.io')
   .split(',').map((s) => s.trim()).filter(Boolean);
 
 /* Telegram разбирает HTML в тексте сообщения, поэтому пользовательские данные
