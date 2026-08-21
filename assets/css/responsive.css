@@ -83,7 +83,7 @@
   /* Схема остаётся схемой: ядро сверху, риски двумя колонками под ним, лучи
      веером вниз. Круговая раскладка с десктопа на 400px не помещается —
      плашки налезали бы на ядро, — поэтому кольцо разворачивается в веер. */
-  .riskfield { min-height: 560px; display: block; }
+  .riskfield { min-height: 760px; display: block; }
   .riskfield__core {
     position: absolute; left: 50%; top: 0; transform: translateX(-50%);
     padding: 16px 20px; width: min(230px, 62%);
@@ -98,16 +98,21 @@
   .risk__note { display: none; }
 
   /* Левая и правая колонки чередуются: нечётные слева, чётные справа.
+     nth-of-type, а не nth-child: в поле лежат ещё <svg> и ядро, и обычный
+     счётчик сдвигал нумерацию плашек на две позиции — две из них попадали
+     в один ряд и наезжали друг на друга.
      !important здесь не украшение: координаты десктопа заданы инлайново,
      а инлайн выигрывает у любого правила таблицы стилей. */
-  .risk:nth-child(odd)  { --x: 27% !important; }
-  .risk:nth-child(even) { --x: 73% !important; }
-  .risk:nth-child(1),  .risk:nth-child(2)  { --y: 28% !important; }
-  .risk:nth-child(3),  .risk:nth-child(4)  { --y: 41% !important; }
-  .risk:nth-child(5),  .risk:nth-child(6)  { --y: 54% !important; }
-  .risk:nth-child(7),  .risk:nth-child(8)  { --y: 67% !important; }
-  .risk:nth-child(9),  .risk:nth-child(10) { --y: 80% !important; }
-  .risk:nth-child(11), .risk:nth-child(12) { --y: 93% !important; }
+  .risk:nth-of-type(odd)  { --x: 27% !important; }
+  .risk:nth-of-type(even) { --x: 73% !important; }
+  /* Шаг между рядами задан с запасом на плашку в две строки: раньше они
+     наезжали друг на друга там, где подпись не помещалась в одну. */
+  .risk:nth-of-type(1),  .risk:nth-of-type(2)  { --y: 25% !important; }
+  .risk:nth-of-type(3),  .risk:nth-of-type(4)  { --y: 39% !important; }
+  .risk:nth-of-type(5),  .risk:nth-of-type(6)  { --y: 53% !important; }
+  .risk:nth-of-type(7),  .risk:nth-of-type(8)  { --y: 67% !important; }
+  .risk:nth-of-type(9),  .risk:nth-of-type(10) { --y: 81% !important; }
+  .risk:nth-of-type(11), .risk:nth-of-type(12) { --y: 95% !important; }
 
   .pillar { grid-template-columns: 64px 1fr; }
   .pillar__d { grid-column: 2; padding-top: 4px; }
@@ -459,7 +464,7 @@
      следующей. Ограничиваем меру там, где абзацы длинные. */
   .section--sunk.relocation .body,
   .section--sunk.relocation .story__turn,
-  .section--sunk.relocation .bounds__list li { max-width: 76%; }
+  .section--sunk.relocation .bounds__list li { max-width: 88%; }
 
   /* Разделители убираем: текст ограничен по ширине, а линия шла на всю
      колонку и торчала правее строк, к которым относится. Пункты и без неё
@@ -471,8 +476,26 @@
      :has здесь уже используется в проекте, отдельной поддержки не требует. */
   .section:has(.share) .body { max-width: 85% !important; }
 
+  /* В блоке про сопровождение подводка и подписи под цифрами шли тремя
+     разными кеглями — 17, 15 и 13. На узком экране это читается как сбой,
+     а не как иерархия: сводим к одному размеру. */
+  #how .body,
+  #how .stat__d { font-size: var(--t-h4); line-height: 1.6; }
+
+  /* Две подводки в блоке про сопровождение шли разным кеглем — один абзац
+     крупнее другого без причины. Приводим к одному размеру и одной мере. */
+  .section:has(.solution__parts) .lead,
+  .section:has(.solution__parts) .body {
+    font-size: var(--t-h4);
+    line-height: 1.6;
+    max-width: 88%;
+  }
+
   /* В светлом блоке линии остаются, а текст поджимаем отступом справа:
-     padding не трогает границу, она рисуется по padding-box. */
+     padding не трогает границу, она рисуется по padding-box.
+     align-self: stretch — потому что в колонке-флексе список получал ширину
+     по содержимому, и разделители обрывались раньше края плашки. */
+  .bounds__list { align-self: stretch; }
   .section--light .bounds__list li { padding-right: 14%; }
   .section--light .bounds .lead { max-width: 88%; }
 

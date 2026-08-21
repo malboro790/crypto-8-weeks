@@ -482,6 +482,12 @@ p { margin: 0; max-width: 62ch; }
      продолжает получать координаты указателя. */
   touch-action: pan-y;
 }
+/* На тач-устройствах канвас не участвует в жестах совсем. Расталкивание монет
+   пальцем — приятный пустяк, а цена ему высокая: перехваченные касания мешают
+   прокрутке, масштабированию и попаданию по кнопкам под ним. */
+@media (hover: none) {
+  .hero__pit { pointer-events: none; touch-action: auto; }
+}
 .hero__inner {
   position: relative; z-index: 3;
   display: flex; flex-direction: column; align-items: center; text-align: center;
@@ -1884,23 +1890,6 @@ p { margin: 0; max-width: 62ch; }
   color: var(--c-ink);
 }
 
-/* --------------------------------------------------------------------------
-   WARP TEXT
-   Заголовок остаётся в DOM — его читают скринридеры, поисковики и выделение
-   мышью. Прячем только краску: `color: transparent` вместо display/visibility,
-   иначе строка выпала бы и из доступности, и из потока, а canvas опирается на
-   её раскладку. Пока скрипт не отработал, текст видно как обычно.
-   -------------------------------------------------------------------------- */
-.hero .display { position: relative; }
-.hero .display [data-warp].is-warped { color: transparent; }
-.hero .display [data-warp].is-warped .hl { color: transparent; }
-.hero .display [data-warp].is-warped .hl::after { opacity: 0; }
-
-.warp__canvas {
-  position: absolute;
-  z-index: 2;
-  pointer-events: none;
-}
 
 /* --------------------------------------------------------------------------
    PERKS — три строки под цифрами сопровождения
