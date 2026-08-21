@@ -1785,3 +1785,76 @@ p { margin: 0; max-width: 62ch; }
   opacity: 0;
   pointer-events: none;
 }
+
+/* --------------------------------------------------------------------------
+   Expanded week: the chips say what the topics are, this says what actually
+   happens in the two hours. Two columns so a nine-item list does not push the
+   result line off the first screen of the open accordion.
+   -------------------------------------------------------------------------- */
+.week__lead {
+  font-size: var(--t-text);
+  line-height: var(--lh-text);
+  color: var(--c-ink-muted);
+  max-width: 68ch;
+}
+.week__cols {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: clamp(24px, 3vw, 56px);
+  align-items: start;
+}
+.week__h {
+  font-family: var(--f-mono);
+  font-size: var(--t-subtext);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--c-ink-faint);
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--c-line);
+  margin-bottom: 12px;
+}
+.week__list {
+  list-style: none;
+  margin: 0; padding: 0;
+  columns: 2;
+  column-gap: clamp(20px, 2.4vw, 36px);
+}
+.week__list li {
+  break-inside: avoid;
+  display: flex; gap: 9px;
+  padding: 5px 0;
+  font-size: var(--t-subtext);
+  line-height: var(--lh-subtext);
+  color: var(--c-ink-muted);
+}
+.week__list li::before {
+  content: "";
+  flex: none;
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--c-line-strong);
+  position: relative; top: .62em;
+}
+.week__res {
+  font-size: var(--t-subtext);
+  line-height: var(--lh-subtext);
+  color: var(--c-ink);
+}
+
+/* --------------------------------------------------------------------------
+   WARP TEXT
+   Заголовок остаётся в DOM — его читают скринридеры, поисковики и выделение
+   мышью. Прячем только краску: `color: transparent` вместо display/visibility,
+   иначе строка выпала бы и из доступности, и из потока, а canvas опирается на
+   её раскладку. Пока скрипт не отработал, текст видно как обычно.
+   -------------------------------------------------------------------------- */
+.hero .display { position: relative; }
+.hero .display [data-warp].is-warped { color: transparent; }
+.hero .display [data-warp].is-warped .hl { color: transparent; }
+.hero .display [data-warp].is-warped .hl::after { opacity: 0; }
+
+.warp__canvas {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+}

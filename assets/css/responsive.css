@@ -217,3 +217,12 @@
   .part { grid-template-columns: 1fr; row-gap: 16px; }
   .mock { height: 96px; max-width: 220px; }
 }
+
+/* The expanded week: two columns of prose need width to stay readable. */
+@media (max-width: 900px) {
+  .week__cols { grid-template-columns: 1fr; }
+  .week__list { columns: 2; }
+}
+@media (max-width: 600px) {
+  .week__list { columns: 1; }
+}
