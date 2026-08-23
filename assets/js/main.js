@@ -17,7 +17,7 @@
      TG_FALLBACK — ваш Telegram: используется, если адрес не задан или запрос
      не прошёл, чтобы заявка не потерялась.
      ---------------------------------------------------------------------- */
-  var LEAD_ENDPOINT = '';
+  var LEAD_ENDPOINT = 'https://crypto-8-weeks-leads-production.up.railway.app/';
   var TG_FALLBACK   = '';
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
