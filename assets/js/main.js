@@ -9,181 +9,24 @@
   /* ------------------------------------------------------------------------
      CONFIGURATION
 
-     LEAD_ENDPOINT — адрес сервиса, который передаёт заявку в Telegram.
-     Это не может быть API Telegram напрямую: токен бота оказался бы в этом
-     файле, доступном любому, и писать от имени бота смог бы кто угодно.
-     Разверните server/ на Render (см. README) и впишите сюда его адрес.
-
-     TG_FALLBACK — ваш Telegram: используется, если адрес не задан или запрос
-     не прошёл, чтобы заявка не потерялась.
+     TG_URL — куда ведут все кнопки призыва. Открываем личку в Telegram
+     с заранее написанным сообщением, чтобы человеку оставалось только
+     нажать «отправить»: форма с полями отсеивала тех, кому проще написать.
      ---------------------------------------------------------------------- */
-  var LEAD_ENDPOINT = 'https://crypto-8-weeks-leads-production.up.railway.app/';
-  var TG_FALLBACK   = '';
+  var TG_URL = 'https://t.me/Andrey_KERBERagency?text=%D0%94%D0%BE%D0%B1%D1%80%D1%8B%D0%B9%20%D0%B4%D0%B5%D0%BD%D1%8C%21%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%BF%D0%BE%D0%B4%D1%80%D0%BE%D0%B1%D0%BD%D0%B5%D0%B5%20%D1%83%D0%B7%D0%BD%D0%B0%D1%82%D1%8C%20%D0%BF%D1%80%D0%BE%20%D0%BB%D0%B8%D1%87%D0%BD%D0%BE%D0%B5%20%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BD%D0%B0%202%20%D0%BC%D0%B5%D1%81%D1%8F%D1%86%D0%B0%20%D0%B8%20%D0%B7%D0%B0%D0%BF%D0%B8%D1%81%D0%B0%D1%82%D1%8C%D1%81%D1%8F%20%D0%BD%D0%B0%20%D0%BB%D0%B8%D1%87%D0%BD%D1%8B%D0%B9%20%D0%B7%D0%B2%D0%BE%D0%BD%D0%BE%D0%BA.';
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var $  = function (s, c) { return (c || document).querySelector(s); };
   var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
 
   /* ---------------------------------------------------------------------- */
-  /* Lead form                                                              */
+  /* Кнопки призыва ведут в личку                                           */
   /* ---------------------------------------------------------------------- */
-  (function leadForm() {
-    var dialog = $('#leadDialog');
-    if (!dialog || typeof dialog.showModal !== 'function') return;  /* no <dialog>: links stay links */
-
-    var form   = $('.lead__box', dialog);
-    var note   = $('[data-lead-note]', dialog);
-    var pack   = $('[data-lead-pack]', dialog);
-    var submit = $('.lead__submit', dialog);
-    var label  = $('[data-lead-label]', dialog);
-    var opener = null;
-
-    function setNote(text, kind) {
-      note.textContent = text || '';
-      note.className = 'lead__note' + (kind ? ' is-' + kind : '');
-    }
-
-    function open(trigger) {
-      opener = trigger || null;
-      var p = trigger && trigger.getAttribute('data-package');
-      pack.textContent = p || '';
-      pack.hidden = !p;
-      /* Будим сервис приёма заявок заранее: на бесплатном тарифе Render
-         инстанс засыпает после простоя и просыпается около минуты. Пока
-         посетитель печатает имя, он успевает подняться. Ответ не нужен,
-         поэтому и ошибку глотаем молча. */
-      if (LEAD_ENDPOINT) {
-        try { fetch(LEAD_ENDPOINT, { method: 'GET', mode: 'no-cors', cache: 'no-store' }).catch(function () {}); }
-        catch (e) { /* старый браузер без fetch — не страшно */ }
-      }
-      dialog.showModal();
-      /* Focus the first field, not the close button: the visitor came here to
-         type, and <dialog> would otherwise land on whatever is first in DOM. */
-      var first = $('.field__input', form);
-      if (first) first.focus();
-    }
-
+  (function ctaLinks() {
     $$('[data-cta]').forEach(function (a) {
-      a.addEventListener('click', function (e) {
-        e.preventDefault();
-        open(a);
-      });
-    });
-
-    $$('[data-lead-close]', dialog).forEach(function (b) {
-      b.addEventListener('click', function () { dialog.close(); });
-    });
-
-    /* Click on the backdrop closes: the backdrop is part of <dialog>'s own box,
-       so a click landing outside the form's rectangle is a click on it. */
-    dialog.addEventListener('click', function (e) {
-      if (e.target !== dialog) return;
-      var r = form.getBoundingClientRect();
-      var inside = e.clientX >= r.left && e.clientX <= r.right &&
-                   e.clientY >= r.top  && e.clientY <= r.bottom;
-      if (!inside) dialog.close();
-    });
-
-    dialog.addEventListener('close', function () {
-      form.classList.remove('is-done');
-      form.reset();
-      $$('.field', form).forEach(function (f) { f.classList.remove('is-bad'); });
-      setNote('');
-      submit.disabled = false;
-      label.textContent = 'Отправить заявку';
-      if (opener && opener.focus) opener.focus();   /* return focus where it came from */
-    });
-
-    /* --- validation ------------------------------------------------------ */
-    var RULES = {
-      name: function (v) {
-        if (v.length < 2) return 'Напишите, как к вам обращаться.';
-        return '';
-      },
-      telegram: function (v) {
-        /* @name, t.me/name, or a bare handle. Telegram handles are 5–32 chars
-           of a–z, 0–9 and underscore. A phone number is accepted too — some
-           people have no username at all. */
-        var handle = v.replace(/^https?:\/\//i, '').replace(/^t\.me\//i, '').replace(/^@/, '');
-        if (/^\+?[\d\s()-]{10,20}$/.test(v)) return '';
-        if (!/^[a-zA-Z0-9_]{5,32}$/.test(handle)) return 'Похоже на опечатку. Например: @username';
-        return '';
-      }
-    };
-
-    function validate() {
-      var ok = true;
-      Object.keys(RULES).forEach(function (name) {
-        var input = form.elements[name];
-        var field = input.closest('.field');
-        var msg = RULES[name](input.value.trim());
-        field.classList.toggle('is-bad', !!msg);
-        $('[data-err-for="' + name + '"]', form).textContent = msg;
-        if (msg && ok) { input.focus(); ok = false; }
-      });
-      return ok;
-    }
-
-    $$('.field__input', form).forEach(function (input) {
-      input.addEventListener('input', function () {
-        var field = input.closest('.field');
-        if (field.classList.contains('is-bad')) field.classList.remove('is-bad');
-      });
-    });
-
-    /* --- submit ---------------------------------------------------------- */
-    function tgLink(text) {
-      if (!TG_FALLBACK) return null;
-      var handle = TG_FALLBACK.replace(/^@/, '');
-      return 'https://t.me/' + handle + (text ? '?text=' + encodeURIComponent(text) : '');
-    }
-
-    function failed(payload) {
-      var link = tgLink('Заявка: ' + payload.name + ', ' + payload.telegram);
-      if (link) {
-        setNote('Не получилось отправить. ', 'bad');
-        var a = document.createElement('a');
-        a.href = link; a.target = '_blank'; a.rel = 'noopener';
-        a.textContent = 'Напишите мне напрямую в Telegram';
-        note.appendChild(a);
-      } else {
-        setNote('Не получилось отправить. Попробуйте ещё раз через минуту.', 'bad');
-      }
-    }
-
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      if (!validate()) return;
-
-      var payload = {
-        name:     form.elements.name.value.trim(),
-        telegram: form.elements.telegram.value.trim(),
-        package:  pack.hidden ? '' : pack.textContent,
-        page:     location.href,
-        website:  form.elements.website.value
-      };
-
-      if (!LEAD_ENDPOINT) { failed(payload); return; }
-
-      submit.disabled = true;
-      label.textContent = 'Отправляю…';
-      setNote('');
-
-      fetch(LEAD_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
-        .then(function (r) { if (!r.ok) throw new Error(r.status); return r; })
-        .then(function () {
-          form.classList.add('is-done');
-          setNote('Заявка отправлена. Я напишу вам в Telegram в ближайшее время.', 'ok');
-        })
-        .catch(function () { failed(payload); })
-        .then(function () {
-          submit.disabled = false;
-          label.textContent = 'Отправить заявку';
-        });
+      a.setAttribute('href', TG_URL);
+      a.setAttribute('target', '_blank');
+      a.setAttribute('rel', 'noopener');
     });
   })();
 
