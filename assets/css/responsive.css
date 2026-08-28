@@ -16,7 +16,9 @@
    -------------------------------------------------------------------------- */
 @media (max-width: 1180px) {
   .wordmark__sub { display: none; }
-  .nav__link { padding: 9px 11px; font-size: var(--t-subtext); }
+  /* Литерал, а не токен: смысл правила — ужать шапку, когда ей не хватает
+     места, а на десктопе токен как раз вырос до 16. */
+  .nav__link { padding: 9px 11px; font-size: .8125rem; }
   .btn__long { display: none; }
 }
 

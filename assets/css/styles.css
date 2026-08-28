@@ -131,6 +131,23 @@ main { overflow-x: clip; }
    ниже сгиба, становится недостижимым. Проверка идёт на каждый ресайз,
    потому что «помещается» зависит от высоты окна, а не от ширины экрана. */
 .is-pinned { position: sticky; top: 0; }
+/* Запас краски под нижним краем прилипшей секции.
+
+   Пиксельная арифметика может сойтись идеально и всё равно дать шов: при
+   быстрой прокрутке позиция sticky обновляется композитором, и на долю кадра
+   между низом секции и низом окна проскакивает полоска того, что лежит ниже.
+   Собственный фон секции, продолженный на четыре пикселя вниз, закрывать
+   нечего не мешает: следующая секция идёт в потоке сразу за ней, тот же
+   z-index и позже по DOM, поэтому в обычном состоянии она эту полосу
+   перекрывает. Видно её только тогда, когда она и должна быть видна. */
+.is-pinned::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 100%;
+  height: 4px;
+  background-color: inherit;
+  pointer-events: none;
+}
 
 /* An inverted band on an otherwise dark site. Token-level only, so every
    component inside it flips without knowing anything about the theme.
@@ -316,7 +333,7 @@ p { margin: 0; max-width: 62ch; }
 .btn--ghost:hover { background: var(--c-neutral-line); }
 
 /* Their header controls: shorter, 10px radius, 13px label at 600. */
-.btn--sm { height: 36px; padding: 0 20px; border-radius: var(--r-md); font-size: .8125rem; font-weight: 600; }
+.btn--sm { height: 40px; padding: 0 20px; border-radius: var(--r-md); font-size: var(--t-subtext); font-weight: 600; }
 .btn--lg { height: 52px; padding: 0 28px; font-size: 1rem; }
 
 .btn__arrow { font-family: var(--f-mono); font-weight: 400; transition: transform var(--d-fast) var(--e-out); }
@@ -1091,7 +1108,18 @@ p { margin: 0; max-width: 62ch; }
   background: rgba(255, 255, 255, .07);
 }
 .scen__art--a .sk-r, .scen__art--c .sk-r,
-.skill__art--light .sk-r { background: rgba(10, 10, 10, .06); }
+/* Все двенадцать макетов на одной тёмной подложке.
+
+   Раньше они наследовали три разные заливки от .mock--theory / --practice /
+   --support, и светлые квадраты чередовались с тёмными без всякой системы:
+   набор читался как двенадцать разных картинок, а не как один ряд.
+   Подложка чуть светлее фона секции, плюс волосяная рамка — иначе на чёрном
+   квадрат не имеет краёв и содержимое висит в пустоте. */
+.skill__art {
+  background: #101012;
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, .09);
+}
 .sk-r b { font-weight: 500; }
 .sk-r--dim { opacity: .55; }
 .sk-r--hot { background: var(--c-spark); color: #0A0A0A; }
@@ -1135,7 +1163,10 @@ p { margin: 0; max-width: 62ch; }
   background: rgba(255, 255, 255, .07);
   margin-bottom: .35em;
 }
-.scen__art--a .sk-bar, .mock--theory .sk-bar { background: rgba(10, 10, 10, .06); }
+/* Тёмная полоска адреса нужна только на светлой подложке. В ряду умений
+   подложка тёмная у всех, поэтому :not() выводит его оттуда. */
+.scen__art--a .sk-bar,
+.mock--theory:not(.skill__art) .sk-bar { background: rgba(10, 10, 10, .06); }
 .sk-dots {
   width: 1.6em; height: .34em; flex: none; border-radius: 999px;
   background: currentColor; opacity: .25;
@@ -1332,7 +1363,10 @@ p { margin: 0; max-width: 62ch; }
 .week__content {
   display: grid; grid-template-columns: 92px minmax(0, 1fr);
   column-gap: var(--grid-gap); row-gap: 20px;
-  padding-bottom: clamp(22px, 2.4vw, 34px);
+  /* Раскрытая неделя должна заканчиваться раньше, чем начинается следующая
+     строка списка. На прежних 34px практика почти упиралась в линейку, и
+     нижняя граница блока читалась как разделитель внутри него. */
+  padding-bottom: clamp(40px, 4.4vw, 64px);
 }
 .week__content > * { grid-column: 2; }
 .week__topics { display: flex; flex-wrap: wrap; gap: 6px; align-content: flex-start; }
