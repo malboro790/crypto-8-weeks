@@ -113,15 +113,6 @@ main { overflow-x: clip; }
 
 .section--hairline { border-top: 1px solid var(--c-line); }
 
-/* Переход с первого экрана на второй: белая полоса выезжает пустой, и только
-   потом в неё поднимается содержимое — оно проявляется собственным
-   data-reveal, отсюда ощущение разной скорости слоёв.
-
-   Полэкрана, а не целый: на целом пауза перестаёт читаться как приём
-   и выглядит дырой в вёрстке. Здесь верх карточек виден сразу, как только
-   белое поле занимает кадр. */
-.section--leadin { padding-top: calc(52svh + var(--sp-cinematic)); }
-
 /* An inverted band on an otherwise dark site. Token-level only, so every
    component inside it flips without knowing anything about the theme.
    The lavender accent is too pale on white, so this block uses a deeper cut. */
