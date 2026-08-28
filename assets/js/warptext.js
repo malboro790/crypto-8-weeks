@@ -180,7 +180,7 @@
 
   function frame(now) {
     raf = requestAnimationFrame(frame);
-    if (!paint()) return;
+    paint();
     active += (target - active) * 0.12;
     gl.uniform2f(U.uMouse, mouse[0], mouse[1]);
     gl.uniform1f(U.uActive, active);
@@ -199,13 +199,30 @@
   }
   function wake() { if (!raf) { host.classList.add('is-warping'); raf = requestAnimationFrame(frame); } }
 
-  host.addEventListener('pointerenter', function () { target = 1; wake(); });
-  host.addEventListener('pointerleave', function () { target = 0; wake(); });
-  host.addEventListener('pointermove', function (e) {
-    var r = host.getBoundingClientRect();
-    mouse[0] = (e.clientX - r.left) / r.width;
-    mouse[1] = (e.clientY - r.top) / r.height;
-    target = 1; wake();
-  });
-  window.addEventListener('resize', function () { W = 0; H = 0; wake(); });
+  /* Текстуру готовим до первого наведения и обязательно после загрузки
+     шрифта. Иначе первый кадр рисовался запасной гарнитурой, канвас ещё
+     держал стартовые 300×150, и слово на мгновение прыгало в размере
+     прежде чем начиналось искажение. */
+  function arm() {
+    if (!paint()) return;
+    gl.uniform2f(U.uMouse, 0.5, 0.5);
+    gl.uniform1f(U.uActive, 0);
+    gl.uniform1f(U.uTime, 0);
+    gl.clearColor(0, 0, 0, 0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+    host.addEventListener('pointerenter', function () { target = 1; wake(); });
+    host.addEventListener('pointerleave', function () { target = 0; wake(); });
+    host.addEventListener('pointermove', function (e) {
+      var r = host.getBoundingClientRect();
+      mouse[0] = (e.clientX - r.left) / r.width;
+      mouse[1] = (e.clientY - r.top) / r.height;
+      target = 1; wake();
+    });
+    window.addEventListener('resize', function () { W = 0; H = 0; if (!raf) arm(); else wake(); });
+  }
+
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(arm);
+  else arm();
 })();

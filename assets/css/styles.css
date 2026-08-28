@@ -273,6 +273,21 @@ p { margin: 0; max-width: 62ch; }
 }
 .btn--primary:hover { background: var(--c-accent-deep); border-color: var(--c-accent-deep); }
 
+/* Кнопка первого экрана — искрой. Единственный призыв, который человек
+   видит до того, как начал читать: на чёрном рядом с белым заголовком
+   и приглушённой строкой она остаётся единственным цветным пятном.
+   Остальные кнопки на сайте белые — если нужно так же везде, это одно
+   значение --c-accent в тёмной теме. */
+.hero .btn--primary {
+  background: var(--c-spark);
+  border-color: var(--c-spark);
+  color: #0A0A0A;
+}
+.hero .btn--primary:hover {
+  background: color-mix(in srgb, var(--c-spark) 86%, #000);
+  border-color: color-mix(in srgb, var(--c-spark) 86%, #000);
+}
+
 .btn--ghost {
   background: var(--c-neutral-tint);
   color: var(--c-ink);
@@ -842,40 +857,11 @@ p { margin: 0; max-width: 62ch; }
    пунктов за краем экрана — а это единственное место на странице, где
    сказано, что человек в итоге будет уметь.
    -------------------------------------------------------------------------- */
-/* Список прокручивается внутри себя, а не растягивает страницу на полтора
-   экрана. Сверху и снизу — растворение в фон: обрезанная строка на границе
-   и есть подсказка, что список длиннее видимой части. */
-.animlist { position: relative; margin-top: var(--sp-tight); }
-.animlist__fade {
-  position: absolute; left: 0; right: 0;
-  height: 64px; z-index: 2;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity var(--d-base) var(--e-out);
-}
-.animlist__fade--top { top: 0;    background: linear-gradient(to bottom, var(--c-paper) 8%, transparent); }
-.animlist__fade--bot { bottom: 0; background: linear-gradient(to top,    var(--c-paper) 8%, transparent); }
-.animlist__fade.is-on { opacity: 1; }
-
 .skills {
-  list-style: none; margin: 0; padding: 0;
+  list-style: none; margin: var(--sp-tight) 0 0; padding: 0;
   border-top: 1px solid var(--c-line);
-  max-height: clamp(420px, 58vh, 640px);
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  scrollbar-width: none;
 }
-.skills::-webkit-scrollbar { display: none; }
 
-/* Каждая строка проявляется, когда доезжает до кадра. Начальное состояние
-   задаётся классом, а не стилем по умолчанию: без JS список просто виден
-   целиком, а не остаётся невидимым навсегда. */
-.skills.is-armed .skill {
-  opacity: 0;
-  transform: translateY(16px) scale(.985);
-  transition: opacity var(--d-slow) var(--e-out), transform var(--d-slow) var(--e-out);
-}
-.skills.is-armed .skill.is-in { opacity: 1; transform: none; }
 .skill {
   display: grid;
   grid-template-columns: clamp(148px, 15vw, 196px) minmax(0, 1fr);
@@ -1772,10 +1758,7 @@ p { margin: 0; max-width: 62ch; }
   /* Трекинг ровно нулевой: любое значение сдвигает чернила относительно
      измеренных метрик, и слово перестаёт совпадать с краями сетки. */
   letter-spacing: 0;
-  /* Искра, а не currentColor: слово во всю сетку — единственное место,
-     где цвету хватает площади, чтобы работать заливкой, а не подчёркиванием.
-     Контраст #C1FF0F к чёрному — 16:1. */
-  fill: var(--c-spark);
+  fill: currentColor;
 }
 
 /* Слово начинается сразу под шапкой, поэтому верхний отступ секции задан
@@ -1801,6 +1784,8 @@ p { margin: 0; max-width: 62ch; }
   line-height: 1.25;
   letter-spacing: -.005em;
   text-wrap: balance;
+  /* На тон тише белого заголовка: строка поясняет слово, а не спорит с ним. */
+  color: rgba(255, 255, 255, .8);
 }
 /* Кнопка идёт сразу за строкой под заголовком — между ними больше ничего нет. */
 .hero .cta-row { margin-top: clamp(28px, 3vw, 40px); }

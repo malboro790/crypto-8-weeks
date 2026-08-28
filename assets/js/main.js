@@ -251,43 +251,6 @@
   })();
 
   /* ---------------------------------------------------------------------- */
-  /* Список умений: строки проявляются по мере прокрутки внутри блока       */
-  /* ---------------------------------------------------------------------- */
-  (function animList() {
-    var wrap = $('[data-animlist]');
-    if (!wrap) return;
-    var list = $('.skills', wrap);
-    var top = $('.animlist__fade--top', wrap);
-    var bot = $('.animlist__fade--bot', wrap);
-    if (!list) return;
-
-    /* Растворение показываем только с той стороны, где список правда
-       продолжается: висящий градиент у начала выглядит как грязь. */
-    function fades() {
-      var max = list.scrollHeight - list.clientHeight;
-      if (top) top.classList.toggle('is-on', list.scrollTop > 4);
-      if (bot) bot.classList.toggle('is-on', max > 4 && list.scrollTop < max - 4);
-    }
-    list.addEventListener('scroll', fades, { passive: true });
-    window.addEventListener('resize', fades);
-    fades();
-
-    if (reduceMotion || !('IntersectionObserver' in window)) return;
-
-    /* Класс вешаем из JS: без него строки видны сразу, и список остаётся
-       рабочим, даже если этот модуль не отработал. */
-    list.classList.add('is-armed');
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        if (!en.isIntersecting) return;
-        en.target.classList.add('is-in');
-        io.unobserve(en.target);
-      });
-    }, { root: list, threshold: 0.15 });
-    $$('.skill', list).forEach(function (li) { io.observe(li); });
-  })();
-
-  /* ---------------------------------------------------------------------- */
   /* Stats: numbers count up once                                           */
   /* ---------------------------------------------------------------------- */
   (function stats() {
