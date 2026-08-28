@@ -122,6 +122,17 @@ main { overflow-x: clip; }
 
 .section--hairline { border-top: 1px solid var(--c-line); }
 
+/* Секция прилипает к верху окна, и следующая наезжает на неё сверху — тот же
+   переход, что у первого экрана. Слой не задаём: у всех секций он одинаковый,
+   и при равном z-index более поздняя в разметке рисуется поверх.
+
+   Только с широкого экрана: прилипшая секция выше окна обрезается снизу
+   и часть содержимого становится недостижимой, а в узкой колонке карточки
+   встают в два ряда и в экран уже не помещаются. */
+@media (min-width: 1025px) {
+  .section--pin { position: sticky; top: 0; }
+}
+
 /* An inverted band on an otherwise dark site. Token-level only, so every
    component inside it flips without knowing anything about the theme.
    The lavender accent is too pale on white, so this block uses a deeper cut. */
@@ -476,17 +487,38 @@ p { margin: 0; max-width: 62ch; }
 
    Линии рисует псевдоэлемент, а не сам фон: маска гасит слой к центру, и,
    будь она на .hero__bg, вместе с линиями исчезла бы и чёрная подложка.
-   Провал в середине не украшение — он держит чистое поле под словом. */
+   Провал в середине не украшение — он держит чистое поле под словом.
+
+   Значения вынесены в переменные: ту же сетку носят тёмные секции ниже
+   по странице, и держать её в двух местах — верный способ развести
+   их по шагу при первой же правке. */
+:root {
+  --grid-lines:
+    repeating-linear-gradient(to right,  rgba(255, 255, 255, .11) 0 1px, transparent 1px 139px),
+    repeating-linear-gradient(to bottom, rgba(255, 255, 255, .11) 0 1px, transparent 1px 139px);
+  --grid-fade: radial-gradient(125% 95% at 50% 50%, transparent 0%, rgba(0, 0, 0, .55) 48%, #000 78%);
+}
 .hero__bg::after {
   content: "";
   position: absolute; inset: 0;
-  background-image:
-    repeating-linear-gradient(to right,  rgba(255, 255, 255, .11) 0 1px, transparent 1px 139px),
-    repeating-linear-gradient(to bottom, rgba(255, 255, 255, .11) 0 1px, transparent 1px 139px);
+  background-image: var(--grid-lines);
   background-position: center center;
-  -webkit-mask-image: radial-gradient(125% 95% at 50% 50%, transparent 0%, rgba(0, 0, 0, .55) 48%, #000 78%);
-          mask-image: radial-gradient(125% 95% at 50% 50%, transparent 0%, rgba(0, 0, 0, .55) 48%, #000 78%);
+  -webkit-mask-image: var(--grid-fade);
+          mask-image: var(--grid-fade);
 }
+
+/* Та же сетка на тёмных секциях в глубине страницы. Слой лежит между фоном
+   секции и её содержимым, поэтому контейнер приходится поднимать явно. */
+.section--grid::before {
+  content: "";
+  position: absolute; inset: 0; z-index: 0;
+  pointer-events: none;
+  background-image: var(--grid-lines);
+  background-position: center center;
+  -webkit-mask-image: var(--grid-fade);
+          mask-image: var(--grid-fade);
+}
+.section--grid > .container { position: relative; z-index: 1; }
 
 .hero__pit {
   position: absolute;
@@ -726,7 +758,6 @@ p { margin: 0; max-width: 62ch; }
   color: rgba(10, 10, 10, .5);
 }
 .tx__row b { font-weight: 500; color: #0A0A0A; }
-.tx__row--test { background: rgba(10, 10, 10, .05); }
 .tx__row--main {
   background: #0A0A0A; color: rgba(255, 255, 255, .5);
   padding: 11px;
