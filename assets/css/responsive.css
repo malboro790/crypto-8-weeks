@@ -134,6 +134,9 @@
   .tiers--single .tier__note, .tiers--single .tier__cta, .tiers--single .tier__more { grid-area: auto; }
   .tiers--single .tier__more { margin-top: var(--sp-block); }
   .tiers--single .tier__list { margin-top: 0; }
+  /* Воздух в строках нужен, только когда список стоит колонкой во всю высоту
+     карточки. В столбик он просто растягивает блок на лишний экран. */
+  .tiers--single .tier__list li { padding: 10px 0; }
 
   .tier__more-sum { display: flex; }
   .tier__more[open] .tier__list { margin-top: var(--sp-stack); }
