@@ -343,53 +343,29 @@ p { margin: 0; max-width: 62ch; }
    it stays sharp at any density and needs no extra request. The lighting is
    fixed (top-left key, bottom-right bounce) — it reads as an object, so it must
    not flip with the theme the way a flat icon would. */
+/* Марка монохромная: сплошной круг цветом текста, «8» вырезана в нём фоном
+   секции. Объём, блик и подложка убраны — на чёрном сайте лепной шар был
+   единственным трёхмерным объектом и читался как чужой элемент. Круг
+   переворачивается вместе с темой сам: и заливка, и цифра берут currentColor
+   и цвет подложки. */
 .wordmark__glyph {
   width: 26px; height: 26px; flex: none; border-radius: 50%;
   position: relative; display: grid; place-items: center;
-  /* Шар теперь стеклянный, а не фиолетовый: тот же объём, но из искры и
-     чёрного, чтобы марка не спорила с монохромом. */
-  background:
-    /* key light */
-    radial-gradient(circle at 32% 26%,
-      color-mix(in srgb, var(--c-spark) 55%, #fff) 0%,
-      transparent 42%),
-    /* bounce light off the surface below */
-    radial-gradient(circle at 72% 84%,
-      color-mix(in srgb, var(--c-spark) 40%, #000) 0%,
-      transparent 38%),
-    /* body, shading away from the key */
-    radial-gradient(circle at 34% 30%,
-      #3A3A3A 0%,
-      #1A1A1A 72%,
-      #0A0A0A 100%);
-  box-shadow:
-    inset 0 -1px 2px #000,
-    inset 0 1px 1px rgba(255, 255, 255, .28);
+  background: currentColor;
 }
-/* The numbered disc. `8` is content rather than a glyph in the markup so the
-   wordmark stays a single readable string for assistive tech. */
+/* Цифра — контент, а не глиф в разметке: так вся марка остаётся одной
+   читаемой строкой для скринридера. */
 .wordmark__glyph::before {
   content: "8";
-  width: 13px; height: 13px;
-  display: grid; place-items: center;
-  border-radius: 50%;
-  background: #FFFFFF;
   font-family: var(--f-display);
-  font-size: 9px; font-weight: 700; line-height: 1;
-  letter-spacing: 0;
-  color: color-mix(in srgb, var(--c-accent) 55%, #000);
-  /* nudged up-left with the sphere's curvature, not centred flat on it */
-  transform: translate(-.5px, -.5px);
+  /* Крупнее прежнего: раньше цифра сидела на белом кружке 13px и была
+     всего 9px — без кружка ей нужен собственный вес. */
+  font-size: 15px; font-weight: 700; line-height: 1;
+  letter-spacing: -.02em;
+  color: var(--c-paper);
+  transform: translateY(.5px);
 }
-/* Specular highlight, offset from the key light so the ball reads as glossy. */
-.wordmark__glyph::after {
-  content: ""; position: absolute;
-  top: 3px; left: 5px;
-  width: 7px; height: 5px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, .62);
-  filter: blur(1.2px);
-}
+
 .wordmark__sub { color: var(--c-ink-faint); font-weight: var(--w-text); }
 
 .nav { display: flex; align-items: center; gap: 2px; }
@@ -544,15 +520,6 @@ p { margin: 0; max-width: 62ch; }
 }
 .hero .cta-row { margin-top: 48px; justify-content: center; gap: 16px; }
 
-/* Дата старта: служебная подпись под кнопкой, не претендующая на внимание
-   заголовка. Сама дата ярче подписи — глаз цепляется за неё, а не за слово
-   «старт». */
-.hero__start {
-  margin-top: 20px;
-  text-align: center;
-  max-width: none;
-}
-.hero__start time { color: var(--c-ink); }
 /* Над полем монет полупрозрачная заливка вторичной кнопки исчезает: на пёстром
    фоне 7% белого не читаются, и остаётся текст, висящий поверх монет.
    Здесь ей нужен собственный непрозрачный корпус. */
@@ -2018,16 +1985,5 @@ p { margin: 0; max-width: 62ch; }
   letter-spacing: -.01em;
   text-wrap: balance;
 }
-
-/* Автор на первом экране: та же карточка, но по центру и без верхней линии —
-   на чёрном фоне она отрезала бы подпись от заголовка. */
-.hero__author {
-  border-top: 0;
-  padding-top: 0;
-  margin-top: clamp(20px, 2.4vw, 32px);
-  text-align: left;
-  max-width: 30rem;
-}
-.hero__author .author__frame { width: 64px; height: 64px; }
-.hero__author .author__role { max-width: 34ch; }
-.hero .cta-row { margin-top: clamp(20px, 2.2vw, 28px); }
+/* Кнопка идёт сразу за строкой под заголовком — между ними больше ничего нет. */
+.hero .cta-row { margin-top: clamp(28px, 3vw, 40px); }
