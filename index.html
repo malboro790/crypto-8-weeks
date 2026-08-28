@@ -16,9 +16,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap">
 
-<link rel="stylesheet" href="assets/css/tokens.css?v=276">
-<link rel="stylesheet" href="assets/css/styles.css?v=276">
-<link rel="stylesheet" href="assets/css/responsive.css?v=276">
+<link rel="stylesheet" href="assets/css/tokens.css?v=283">
+<link rel="stylesheet" href="assets/css/styles.css?v=283">
+<link rel="stylesheet" href="assets/css/responsive.css?v=283">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='none' stroke='%23FFFFFF' stroke-width='2'/><circle cx='16' cy='16' r='6' fill='%23C1FF0F'/></svg>">
 </head>
 <body>
@@ -116,55 +116,77 @@
     <div class="scens">
 
       <article class="scen" data-reveal>
+        <!-- Мокап телефона намеренно вылезает за нижний край карточки:
+             целиком он не помещается в 252px, а обрезанный снизу читается
+             как настоящее устройство, а не как иконка телефона. -->
         <div class="scen__art scen__art--a" aria-hidden="true">
-          <span class="art-pill">₽ на счёте</span>
-          <span class="art-arrow">↓</span>
-          <span class="art-pill art-pill--hot">100 000 <i>USDT</i></span>
-          <span class="art-arrow">↓</span>
-          <span class="art-pill">счёт за границей</span>
+          <div class="phone">
+            <div class="phone__island"></div>
+            <div class="phone__scr">
+              <p class="phone__h">Отправить</p>
+              <div class="phone__amt">
+                <img src="assets/coins/usdt.png" alt="" width="26" height="26" loading="lazy">
+                <b>100&nbsp;000</b><i>USDT</i>
+              </div>
+              <div class="phone__f"><span>Сеть</span><b>TRON</b></div>
+              <div class="phone__f"><span>Кому</span><b>TR7N…9Qv3</b></div>
+              <div class="phone__go">Отправить</div>
+            </div>
+          </div>
         </div>
         <span class="scen__i">01</span>
         <h3 class="scen__t">Нужно перевести деньги</h3>
-        <p class="scen__d">Часть капитала нужно перевести за границу, между странами
-        или просто вывести из привычной банковской системы.</p>
+        <p class="scen__d">Часть капитала нужно перевести за границу, между странами
+        или просто вывести из привычной банковской системы.</p>
       </article>
 
       <article class="scen" data-reveal style="--reveal-delay:70ms">
         <div class="scen__art scen__art--b" aria-hidden="true">
-          <div class="art-bal">100 000<i>USDT</i></div>
-          <div class="art-nets">
-            <span class="is-on">TRON</span><span>Ethereum</span><span>Solana</span><span>BNB</span>
+          <div class="wal">
+            <div class="wal__top">
+              <span>Кошелёк</span><span class="wal__addr">0x7a…4F2c</span>
+            </div>
+            <img class="wal__coin" src="assets/coins/usdt.png" alt="" width="40" height="40" loading="lazy">
+            <div class="wal__bal">100&nbsp;000<i>USDT</i></div>
+            <div class="wal__sub">≈ 100 000 $</div>
           </div>
-          <p class="art-note">одна сумма — четыре разные сети</p>
         </div>
         <span class="scen__i">02</span>
-        <h3 class="scen__t">Деньги уже в крипте</h3>
-        <p class="scen__d">USDT или другие активы уже лежат на бирже или кошельке,
-        но пока непонятно, как их безопасно хранить и перемещать.</p>
+        <h3 class="scen__t">Деньги уже в крипте</h3>
+        <p class="scen__d">USDT или другие активы уже лежат на бирже или кошельке,
+        но пока непонятно, как их безопасно хранить и перемещать.</p>
       </article>
 
       <article class="scen" data-reveal style="--reveal-delay:140ms">
         <div class="scen__art scen__art--c" aria-hidden="true">
-          <div class="art-row"><span>Тестовая</span><b>10 USDT</b></div>
-          <span class="art-arrow">↓</span>
-          <div class="art-row art-row--hot"><span>Основная</span><b>100 000 USDT</b></div>
+          <div class="tx">
+            <div class="tx__head"><span>Перевод</span><b>TRON · TRC20</b></div>
+            <div class="tx__row"><span>Откуда</span><b>TR7N…9Qv3</b></div>
+            <div class="tx__row"><span>Кому</span><b>TXk4…21aF</b></div>
+            <div class="tx__row tx__row--test"><span>Тестовая</span><b>10 USDT</b></div>
+            <div class="tx__row tx__row--main"><span>Основная</span><b>100 000 USDT</b></div>
+          </div>
         </div>
         <span class="scen__i">03</span>
         <h3 class="scen__t">Впереди крупная операция</h3>
         <p class="scen__d">Покупка недвижимости, автомобиля, перевод накоплений
-        или другой платёж, где цена ошибки уже ощутима.</p>
+        или другой платёж, где цена ошибки уже ощутима.</p>
       </article>
 
       <article class="scen" data-reveal style="--reveal-delay:210ms">
         <div class="scen__art scen__art--d" aria-hidden="true">
-          <div class="art-grid">
-            <span>Wallet</span><span>Network</span><span>Seed</span><span>Address</span>
+          <div class="cloud">
+            <span>wallet</span><span>gas</span><span>seed</span><span>TRC20</span>
+            <span>network</span><span>swap</span><span>fee</span>
+            <span>address</span><span>approve</span><span>explorer</span>
+            <b class="cloud__q">?</b><span>DEX</span><span>2FA</span>
+            <span>stablecoin</span><span>chain</span><span>KYC</span><span>custody</span>
           </div>
         </div>
         <span class="scen__i">04</span>
         <h3 class="scen__t">Хочется сначала разобраться</h3>
-        <p class="scen__d">До первой серьёзной операции хочется понять кошельки, сети,
-        seed-фразы, комиссии и почему всё это работает не так, как привычный банк.</p>
+        <p class="scen__d">До первой серьёзной операции хочется понять кошельки, сети,
+        seed-фразы, комиссии и почему всё это работает не так, как привычный банк.</p>
       </article>
 
     </div>
@@ -1262,8 +1284,8 @@
 
 
 
-<script src="assets/js/warptext.js?v=276" defer></script>
-<script src="assets/js/coinpit.js?v=276"></script>
-<script src="assets/js/main.js?v=276"></script>
+<script src="assets/js/warptext.js?v=283" defer></script>
+<script src="assets/js/coinpit.js?v=283"></script>
+<script src="assets/js/main.js?v=283"></script>
 </body>
 </html>

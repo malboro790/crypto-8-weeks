@@ -113,12 +113,14 @@ main { overflow-x: clip; }
 
 .section--hairline { border-top: 1px solid var(--c-line); }
 
-/* Переход с первого экрана на второй. Белая полоса выезжает на весь экран
-   пустой, и только потом в неё поднимается содержимое — оно проявляется
-   собственным data-reveal, отсюда и ощущение разной скорости слоёв.
-   Пустой экран сделан полем секции, а не отдельным блоком: так он живёт
-   в потоке и ничего не перекрывает. */
-.section--leadin { padding-top: calc(100svh + var(--sp-cinematic)); }
+/* Переход с первого экрана на второй: белая полоса выезжает пустой, и только
+   потом в неё поднимается содержимое — оно проявляется собственным
+   data-reveal, отсюда ощущение разной скорости слоёв.
+
+   Полэкрана, а не целый: на целом пауза перестаёт читаться как приём
+   и выглядит дырой в вёрстке. Здесь верх карточек виден сразу, как только
+   белое поле занимает кадр. */
+.section--leadin { padding-top: calc(52svh + var(--sp-cinematic)); }
 
 /* An inverted band on an otherwise dark site. Token-level only, so every
    component inside it flips without knowing anything about the theme.
@@ -602,57 +604,155 @@ p { margin: 0; max-width: 62ch; }
 .scen__art--c { background: #F4F4F5; color: #0A0A0A; }
 .scen__art--d { background: #0A0A0A; color: #FFFFFF; }
 
-/* --- shared art pieces, sized to read at a glance ----------------------- */
-.art-pill {
-  display: block; text-align: left;
-  font-family: var(--f-mono); font-size: .8125rem; font-weight: 500;
-  padding: 11px 14px; border-radius: var(--r-md);
-  background: rgba(255, 255, 255, .82); color: #0A0A0A;
-}
-.art-pill--hot {
-  background: #0A0A0A; color: #FFFFFF;
-  font-size: 1.0625rem; letter-spacing: -.02em; padding: 13px 14px;
-}
-.art-pill--hot i { font-style: normal; opacity: .75; font-size: .78em; margin-left: .35em; }
-.art-arrow { font-family: var(--f-mono); font-size: .875rem; opacity: .5; padding-left: 14px; line-height: 1; }
+/* --------------------------------------------------------------------------
+   ГРАФИКА КАРТОЧЕК
 
-.art-bal {
+   Четыре разных интерфейса, а не четыре набора абстрактных плашек: телефон
+   с экраном перевода, кошелёк с балансом, лист транзакции и облако терминов.
+   Общее у них одно — моношрифт и та же сетка скруглений, что на всём сайте.
+   -------------------------------------------------------------------------- */
+
+/* --- 01 · телефон ------------------------------------------------------- */
+/* Телефон помещается в карточку целиком. Обрезанный снизу он выглядел бы
+   эффектнее, но кнопка «Отправить» попадала ровно на срез — половина кнопки
+   на краю читается как баг вёрстки, а не как приём. */
+.scen__art--a { padding: 0; align-items: center; justify-content: center; }
+.phone {
+  width: min(148px, 78%);
+  flex: 0 0 auto;
+  border-radius: 26px;
+  background: #0A0A0A;
+  padding: 5px;
+  box-shadow: 0 18px 40px -20px rgba(10, 10, 10, .55);
+  position: relative;
+}
+.phone__island {
+  position: absolute; top: 11px; left: 50%; transform: translateX(-50%);
+  width: 38px; height: 9px; border-radius: 5px;
+  background: #0A0A0A; z-index: 2;
+}
+.phone__scr {
+  border-radius: 22px;
+  background: #141416;
+  padding: 24px 11px 12px;
+  min-height: 212px;
+  display: flex; flex-direction: column; gap: 7px;
+  color: #FFFFFF;
+}
+.phone__h {
+  font-family: var(--f-mono); font-size: .625em;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: rgba(255, 255, 255, .45);
+}
+.phone__amt {
+  display: flex; align-items: center; gap: 7px;
+  margin: 2px 0 6px;
   font-family: var(--f-display); font-weight: 600;
-  font-size: clamp(1.75rem, 2.4vw, 2.25rem); letter-spacing: -.04em; line-height: 1;
+  /* Кегль подобран так, чтобы «100 000 USDT» с иконкой умещались в строку:
+     на 18px хвост USDT срезался краем экрана. */
+  font-size: .9375em; letter-spacing: -.03em;
+  white-space: nowrap;
 }
-.art-bal i { font-style: normal; font-size: .44em; opacity: .55; margin-left: .4em; letter-spacing: 0; }
-.art-nets { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
-.art-nets span {
-  font-family: var(--f-mono); font-size: .75rem;
-  padding: 6px 10px; border-radius: var(--r-md);
-  background: rgba(255, 255, 255, .1); color: rgba(255, 255, 255, .75);
+.phone__amt img { width: 1.125em; height: 1.125em; flex: none; }
+.phone__amt i { font-style: normal; font-size: .62em; opacity: .5; letter-spacing: 0; }
+.phone__f {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  white-space: nowrap;
+  font-family: var(--f-mono); font-size: .625em;
+  padding: 8px 10px; border-radius: 10px;
+  background: rgba(255, 255, 255, .06);
 }
-/* Активная сеть — чёрная плитка с белым текстом.
-   this 12px label needs. */
-.art-nets .is-on { background: #0A0A0A; color: #FFFFFF; }
-.art-note { font-size: .75rem; opacity: .55; margin-top: 12px; }
+.phone__f span { color: rgba(255, 255, 255, .45); }
+.phone__f b { font-weight: 500; }
+.phone__go {
+  margin-top: auto;
+  text-align: center;
+  font-family: var(--f-display); font-weight: 600; font-size: .75em;
+  padding: 10px; border-radius: 12px;
+  background: var(--c-spark); color: #0A0A0A;
+}
 
-.art-row {
-  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
-  font-family: var(--f-mono); font-size: .8125rem;
-  padding: 13px 14px; border-radius: var(--r-md);
-  background: rgba(255, 255, 255, .9); color: #0A0A0A;
+/* --- 02 · кошелёк ------------------------------------------------------- */
+.scen__art--b { justify-content: center; }
+.wal { font-size: 16px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0; }
+.wal__top {
+  display: flex; align-items: center; gap: 8px;
+  white-space: nowrap;
+  font-family: var(--f-mono); font-size: .6875em;
+  color: rgba(255, 255, 255, .45);
+  margin-bottom: 18px;
 }
-.art-row b { font-weight: 600; }
-.art-row--hot {
-  background: #0A0A0A; color: #FFFFFF;
-  font-size: .9375rem; padding: 15px 14px;
+.wal__addr {
+  padding: 4px 8px; border-radius: 999px;
+  background: rgba(255, 255, 255, .08); color: rgba(255, 255, 255, .7);
 }
-.art-row--hot b { font-size: 1.0625rem; letter-spacing: -.02em; }
+.wal__coin { width: 40px; height: 40px; margin-bottom: 14px; }
+.wal__bal {
+  font-family: var(--f-display); font-weight: 600;
+  font-size: clamp(1.5rem, 2.1vw, 2rem); letter-spacing: -.04em; line-height: 1;
+}
+.wal__bal i { font-style: normal; font-size: .42em; opacity: .5; margin-left: .4em; letter-spacing: 0; }
+.wal__sub {
+  margin-top: 8px;
+  font-family: var(--f-mono); font-size: .6875em;
+  color: rgba(255, 255, 255, .4);
+}
 
-.art-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; }
-.art-grid span {
-  font-family: var(--f-mono); font-size: .8125rem; font-weight: 500;
-  padding: 18px 10px; border-radius: var(--r-md); text-align: center;
-  /* Тёмная подложка, а не светлая: белый на осветлённом фиолетовом даёт 4.28,
-     ниже порога для мелкого текста. */
-  background: rgba(0, 0, 0, .20);
-}/* ==========================================================================
+/* --- 03 · транзакция ---------------------------------------------------- */
+.scen__art--c { justify-content: center; gap: 0; }
+.tx { font-size: 16px; display: flex; flex-direction: column; gap: 5px; width: 100%; }
+.tx__head {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  font-family: var(--f-mono); font-size: .625em;
+  letter-spacing: .06em; text-transform: uppercase;
+  color: rgba(10, 10, 10, .45);
+  padding-bottom: 9px; margin-bottom: 4px;
+  border-bottom: 1px solid rgba(10, 10, 10, .1);
+}
+.tx__head b { font-weight: 500; color: rgba(10, 10, 10, .7); }
+/* Ключ слева, значение справа, цифры табличные — строки выстраиваются
+   по одной вертикали, и лист читается как выписка, а не как набор плашек. */
+.tx__row {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  white-space: nowrap;
+  font-family: var(--f-mono); font-size: .6875em;
+  font-variant-numeric: tabular-nums;
+  padding: 9px 11px; border-radius: 10px;
+  background: rgba(10, 10, 10, .05);
+  color: rgba(10, 10, 10, .5);
+}
+.tx__row b { font-weight: 500; color: #0A0A0A; }
+.tx__row--test { background: rgba(10, 10, 10, .05); }
+.tx__row--main {
+  background: #0A0A0A; color: rgba(255, 255, 255, .5);
+  padding: 11px;
+}
+.tx__row--main b { color: var(--c-spark); }
+
+/* --- 04 · облако терминов ----------------------------------------------- */
+.scen__art--d { justify-content: center; padding: clamp(14px, 1.4vw, 18px); }
+.cloud {
+  font-size: 16px;
+  display: flex; flex-wrap: wrap; align-content: center; justify-content: center;
+  gap: 5px;
+}
+.cloud span {
+  font-family: var(--f-mono); font-size: .625em;
+  padding: 5px 8px; border-radius: 999px;
+  background: rgba(255, 255, 255, .07);
+  color: rgba(255, 255, 255, .55);
+}
+/* Вопрос стоит в середине перечня, а не поверх него: наложенный знак
+   перекрывал бы слова, а вставленный в поток раздвигает их сам. */
+.cloud__q {
+  width: 2.12em; height: 2.12em; flex: none;
+  display: grid; place-items: center;
+  border-radius: 999px;
+  background: var(--c-spark); color: #0A0A0A;
+  font-family: var(--f-display); font-weight: 700; font-size: 1.125em;
+  line-height: 1;
+}
+/* ==========================================================================
    COMPARE — banking vs crypto
    ========================================================================== */
 
