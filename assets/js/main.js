@@ -42,42 +42,6 @@
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
   /* ---------------------------------------------------------------------- */
-  /* A/B hero variants: ?v=a | b | c   (add ?ab=1 for a visible switcher)    */
-  /* ---------------------------------------------------------------------- */
-  (function heroVariants() {
-    var params = new URLSearchParams(location.search);
-    var v = (params.get('v') || 'b').toLowerCase();
-    if (['a', 'b', 'c'].indexOf(v) < 0) v = 'b';
-
-    function apply(which) {
-      $$('[data-cover]').forEach(function (el) {
-        el.classList.toggle('is-on', el.getAttribute('data-cover') === which);
-      });
-      $$('[data-ab]').forEach(function (b) {
-        b.setAttribute('aria-pressed', String(b.getAttribute('data-ab') === which));
-      });
-    }
-    apply(v);
-
-    if (params.get('ab') === '1') {
-      var box = document.createElement('div');
-      box.className = 'abswitch';
-      box.setAttribute('role', 'group');
-      box.setAttribute('aria-label', 'Варианты первого экрана');
-      ['a', 'b', 'c'].forEach(function (k) {
-        var b = document.createElement('button');
-        b.type = 'button';
-        b.setAttribute('data-ab', k);
-        b.textContent = k.toUpperCase();
-        b.addEventListener('click', function () { apply(k); });
-        box.appendChild(b);
-      });
-      document.body.appendChild(box);
-      apply(v);
-    }
-  })();
-
-  /* ---------------------------------------------------------------------- */
   /* Reveal on scroll                                                       */
   /* ---------------------------------------------------------------------- */
   var io = null;

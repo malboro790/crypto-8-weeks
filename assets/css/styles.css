@@ -1618,22 +1618,7 @@ p { margin: 0; max-width: 62ch; }
    HERO A/B VARIANTS
    ========================================================================== */
 
-[data-cover] { display: none; }
-[data-cover].is-on { display: inline; }
 
-.abswitch {
-  position: fixed; left: 12px; bottom: 12px; z-index: 120;
-  display: flex; gap: 3px; padding: 4px;
-  background: var(--c-surface); border: 1px solid var(--c-line);
-  border-radius: var(--r-pill); box-shadow: var(--sh-md);
-}
-.abswitch button {
-  appearance: none; border: 0; cursor: pointer;
-  background: transparent; color: var(--c-ink-muted);
-  font-family: var(--f-mono); font-size: var(--t-subtext);
-  padding: 7px 12px; border-radius: var(--r-pill);
-}
-.abswitch button[aria-pressed="true"] { background: var(--c-accent); color: var(--c-on-accent); }
 
 /* ==========================================================================
    MOTION
@@ -1986,3 +1971,63 @@ p { margin: 0; max-width: 62ch; }
   background-position: 0 94%;
   background-repeat: no-repeat;
 }
+
+/* --------------------------------------------------------------------------
+   ЗАГОЛОВОК ПЕРВОГО ЭКРАНА
+
+   Одно слово от края до края сетки. Обычный текст такого не умеет: кегль
+   пришлось бы подбирать под каждую ширину экрана и всё равно промахиваться
+   на пару пикселей.
+
+   viewBox снят с настоящих чернил Geist 600 (measureText на кегле 254:
+   ink 10.9…976.1 по горизонтали, 184.4 над базовой линией и 4.1 под ней),
+   поэтому буквы упираются в оба края без растяжения. Если шрифт не
+   загрузится, запасной просто впишется меньшим кеглем — свалиться за край
+   ему не даёт preserveAspectRatio по умолчанию.
+   -------------------------------------------------------------------------- */
+.hero__word { width: 100%; margin: 0; line-height: 0; }
+.hero__word-svg { display: block; width: 100%; height: auto; }
+.hero__word text {
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: 254px;
+  /* Трекинг ровно нулевой: любое значение сдвигает чернила относительно
+     измеренных метрик, и слово перестаёт совпадать с краями сетки. */
+  letter-spacing: 0;
+  fill: currentColor;
+}
+
+/* Слово начинается сразу под шапкой, поэтому верхний отступ секции задан
+   явно: при центрировании по высоте одного padding не хватает, и «P»
+   налезала на пункты меню. */
+/* Нижнее поле меньше верхнего: сверху его съедает шапка, а внизу секции
+   и так стоит поле монет. Ради того, чтобы первый экран оставался одним
+   экраном, а не почти одним. */
+.hero { padding-top: clamp(104px, 12vh, 148px); padding-bottom: clamp(56px, 7vh, 96px); }
+
+/* Строка под словом — ровно вполовину кегля заголовка. */
+.hero__claim {
+  margin-top: clamp(16px, 2vw, 28px);
+  /* 24ch давали три строки и лишние восемьдесят пикселей высоты — первый
+     экран переставал помещаться в экран. */
+  max-width: 34ch;
+  font-family: var(--f-display);
+  font-weight: var(--w-display);
+  font-size: clamp(1.0625rem, 0.475rem + 1.65vw, 2.0625rem);
+  line-height: 1.18;
+  letter-spacing: -.01em;
+  text-wrap: balance;
+}
+
+/* Автор на первом экране: та же карточка, но по центру и без верхней линии —
+   на чёрном фоне она отрезала бы подпись от заголовка. */
+.hero__author {
+  border-top: 0;
+  padding-top: 0;
+  margin-top: clamp(20px, 2.4vw, 32px);
+  text-align: left;
+  max-width: 30rem;
+}
+.hero__author .author__frame { width: 64px; height: 64px; }
+.hero__author .author__role { max-width: 34ch; }
+.hero .cta-row { margin-top: clamp(20px, 2.2vw, 28px); }
