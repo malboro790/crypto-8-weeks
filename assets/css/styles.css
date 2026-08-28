@@ -488,9 +488,9 @@ p { margin: 0; max-width: 62ch; }
    будь она на .hero__bg, вместе с линиями исчезла бы и чёрная подложка.
    Провал в середине не украшение — он держит чистое поле под словом.
 
-   Значения вынесены в переменные: сетка какое-то время стояла и на тёмных
-   секциях ниже, и держать её в двух местах — верный способ развести их
-   по шагу при первой же правке. Сейчас она осталась только здесь. */
+   Значения вынесены в переменные: ту же сетку носят тёмные секции ниже
+   по странице, и держать её в двух местах — верный способ развести их
+   по шагу при первой же правке. */
 :root {
   --grid-lines:
     repeating-linear-gradient(to right,  rgba(255, 255, 255, .11) 0 1px, transparent 1px 139px),
@@ -505,6 +505,19 @@ p { margin: 0; max-width: 62ch; }
   -webkit-mask-image: var(--grid-fade);
           mask-image: var(--grid-fade);
 }
+
+/* Та же сетка на тёмной секции в глубине страницы. Слой лежит между фоном
+   секции и её содержимым, поэтому контейнер приходится поднимать явно. */
+.section--grid::before {
+  content: "";
+  position: absolute; inset: 0; z-index: 0;
+  pointer-events: none;
+  background-image: var(--grid-lines);
+  background-position: center center;
+  -webkit-mask-image: var(--grid-fade);
+          mask-image: var(--grid-fade);
+}
+.section--grid > .container { position: relative; z-index: 1; }
 
 
 .hero__pit {
