@@ -500,6 +500,10 @@ p { margin: 0; max-width: 62ch; }
      Без него линии упирались в границу блока и обрывались ровной чертой,
      из-за чего сетка читалась как картинка с краями, а не как фон. */
   --grid-edges: linear-gradient(to bottom, transparent 0%, #000 16%, #000 84%, transparent 100%);
+  /* Вариант для блока, где сетка нужна только внизу: сверху её нет вовсе,
+     к низу она набирает силу и гаснет у самой границы, чтобы не упереться
+     в следующую секцию ровной чертой. */
+  --grid-down: linear-gradient(to bottom, transparent 24%, rgba(0, 0, 0, .5) 58%, #000 88%, transparent 100%);
 }
 .hero__bg::after {
   content: "";
@@ -520,6 +524,9 @@ p { margin: 0; max-width: 62ch; }
   content: "";
   position: absolute; inset: 0; z-index: 0;
   pointer-events: none;
+  /* Собственный слой композитора. Маска внутри прилипшей секции без него
+     перерисовывалась вместе с прокруткой и мигала полосой. */
+  transform: translateZ(0);
   background-image: var(--grid-lines);
   background-position: center center;
   /* Две маски пересечением: радиальная держит чистое поле в середине,
@@ -530,6 +537,23 @@ p { margin: 0; max-width: 62ch; }
           mask-composite: intersect;
 }
 .section--grid > .container { position: relative; z-index: 1; }
+
+/* Сетка только в нижней части блока. Отдельный класс, а не переопределение
+   маски у .section--grid: у них разный смысл, и общее правило пришлось бы
+   читать в двух режимах сразу. */
+.section--grid-down::before {
+  content: "";
+  position: absolute; inset: 0; z-index: 0;
+  pointer-events: none;
+  /* Собственный слой композитора. Маска внутри прилипшей секции без него
+     перерисовывалась вместе с прокруткой и мигала полосой. */
+  transform: translateZ(0);
+  background-image: var(--grid-lines);
+  background-position: center center;
+  -webkit-mask-image: var(--grid-down);
+          mask-image: var(--grid-down);
+}
+.section--grid-down > .container { position: relative; z-index: 1; }
 
 
 .hero__pit {

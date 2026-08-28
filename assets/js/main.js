@@ -287,11 +287,21 @@
       var long = window.matchMedia('(min-width: 1025px)').matches;
       secs.forEach(function (s, i) {
         var next = secs[i + 1] || document.querySelector('.footer');
-        var h = s.offsetHeight;
+        /* Дробная высота, а не offsetHeight: тот округляет до целого, и при
+           смещении на пару десятых пикселя нижний край прилипшей секции
+           вставал выше низа окна — по низу экрана проскакивала полоска
+           того, что лежит под ней.
+
+           Округление строго вверх плюс запасной пиксель: смещение
+           отрицательное, поэтому вверх — это в сторону нуля, и нижний край
+           гарантированно уходит за низ окна, а не не доходит до него.
+           Переполнение прячется под сгибом и попадает на собственное поле
+           секции, так что ничего не срезается. */
+        var h = s.getBoundingClientRect().height;
         var tall = h > vh;
         var pin = bg(s) !== bg(next) && (tall ? long : h >= vh * 0.92);
         s.classList.toggle('is-pinned', pin);
-        s.style.top = (pin && tall) ? (vh - h) + 'px' : '';
+        s.style.top = (pin && tall) ? (Math.ceil(vh - h) + 1) + 'px' : '';
       });
     }
     apply();
