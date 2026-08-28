@@ -496,14 +496,22 @@ p { margin: 0; max-width: 62ch; }
     repeating-linear-gradient(to right,  rgba(255, 255, 255, .11) 0 1px, transparent 1px 139px),
     repeating-linear-gradient(to bottom, rgba(255, 255, 255, .11) 0 1px, transparent 1px 139px);
   --grid-fade: radial-gradient(125% 95% at 50% 50%, transparent 0%, rgba(0, 0, 0, .55) 48%, #000 78%);
+  /* Второй слой маски — растворение к верхнему и нижнему краю секции.
+     Без него линии упирались в границу блока и обрывались ровной чертой,
+     из-за чего сетка читалась как картинка с краями, а не как фон. */
+  --grid-edges: linear-gradient(to bottom, transparent 0%, #000 16%, #000 84%, transparent 100%);
 }
 .hero__bg::after {
   content: "";
   position: absolute; inset: 0;
   background-image: var(--grid-lines);
   background-position: center center;
-  -webkit-mask-image: var(--grid-fade);
-          mask-image: var(--grid-fade);
+  /* Две маски пересечением: радиальная держит чистое поле в середине,
+     линейная гасит линии у краёв блока. */
+  -webkit-mask-image: var(--grid-fade), var(--grid-edges);
+          mask-image: var(--grid-fade), var(--grid-edges);
+  -webkit-mask-composite: source-in;
+          mask-composite: intersect;
 }
 
 /* Та же сетка на тёмной секции в глубине страницы. Слой лежит между фоном
@@ -514,8 +522,12 @@ p { margin: 0; max-width: 62ch; }
   pointer-events: none;
   background-image: var(--grid-lines);
   background-position: center center;
-  -webkit-mask-image: var(--grid-fade);
-          mask-image: var(--grid-fade);
+  /* Две маски пересечением: радиальная держит чистое поле в середине,
+     линейная гасит линии у краёв блока. */
+  -webkit-mask-image: var(--grid-fade), var(--grid-edges);
+          mask-image: var(--grid-fade), var(--grid-edges);
+  -webkit-mask-composite: source-in;
+          mask-composite: intersect;
 }
 .section--grid > .container { position: relative; z-index: 1; }
 
