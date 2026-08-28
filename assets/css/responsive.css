@@ -165,9 +165,11 @@
         transparent 58%);
   }
 
-  /* Карточки умений на телефоне уже: две с половиной в кадре подсказывают,
-     что лента листается. */
-  .skill { flex: 0 0 72%; }
+  /* Картинка в строке ужимается, но остаётся: без неё список умений
+     превращается в двенадцать одинаковых абзацев. */
+  .skill { grid-template-columns: 108px minmax(0, 1fr); gap: 14px; }
+  .skill__art { height: 72px; padding: 8px; }
+  .skill .mock__row { padding: 4px 6px; }
      колонки .proof дают строки по три слова. */
   .founder__shot { max-width: none; aspect-ratio: 4 / 4.4; }
   .proof { grid-template-columns: minmax(0, 1fr); }

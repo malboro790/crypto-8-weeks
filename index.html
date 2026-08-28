@@ -16,9 +16,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap">
 
-<link rel="stylesheet" href="assets/css/tokens.css?v=247">
-<link rel="stylesheet" href="assets/css/styles.css?v=247">
-<link rel="stylesheet" href="assets/css/responsive.css?v=247">
+<link rel="stylesheet" href="assets/css/tokens.css?v=250">
+<link rel="stylesheet" href="assets/css/styles.css?v=250">
+<link rel="stylesheet" href="assets/css/responsive.css?v=250">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='none' stroke='%23FFFFFF' stroke-width='2'/><circle cx='16' cy='16' r='6' fill='%23C1FF0F'/></svg>">
 </head>
 <body>
@@ -393,12 +393,12 @@
      ====================================================================== -->
 <section class="section">
   <div class="container">
-    <h2 class="h2" data-reveal>Через 8 недель вам не нужно знать <span class="hl hl--flat">всё о крипте</span>.</h2>
+    <h2 class="h2" data-reveal>Через 8 недель вы <span class="hl hl--flat">научитесь</span>.</h2>
     <p class="lead" data-reveal style="margin-top: var(--sp-stack)">Нужно уверенно пользоваться тем, что вам действительно необходимо.</p>
 
-    <!-- Двенадцать умений были двумя колонками галочек — списком, который
-         пролистывают не читая. Лента карточек заставляет их разглядывать
-         по одной, а картинка на каждой говорит, о чём пункт, раньше подписи.
+    <!-- Список сверху вниз: картинка слева, заголовок и пояснение справа.
+         Лента прокруткой прятала половину пунктов за краем экрана — а это
+         единственное место, где сказано, что человек в итоге будет уметь.
          Графика собрана из тех же .mock, что и в продуктовом блоке. -->
     <ul class="skills" data-reveal>
     <li class="skill">
@@ -406,14 +406,20 @@
         <span class="mock__row">USDT</span>
         <span class="mock__row mock__row--hot">купить →</span>
       </div>
-      <p class="skill__t">Купить USDT</p>
+      <div class="skill__copy">
+        <p class="skill__t">Купить USDT</p>
+        <p class="skill__d">Через биржу, с карты или переводом — и понимать, что именно вы купили.</p>
+      </div>
     </li>
     <li class="skill">
       <div class="mock mock--practice skill__art" aria-hidden="true">
         <span class="mock__row">CEX</span>
         <span class="mock__row mock__row--hot">вывод →</span>
       </div>
-      <p class="skill__t">Вывести средства с биржи</p>
+      <div class="skill__copy">
+        <p class="skill__t">Вывести средства с биржи</p>
+        <p class="skill__d">Выбрать сеть, проверить адрес и не потерять сумму на комиссии.</p>
+      </div>
     </li>
     <li class="skill">
       <div class="mock mock--support skill__art" aria-hidden="true">
@@ -421,56 +427,80 @@
         <span class="mock__row mock__row--dim">seed</span>
         <span class="mock__row mock__row--hot">create</span>
       </div>
-      <p class="skill__t">Создать non-custodial wallet</p>
+      <div class="skill__copy">
+        <p class="skill__t">Создать non-custodial wallet</p>
+        <p class="skill__d">Кошелёк, доступ к которому есть только у вас — и ни у кого больше.</p>
+      </div>
     </li>
     <li class="skill">
       <div class="mock mock--theory skill__art" aria-hidden="true">
         <span class="mock__row">1 … 12</span>
         <span class="mock__row">не в облаке</span>
       </div>
-      <p class="skill__t">Понимать, что такое seed phrase и как её хранить</p>
+      <div class="skill__copy">
+        <p class="skill__t">Хранить seed phrase</p>
+        <p class="skill__d">Двенадцать слов, которые нельзя фотографировать, пересылать и держать в облаке.</p>
+      </div>
     </li>
     <li class="skill">
       <div class="mock mock--practice skill__art" aria-hidden="true">
         <span class="mock__row mock__row--dim">TRC20</span>
         <span class="mock__row mock__row--hot">ERC20</span>
       </div>
-      <p class="skill__t">Выбирать сеть перед переводом</p>
+      <div class="skill__copy">
+        <p class="skill__t">Выбирать сеть перед переводом</p>
+        <p class="skill__d">Один и тот же токен живёт в разных сетях, и между собой они не сообщаются.</p>
+      </div>
     </li>
     <li class="skill">
       <div class="mock mock--support skill__art" aria-hidden="true">
         <span class="mock__row">TX7f…92F</span>
         <span class="mock__row mock__row--hot">совпал</span>
       </div>
-      <p class="skill__t">Проверять адрес получателя</p>
+      <div class="skill__copy">
+        <p class="skill__t">Проверять адрес получателя</p>
+        <p class="skill__d">Целиком, а не первые четыре символа: подменённый адрес выглядит правдоподобно.</p>
+      </div>
     </li>
     <li class="skill">
       <div class="mock mock--practice skill__art" aria-hidden="true">
         <span class="mock__row mock__row--dim">тест <b>10</b></span>
         <span class="mock__row mock__row--hot">перевод →</span>
       </div>
-      <p class="skill__t">Выполнять тестовую транзакцию</p>
+      <div class="skill__copy">
+        <p class="skill__t">Выполнять тестовую транзакцию</p>
+        <p class="skill__d">Сначала небольшая сумма по тому же маршруту, потом основная.</p>
+      </div>
     </li>
     <li class="skill">
       <div class="mock mock--theory skill__art" aria-hidden="true">
         <span class="mock__row">explorer</span>
         <span class="mock__row">confirmed</span>
       </div>
-      <p class="skill__t">Читать blockchain explorer</p>
+      <div class="skill__copy">
+        <p class="skill__t">Читать blockchain explorer</p>
+        <p class="skill__d">Видеть свою операцию в сети и понимать, на каком она этапе.</p>
+      </div>
     </li>
     <li class="skill">
       <div class="mock mock--theory skill__art" aria-hidden="true">
         <span class="mock__row">fee</span>
         <span class="mock__row">gas</span>
       </div>
-      <p class="skill__t">Понимать комиссии</p>
+      <div class="skill__copy">
+        <p class="skill__t">Понимать комиссии</p>
+        <p class="skill__d">Из чего складывается цена перевода и почему она меняется в течение дня.</p>
+      </div>
     </li>
     <li class="skill">
       <div class="mock mock--support skill__art" aria-hidden="true">
         <span class="mock__row mock__row--dim">approval</span>
         <span class="mock__row mock__row--hot">revoke</span>
       </div>
-      <p class="skill__t">Видеть базовые риски</p>
+      <div class="skill__copy">
+        <p class="skill__t">Видеть базовые риски</p>
+        <p class="skill__d">Какие разрешения вы выдаёте кошельком и как их отзывать.</p>
+      </div>
     </li>
     <li class="skill">
       <div class="mock mock--practice skill__art" aria-hidden="true">
@@ -478,7 +508,10 @@
         <span class="mock__row mock__row--dim">DEX</span>
         <span class="mock__row mock__row--hot">L2</span>
       </div>
-      <p class="skill__t">Понимать основные элементы индустрии</p>
+      <div class="skill__copy">
+        <p class="skill__t">Понимать устройство индустрии</p>
+        <p class="skill__d">Биржи, кошельки, сети, мосты — что за что отвечает и где чьи деньги.</p>
+      </div>
     </li>
     <li class="skill">
       <div class="mock mock--support skill__art" aria-hidden="true">
@@ -486,7 +519,10 @@
         <span class="mock__row">cold</span>
         <span class="mock__row mock__row--hot">→ схема</span>
       </div>
-      <p class="skill__t">Иметь собственную схему хранения и переводов</p>
+      <div class="skill__copy">
+        <p class="skill__t">Иметь собственную схему</p>
+        <p class="skill__d">Где лежат активы, каким маршрутом ходят и что делать, если что-то пошло не так.</p>
+      </div>
     </li>
     </ul>
   </div>
@@ -584,12 +620,12 @@
     <div class="program" id="program-list" data-reveal>
 
       <article class="week">
-        <h3><button class="week__head" type="button" aria-expanded="false" aria-controls="w1">
+        <h3><button class="week__head" type="button" aria-expanded="true" aria-controls="w1">
           <span class="week__n">Неделя 01</span>
           <span class="week__t">Введение в крипту</span>
           <span class="week__toggle" aria-hidden="true"></span>
         </button></h3>
-        <div class="week__body" id="w1">
+        <div class="week__body is-open" id="w1">
           <div class="week__body-inner"><div class="week__content">
             <div class="week__topics"><span class="tag">Crypto</span><span class="tag">Blockchain</span><span class="tag">Stablecoins</span><span class="tag">Networks</span><span class="tag">Wallet</span><span class="tag">CEX</span><span class="tag">DEX</span><span class="tag">P2P</span><span class="tag">KYC</span></div>
 
@@ -1231,8 +1267,8 @@
 
 
 
-<script src="assets/js/silk.js?v=247" defer></script>
-<script src="assets/js/coinpit.js?v=247"></script>
-<script src="assets/js/main.js?v=247"></script>
+<script src="assets/js/silk.js?v=250" defer></script>
+<script src="assets/js/coinpit.js?v=250"></script>
+<script src="assets/js/main.js?v=250"></script>
 </body>
 </html>

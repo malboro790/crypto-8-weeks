@@ -832,49 +832,41 @@ p { margin: 0; max-width: 62ch; }
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   ЧТО ВЫ СМОЖЕТЕ — лента карточек
+   ЧЕМУ ВЫ НАУЧИТЕСЬ
 
-   Двенадцать умений стояли двумя колонками галочек: список, который
-   пролистывают не читая. Лента заставляет разглядывать их по одной,
-   а картинка на карточке говорит, о чём пункт, раньше подписи.
-
-   Лента начинается по левому краю сетки и уходит в правый край экрана:
-   отрицательное поле справа ровно на половину разницы между шириной
-   контейнера и шириной окна. Обрез справа — это и есть подсказка,
-   что ленту можно листать.
+   Список сверху вниз: картинка слева, заголовок и пояснение справа. Сначала
+   это была лента с горизонтальной прокруткой, но она прятала половину
+   пунктов за краем экрана — а это единственное место на странице, где
+   сказано, что человек в итоге будет уметь.
    -------------------------------------------------------------------------- */
 .skills {
   list-style: none; margin: var(--sp-tight) 0 0; padding: 0;
-  display: flex; gap: 12px;
-  overflow-x: auto;
-  scroll-snap-type: x proximity;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  margin-right: calc(50% - 50vw);
-  padding-right: var(--gutter);
-  padding-bottom: 4px;
+  border-top: 1px solid var(--c-line);
 }
-.skills::-webkit-scrollbar { display: none; }
-
 .skill {
-  flex: 0 0 clamp(212px, 19vw, 258px);
-  scroll-snap-align: start;
-  background: var(--c-surface);
-  border: 1px solid var(--c-line);
-  border-radius: var(--r-lg);
-  padding: 12px;
-  display: flex; flex-direction: column;
+  display: grid;
+  grid-template-columns: clamp(148px, 15vw, 196px) minmax(0, 1fr);
+  gap: clamp(20px, 3vw, 48px);
+  align-items: center;
+  padding: clamp(14px, 1.6vw, 20px) 0;
+  border-bottom: 1px solid var(--c-line);
 }
-.skill__art { height: 118px; }
+/* Картинка ниже, чем в продуктовом блоке: там она сама по себе иллюстрация,
+   здесь — метка строки, и высота держится в габарите двух строк текста. */
+.skill__art { height: 88px; }
 .skill__t {
-  margin-top: 14px;
-  font-size: var(--t-h4);
-  line-height: 1.4;
+  font-size: var(--t-h3);
+  line-height: var(--lh-h3);
+  letter-spacing: var(--ls-h3);
   font-weight: 500;
   color: var(--c-ink);
-  /* Подпись прижата к низу карточки: строки бывают в одну и в три, и без
-     этого картинки вставали на разной высоте. */
-  margin-top: auto; padding-top: 14px;
+}
+.skill__d {
+  margin-top: 6px;
+  font-size: var(--t-subtext);
+  line-height: var(--lh-subtext);
+  color: var(--c-ink-muted);
+  max-width: 60ch;
 }
 
 /* ==========================================================================
@@ -1386,10 +1378,12 @@ p { margin: 0; max-width: 62ch; }
   position: relative; overflow: hidden;
 }
 .footer > .container { position: relative; z-index: 2; }
-/* Селектор с двумя классами намеренно: .pit объявлен ниже по файлу
-   и своей height: 100% растягивал кучу на весь подвал. */
+/* Куча лежит на самом низу страницы — монеты докатываются до края экрана.
+   Добавленный воздух ушёл наверх, между последней строкой и кучей.
+   Селектор с двумя классами намеренно: .pit объявлен ниже по файлу и своей
+   height: 100% растягивал кучу на весь подвал. */
 .footer .footer__pit {
-  top: auto; bottom: 100px;
+  top: auto; bottom: 0;
   height: clamp(110px, 11vw, 150px);
   z-index: 1;
 }

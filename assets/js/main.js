@@ -222,13 +222,30 @@
   /* Program accordion                                                      */
   /* ---------------------------------------------------------------------- */
   (function program() {
-    $$('.week__head').forEach(function (head) {
-      var body = document.getElementById(head.getAttribute('aria-controls'));
-      if (!body) return;
-      head.addEventListener('click', function () {
-        var open = head.getAttribute('aria-expanded') === 'true';
-        head.setAttribute('aria-expanded', String(!open));
-        body.classList.toggle('is-open', !open);
+    var heads = $$('.week__head');
+    if (!heads.length) return;
+
+    var pairs = heads.map(function (head) {
+      return { head: head, body: document.getElementById(head.getAttribute('aria-controls')) };
+    }).filter(function (p) { return p.body; });
+
+    function setOpen(p, open) {
+      p.head.setAttribute('aria-expanded', String(open));
+      p.body.classList.toggle('is-open', open);
+    }
+
+    /* Раскрыта всегда ровно одна неделя. Восемь одновременно открытых недель
+       давали экран сплошного текста, в котором нельзя было сравнить два
+       соседних пункта — приходилось листать. */
+    pairs.forEach(function (p, i) {
+      setOpen(p, i === 0);
+      p.head.addEventListener('click', function () {
+        var open = p.head.getAttribute('aria-expanded') === 'true';
+        /* Повторный клик по раскрытой неделе на десктопе ничего не делает:
+           пустой аккордеон оставлял дыру там, где только что был текст.
+           На телефоне закрыть можно — там открытая неделя занимает экран. */
+        if (open && !window.matchMedia('(max-width: 900px)').matches) return;
+        pairs.forEach(function (q) { setOpen(q, q === p && !open); });
       });
     });
   })();
