@@ -162,7 +162,7 @@
   .tier--lead {
     order: -1;
     flex-basis: 92%;
-    box-shadow: 0 14px 32px -18px rgba(39, 39, 53, .30);
+    box-shadow: 0 14px 32px -18px rgba(10, 10, 10, .30);
   }
 
   /* The editorial 12-column grid collapses to a single column. Column spans are
@@ -200,7 +200,7 @@
      на белом фоне полноценная кромка спорила бы с содержимым списка. */
   .bounds .plate {
     padding: clamp(18px, 4vw, 24px);
-    box-shadow: 0 1px 2px rgba(39, 39, 53, .04);
+    box-shadow: 0 1px 2px rgba(10, 10, 10, .04);
     background-image:
       linear-gradient(var(--c-plate), var(--c-plate)),
       linear-gradient(45deg,
@@ -287,16 +287,16 @@
     padding: 5px 8px;
     border-radius: 5px;
   }
-  .fact__art--a { background: #C4B5FD; }
-  .fact__art--a i { background: rgba(255, 255, 255, .82); color: #1E1633; }
+  .fact__art--a { background: #E4E4E7; }
+  .fact__art--a i { background: rgba(255, 255, 255, .82); color: #0A0A0A; }
   .fact__art--b { background: #14111C; }
   .fact__art--b i { background: rgba(255, 255, 255, .12); color: rgba(255, 255, 255, .82); }
-  .fact__art--b i:first-child { background: #7C3AED; color: #FFFFFF; }
-  .fact__art--c { background: #7C3AED; }
+  .fact__art--b i:first-child { background: #0A0A0A; color: #FFFFFF; }
+  .fact__art--c { background: #0A0A0A; }
   /* Затемняем, а не осветляем: белая подложка на фиолетовом делает фон светлее
      и белый текст на нём падает до 3.97. Тёмная подложка работает наоборот. */
   .fact__art--c i { background: rgba(0, 0, 0, .26); color: #FFFFFF; }
-  .fact__art--c i:first-child { background: #FFFFFF; color: #2E1065; }
+  .fact__art--c i:first-child { background: #FFFFFF; color: #0A0A0A; }
 
 }
 
@@ -440,6 +440,8 @@
     align-content: start;
     padding-bottom: 180px;
   }
+  /* Компактный вариант высоту экрана не берёт — только полосу под кучу. */
+  .relocation--compact { min-height: 0; padding-bottom: 150px; }
   .relocation > .container { align-self: start; }
 
   /* Строка во всю ширину телефона читается тяжело: глаз теряет начало

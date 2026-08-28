@@ -118,33 +118,36 @@ main { overflow-x: clip; }
    component inside it flips without knowing anything about the theme.
    The lavender accent is too pale on white, so this block uses a deeper cut. */
 .section--light {
-  background: #FBFCFD;
-  color: #272735;
-  --c-ink: #272735;
-  --c-ink-muted: #535461;
-  --c-ink-faint: #6C6D7E;
-  --c-line: #E6E7EF;
-  --c-line-strong: rgba(112, 115, 147, .28);
-  --c-paper: #FBFCFD;
-  --c-paper-sunk: #F1F2F7;
+  background: #FFFFFF;
+  color: #0A0A0A;
+  --c-ink: #0A0A0A;
+  --c-ink-muted: #52525B;
+  --c-ink-faint: #71717A;
+  --c-line: #E4E4E7;
+  --c-line-strong: rgba(10, 10, 10, .22);
+  --c-paper: #FFFFFF;
+  --c-paper-sunk: #F4F4F5;
   --c-surface: #FFFFFF;
   /* Plates carry their own opaque fill, so they need a light-theme value of
      their own — without it they keep the dark-theme plate on a white ground. */
   --c-plate: #FFFFFF;
-  --c-surface-alt: #F4F5F9;
-  --sh-sm: 0 1px 2px rgba(39, 39, 53, .05);
-  --sh-md: 0 1px 2px rgba(39, 39, 53, .04), 0 8px 20px -12px rgba(39, 39, 53, .16);
-  --sh-lg: 0 1px 3px rgba(39, 39, 53, .05), 0 24px 52px -28px rgba(39, 39, 53, .26);
-  --c-accent: #6E5BD6;
-  --c-accent-deep: #5A47C2;
-  --c-accent-tint: rgba(110, 91, 214, .09);
-  --c-accent-line: rgba(110, 91, 214, .26);
+  --c-surface-alt: #FAFAFA;
+  --sh-sm: 0 1px 2px rgba(10, 10, 10, .05);
+  --sh-md: 0 1px 2px rgba(10, 10, 10, .04), 0 8px 20px -12px rgba(10, 10, 10, .14);
+  --sh-lg: 0 1px 3px rgba(10, 10, 10, .05), 0 24px 52px -28px rgba(10, 10, 10, .22);
+  --c-accent: #0A0A0A;
+  --c-accent-deep: #000000;
+  --c-accent-tint: rgba(10, 10, 10, .05);
+  --c-accent-line: rgba(10, 10, 10, .16);
   --c-on-accent: #FFFFFF;
-  --c-neutral-tint: rgba(112, 115, 147, .10);
-  --c-neutral-line: rgba(112, 115, 147, .22);
+  /* Полоса выделения остаётся кислотной, но буквы поверх неё — чёрные. */
+  --c-spark: #C1FF0F;
+  --c-spark-ink: #0A0A0A;
+  --c-neutral-tint: rgba(10, 10, 10, .06);
+  --c-neutral-line: rgba(10, 10, 10, .16);
   /* The dark-theme pair is far too light on white — the green reads 1.87:1. */
-  --c-neg: #C42B2F;
-  --c-pos: #1B7A52;
+  --c-neg: #8A8A93;
+  --c-pos: #0A0A0A;
 }
 
 /* Centred variant: heading, lead and footnote sit on the section's axis.
@@ -165,12 +168,14 @@ main { overflow-x: clip; }
   --c-line: var(--c-dark-line);
   --c-line-strong: var(--c-dark-line);
   --c-surface: var(--c-dark-sunk);
-  --c-accent: #A855F7;
-  --c-accent-tint: rgba(168, 85, 247, .14);
-  --c-accent-line: rgba(168, 85, 247, .34);
-  --c-on-accent: #FFFFFF;
-  --c-neutral-tint: rgba(237, 236, 251, .08);
-  --c-neutral-line: rgba(237, 236, 251, .2);
+  --c-accent: #FFFFFF;
+  --c-accent-tint: rgba(255, 255, 255, .07);
+  --c-accent-line: rgba(255, 255, 255, .22);
+  --c-on-accent: #000000;
+  --c-spark: #C1FF0F;
+  --c-spark-ink: #C1FF0F;
+  --c-neutral-tint: rgba(255, 255, 255, .08);
+  --c-neutral-line: rgba(255, 255, 255, .2);
 }
 
 /* 12-column editorial grid, Mercury-style gutters */
@@ -265,18 +270,20 @@ p { margin: 0; max-width: 62ch; }
               border-color var(--d-fast) var(--e-out);
 }
 
-/* One step deeper than the brand accent. White on #A855F7 measures 3.96, under
-   the 4.5 a 14px label needs; #9333EA reads 5.4 and stays the same purple.
+/* Тёмная плитка вместо фиолетовой: белое на чёрном — 21:1, вопрос контраста
+   в монохроме снимается сам.
    Stated literally rather than through --c-accent-deep: that token shifts to a
    deeper indigo on light sections, and the main call to action should be the
    same colour everywhere on the page. 5.4 against white, 5.0 against the dark
    ground — it clears AA on both. */
+/* Основная кнопка всегда максимально далеко от подложки: на чёрном белая,
+   на светлой полосе чёрная. Раньше цвет был вписан числом и не слушал тему. */
 .btn--primary {
-  background: #9333EA;
-  color: #FFFFFF;
-  border-color: #9333EA;
+  background: var(--c-accent);
+  color: var(--c-on-accent);
+  border-color: var(--c-accent);
 }
-.btn--primary:hover { background: #7C3AED; border-color: #7C3AED; }
+.btn--primary:hover { background: var(--c-accent-deep); border-color: var(--c-accent-deep); }
 
 .btn--ghost {
   background: var(--c-neutral-tint);
@@ -331,7 +338,7 @@ p { margin: 0; max-width: 62ch; }
   font-weight: var(--w-display); font-size: var(--t-h4); letter-spacing: var(--ls-h4);
   white-space: nowrap; flex: none;
 }
-/* The mark is a billiard ball: a lit sphere in the brand purple carrying the
+/* The mark is a billiard ball: a lit sphere carrying the
    number 8 on a white disc. Built from gradients rather than an image file so
    it stays sharp at any density and needs no extra request. The lighting is
    fixed (top-left key, bottom-right bounce) — it reads as an object, so it must
@@ -339,22 +346,24 @@ p { margin: 0; max-width: 62ch; }
 .wordmark__glyph {
   width: 26px; height: 26px; flex: none; border-radius: 50%;
   position: relative; display: grid; place-items: center;
+  /* Шар теперь стеклянный, а не фиолетовый: тот же объём, но из искры и
+     чёрного, чтобы марка не спорила с монохромом. */
   background:
     /* key light */
     radial-gradient(circle at 32% 26%,
-      color-mix(in srgb, var(--c-accent) 35%, #fff) 0%,
+      color-mix(in srgb, var(--c-spark) 55%, #fff) 0%,
       transparent 42%),
     /* bounce light off the surface below */
     radial-gradient(circle at 72% 84%,
-      color-mix(in srgb, var(--c-accent) 78%, #fff) 0%,
+      color-mix(in srgb, var(--c-spark) 40%, #000) 0%,
       transparent 38%),
     /* body, shading away from the key */
     radial-gradient(circle at 34% 30%,
-      var(--c-accent) 0%,
-      color-mix(in srgb, var(--c-accent) 72%, #000) 72%,
-      color-mix(in srgb, var(--c-accent) 52%, #000) 100%);
+      #3A3A3A 0%,
+      #1A1A1A 72%,
+      #0A0A0A 100%);
   box-shadow:
-    inset 0 -1px 2px color-mix(in srgb, var(--c-accent) 30%, #000),
+    inset 0 -1px 2px #000,
     inset 0 1px 1px rgba(255, 255, 255, .28);
 }
 /* The numbered disc. `8` is content rather than a glyph in the markup so the
@@ -452,6 +461,10 @@ p { margin: 0; max-width: 62ch; }
    lower left over a near-black violet ground, with a sparse dot field above it.
    Built from gradients rather than their WebGL shader — same look, no shader
    of theirs, and it costs nothing to render. */
+/* Фон первого экрана. Свечение и точечное поле убраны: они были построены
+   на фиолетовом, а в монохромной палитре любой цветной ореол сразу становится
+   единственным пятном на странице и перетягивает внимание с заголовка.
+   Остался чистый чёрный — как на kerber.agency. */
 .hero__bg {
   position: absolute;
   top: 0; bottom: 0;
@@ -460,18 +473,8 @@ p { margin: 0; max-width: 62ch; }
   z-index: 0;
   pointer-events: none;
   background-color: var(--c-paper);
-  background-image:
-    /* dot field — matches their rgb(170,100,250) specks at low alpha */
-    radial-gradient(rgba(170, 100, 250, .16) 1px, transparent 1px),
-    /* the bloom, brightest low and left, dying out towards the top right */
-    radial-gradient(60% 55% at 8% 96%,  rgba(168, 85, 247, .40) 0%, transparent 72%),
-    radial-gradient(48% 46% at 28% 88%, rgba(139, 92, 246, .30) 0%, transparent 70%),
-    radial-gradient(80% 60% at 50% 108%, rgba(88, 40, 160, .34) 0%, transparent 78%),
-    radial-gradient(70% 70% at 88% 4%,  rgba(120, 70, 200, .10) 0%, transparent 70%);
-  background-size: 26px 26px, auto, auto, auto, auto;
-  background-position: 0 0, center, center, center, center;
-  background-repeat: repeat, no-repeat, no-repeat, no-repeat, no-repeat;
 }
+
 
 .hero__pit {
   position: absolute;
@@ -509,7 +512,11 @@ p { margin: 0; max-width: 62ch; }
   letter-spacing: var(--ls-h1);
 }
 /* One phrase carries the accent, with a soft bar sitting under it. */
-.hl { color: var(--c-accent); position: relative; white-space: nowrap; }
+/* Выделение в заголовке — единственное место, где на сайте появляется цвет.
+   На чёрном фоне слово набирается искрой; на белой полосе искра остаётся
+   только полосой под чёрными буквами: #C1FF0F как текст на белом даёт
+   контраст 1.3:1 и не читается. */
+.hl { color: var(--c-spark-ink); position: relative; white-space: nowrap; }
 /* Запрет переноса на .hl нужен ради подчёркивания: разорванная строка дала бы
    две отдельные полосы. У плоского акцента полосы нет, а запрет остаётся и
    выталкивает длинную фразу за пределы колонки — поэтому снимаем его. */
@@ -522,7 +529,7 @@ p { margin: 0; max-width: 62ch; }
 .hl::after {
   content: ""; position: absolute; left: -.04em; right: -.04em; bottom: .04em;
   height: .13em; border-radius: 2px;
-  background: color-mix(in srgb, var(--c-accent) 34%, transparent);
+  background: color-mix(in srgb, var(--c-spark) 45%, transparent);
   z-index: -1;
 }
 
@@ -608,20 +615,20 @@ p { margin: 0; max-width: 62ch; }
   display: flex; flex-direction: column; justify-content: center; gap: 7px;
   overflow: hidden;
 }
-.scen__art--a { background: #C4B5FD; color: #1E1633; }
+.scen__art--a { background: #E4E4E7; color: #0A0A0A; }
 .scen__art--b { background: #14111C; color: #FFFFFF; }
-.scen__art--c { background: #E8E6F2; color: #1E1633; }
-.scen__art--d { background: #7C3AED; color: #FFFFFF; }
+.scen__art--c { background: #F4F4F5; color: #0A0A0A; }
+.scen__art--d { background: #0A0A0A; color: #FFFFFF; }
 
 /* --- shared art pieces, sized to read at a glance ----------------------- */
 .art-pill {
   display: block; text-align: left;
   font-family: var(--f-mono); font-size: .8125rem; font-weight: 500;
   padding: 11px 14px; border-radius: var(--r-md);
-  background: rgba(255, 255, 255, .82); color: #1E1633;
+  background: rgba(255, 255, 255, .82); color: #0A0A0A;
 }
 .art-pill--hot {
-  background: #4C1D95; color: #FFFFFF;
+  background: #0A0A0A; color: #FFFFFF;
   font-size: 1.0625rem; letter-spacing: -.02em; padding: 13px 14px;
 }
 .art-pill--hot i { font-style: normal; opacity: .75; font-size: .78em; margin-left: .35em; }
@@ -638,20 +645,20 @@ p { margin: 0; max-width: 62ch; }
   padding: 6px 10px; border-radius: var(--r-md);
   background: rgba(255, 255, 255, .1); color: rgba(255, 255, 255, .75);
 }
-/* Deeper than the page accent: white on #A855F7 measures 3.96, under the 4.5
+/* Активная сеть — чёрная плитка с белым текстом.
    this 12px label needs. */
-.art-nets .is-on { background: #7C3AED; color: #FFFFFF; }
+.art-nets .is-on { background: #0A0A0A; color: #FFFFFF; }
 .art-note { font-size: .75rem; opacity: .55; margin-top: 12px; }
 
 .art-row {
   display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
   font-family: var(--f-mono); font-size: .8125rem;
   padding: 13px 14px; border-radius: var(--r-md);
-  background: rgba(255, 255, 255, .9); color: #1E1633;
+  background: rgba(255, 255, 255, .9); color: #0A0A0A;
 }
 .art-row b { font-weight: 600; }
 .art-row--hot {
-  background: #4C1D95; color: #FFFFFF;
+  background: #0A0A0A; color: #FFFFFF;
   font-size: .9375rem; padding: 15px 14px;
 }
 .art-row--hot b { font-size: 1.0625rem; letter-spacing: -.02em; }
@@ -851,18 +858,19 @@ p { margin: 0; max-width: 62ch; }
   overflow: hidden;
   font-family: var(--f-mono); font-size: .625rem; letter-spacing: .02em;
 }
-.mock--theory   { background: #C4B5FD; color: #1E1633; }
+.mock--theory   { background: #E4E4E7; color: #0A0A0A; }
 .mock--practice { background: #14111C; color: #FFFFFF; }
-.mock--support  { background: #7C3AED; color: #FFFFFF; }
+.mock--support  { background: #0A0A0A; color: #FFFFFF; }
 
 .mock__row {
   display: flex; align-items: baseline; justify-content: space-between; gap: 8px;
   padding: 7px 9px; border-radius: var(--r-sm);
-  background: rgba(255, 255, 255, .86); color: #1E1633;
+  background: rgba(255, 255, 255, .86); color: #0A0A0A;
 }
 .mock__row b { font-weight: 600; }
 .mock__row--dim { background: rgba(255, 255, 255, .12); color: rgba(255, 255, 255, .78); }
-.mock__row--hot { background: #7C3AED; color: #FFFFFF; }
+/* Единственная искра в иллюстрациях: строка, ради которой картинка и нарисована. */
+.mock__row--hot { background: var(--c-spark); color: #0A0A0A; }
 .mock__arrow { padding-left: 9px; opacity: .5; line-height: 1; font-size: .6875rem; }
 
 .mock__bub {
@@ -875,7 +883,7 @@ p { margin: 0; max-width: 62ch; }
 .mock__bub--me {
   align-self: flex-end;
   border-radius: var(--r-sm) var(--r-sm) 2px var(--r-sm);
-  background: #FFFFFF; color: #2E1065; font-weight: 500;
+  background: #FFFFFF; color: #0A0A0A; font-weight: 500;
 }
 
 /* Quieter than a heading — a note above the line, not a shout. */
@@ -1078,10 +1086,15 @@ p { margin: 0; max-width: 62ch; }
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: var(--sp-tight); border-top: 1px solid var(--c-line); }
 .stat { padding: clamp(22px, 2.4vw, 36px) clamp(16px, 2vw, 28px) clamp(22px, 2.4vw, 36px) 0; }
 .stat + .stat { border-left: 1px solid var(--c-line); padding-left: clamp(16px, 2vw, 28px); }
+/* Цифры набраны искрой: на чёрном она держит 16:1, на белой полосе токен
+   переключается в чёрный — зелёный текст на белом нечитаем. */
+/* Чтобы искра не пропадала на светлых полосах совсем, там она ложится
+   полосой под цифрой — тем же приёмом, что выделение в заголовке. */
 .stat__n {
   font-family: var(--f-display); font-weight: var(--w-display);
   font-size: var(--t-h2);
   letter-spacing: -.025em; line-height: .95; font-variant-numeric: tabular-nums;
+  color: var(--c-spark-ink);
 }
 /* «до» и «недель» при 0.3em превращались в нечитаемые 12px самым бледным
    цветом палитры. Это часть смысла числа, а не сноска: без «до» шестнадцать
@@ -1113,7 +1126,7 @@ p { margin: 0; max-width: 62ch; }
 }
 .share__dots { display: flex; gap: 5px; flex: none; }
 .share__dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--c-line-strong); display: block; }
-.share__live { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; color: var(--c-accent); flex: none; }
+.share__live { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; color: var(--c-spark-ink); flex: none; }
 .share__live i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; animation: pulse 2s var(--e-inout) infinite; }
 @keyframes pulse { 0%, 100% { opacity: 1 } 50% { opacity: .25 } }
 
@@ -1360,12 +1373,17 @@ p { margin: 0; max-width: 62ch; }
   align-items: stretch;
 }
 
+/* Один формат вместо двух. Карточка во всю ширину секции превращается
+   в полосу, где строка списка уезжает от маркера на пол-экрана. */
+.tiers--single { grid-template-columns: minmax(0, 640px); justify-content: center; }
+
 .tier {
   display: grid;
-  /* label · price · $-equivalent · summary · volume · list · key line · note ·
-     button — the list is the only track allowed to stretch, so the key line and
-     the button stay level across both cards however long the lists are. */
-  grid-template-rows: auto auto auto auto auto 1fr auto auto auto;
+  /* label · summary · volume · list · key line · note · button — the list is
+     the only track allowed to stretch. Раньше карточек было две и одинаковые
+     дорожки держали их кнопки на одной линии; карточка осталась одна, но
+     раскладка та же: она задаёт порядок, а не выравнивание. */
+  grid-template-rows: auto auto auto 1fr auto auto auto;
   padding: clamp(24px, 2.4vw, 34px);
   border: 1px solid var(--c-line);
   border-radius: var(--r-lg);
@@ -1389,20 +1407,7 @@ p { margin: 0; max-width: 62ch; }
   background-clip: padding-box, border-box;
 }
 
-.tier__price {
-  font-family: var(--f-display); font-weight: var(--w-display);
-  font-size: var(--t-h1);
-  letter-spacing: -.03em; line-height: .9;
-  font-variant-numeric: tabular-nums;
-  margin-top: 14px;
-}
-.tier--lead .tier__price { color: var(--c-accent); }
 
-/* Формат «только материалы» звучит тише: приглушённая подложка и цена
-   обычным цветом текста. Два одинаково ярких прямоугольника читаются как
-   выбор между равными, хотя равными они не являются. */
-.tier:not(.tier--lead) { background: var(--c-surface); }
-.tier:not(.tier--lead) .tier__price { color: var(--c-ink-muted); }
 
 .tier__sum {
   margin-top: var(--sp-stack);
@@ -1430,7 +1435,7 @@ p { margin: 0; max-width: 62ch; }
   font-size: var(--t-h3);
   font-weight: 600;
   letter-spacing: var(--ls-h3);
-  color: var(--c-ink);
+  color: var(--c-spark-ink);
   /* sits on the same optical line as the mono text beside it */
   vertical-align: -.06em;
   margin-right: 2px;
@@ -1445,22 +1450,13 @@ p { margin: 0; max-width: 62ch; }
    автоматическое размещение перестало держать ключевые строки на одном
    уровне — а именно на них строится сравнение тарифов. */
 .tier > .label      { grid-row: 1; }
-.tier__price        { grid-row: 2; }
-.tier__alt          { grid-row: 3; }
-.tier__sum          { grid-row: 4; }
-.tier__vol          { grid-row: 5; }
-.tier__more         { grid-row: 6; }
-.tier__key          { grid-row: 7; }
-.tier__note         { grid-row: 8; }
-.tier__cta          { grid-row: 9; }
+.tier__sum          { grid-row: 2; }
+.tier__vol          { grid-row: 3; }
+.tier__more         { grid-row: 4; }
+.tier__key          { grid-row: 5; }
+.tier__note         { grid-row: 6; }
+.tier__cta          { grid-row: 7; }
 
-/* Долларовый эквивалент — справочная строка, не вторая цена: моношрифт
-   и приглушённый цвет, чтобы взгляд не выбирал между двумя числами. */
-.tier__alt {
-  font-family: var(--f-mono); font-size: var(--t-subtext);
-  color: var(--c-ink-faint); letter-spacing: .02em;
-  margin-top: 8px;
-}
 .label--lead { color: var(--c-accent); }
 .tier__more-sum {
   display: none;
@@ -1820,24 +1816,11 @@ p { margin: 0; max-width: 62ch; }
 .relocation { position: relative; isolation: isolate; overflow: hidden; }
 .relocation > .container { position: relative; z-index: 2; }
 
-/* The hero's dot field and bloom, dialled down. The hero is the headline
-   moment and keeps the brighter version; here the same ground reads as a
-   continuation rather than a second climax. The bloom sits low, where the
-   coins come to rest. */
-.relocation::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background-image:
-    radial-gradient(rgba(170, 100, 250, .11) 1px, transparent 1px),
-    radial-gradient(58% 50% at 12% 98%, rgba(168, 85, 247, .22) 0%, transparent 72%),
-    radial-gradient(74% 55% at 62% 106%, rgba(88, 40, 160, .22) 0%, transparent 78%);
-  background-size: 26px 26px, auto, auto;
-  background-position: 0 0, center, center;
-  background-repeat: repeat, no-repeat, no-repeat;
-}
+/* Блок про переезд занимал целый экран ради одного абзаца: на большом мониторе
+   между текстом и кучей монет оставалась пустая страница. Высота теперь по
+   содержимому, снизу — полоса, на которой монеты успокаиваются. */
+.relocation--compact { min-height: 0; padding-bottom: clamp(140px, 14vw, 220px); }
+
 
 .pit {
   position: absolute;
@@ -1980,4 +1963,20 @@ p { margin: 0; max-width: 62ch; }
   color: #FFB4A2;
   border-bottom: 1px dashed currentColor;
   padding-bottom: 1px;
+}
+
+/* --------------------------------------------------------------------------
+   ИСКРА НА СВЕТЛОЙ ПОЛОСЕ
+   #C1FF0F на белом даёт контраст 1.3:1 — как текст он нечитаем даже
+   в крупном кегле. Поэтому на светлых секциях цифра остаётся чёрной,
+   а цвет уходит в полосу под ней.
+   -------------------------------------------------------------------------- */
+.section--light .stat__n,
+.section--light .tier__vol b {
+  display: inline-block;
+  padding-inline: .08em;
+  background-image: linear-gradient(var(--c-spark), var(--c-spark));
+  background-size: 100% .16em;
+  background-position: 0 94%;
+  background-repeat: no-repeat;
 }

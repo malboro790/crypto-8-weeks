@@ -6,42 +6,53 @@
    ========================================================================== */
 
 :root {
-  /* ---- Color: neutrals (Mercury's cool, violet-leaning ramp) ----------- */
-  --c-paper:        #FBFCFD;  /* page ground                                */
-  --c-paper-sunk:   #F4F5F9;  /* recessed section                           */
-  --c-surface:      #FFFFFF;  /* raised card                                */
-  --c-plate:        #FFFFFF;  /* opaque plate that must hide what is behind it */
-  --c-surface-alt:  #F8F9FC;
-  --c-ink:          #272735;  /* near-black with a violet cast, never #000   */
-  --c-ink-muted:    #535461;
-  --c-ink-faint:    #8A8B99;
-  --c-line:         #E6E7EF;
-  --c-line-strong:  rgba(112, 115, 147, .28);
+  /* ---- Цвет: нейтрали -------------------------------------------------- */
+  /* Палитра v2: чистая монохромная пара, как на kerber.agency. Фиолетовый
+     ушёл целиком, вместе с ним — фиолетовый подмес в серых. Единственный
+     цвет на сайте, кроме логотипов монет, — акцентная искра ниже. */
+  --c-paper:        #FFFFFF;  /* светлая полоса                             */
+  --c-paper-sunk:   #F4F4F5;  /* утопленная секция                          */
+  --c-surface:      #FFFFFF;  /* приподнятая карточка                       */
+  --c-plate:        #FFFFFF;  /* непрозрачная плашка                        */
+  --c-surface-alt:  #FAFAFA;
+  --c-ink:          #0A0A0A;
+  --c-ink-muted:    #52525B;
+  --c-ink-faint:    #8A8A93;
+  --c-line:         #E4E4E7;
+  --c-line-strong:  rgba(10, 10, 10, .22);
 
-  /* Mercury's neutral tint — the fill and border behind secondary controls */
-  --c-neutral-tint: rgba(112, 115, 147, .10);
-  --c-neutral-line: rgba(112, 115, 147, .22);
+  --c-neutral-tint: rgba(10, 10, 10, .06);
+  --c-neutral-line: rgba(10, 10, 10, .16);
 
-  /* ---- Color: accent --------------------------------------------------- */
-  /* Light theme: the purple has to hold contrast on white, so it sits deeper
-     than the #A855F7 used on the dark ground. */
-  --c-accent:       #6E5BD6;
-  --c-accent-deep:  #5A47C2;
-  --c-accent-tint:  rgba(110, 91, 214, .09);
-  --c-accent-line:  rgba(110, 91, 214, .26);
+  /* ---- Цвет: акцент ---------------------------------------------------- */
+  /* Акцент — не цвет, а контраст: на светлой полосе кнопка чёрная, на чёрном
+     фоне белая. Так призыв всегда максимально далеко от подложки. */
+  --c-accent:       #0A0A0A;
+  --c-accent-deep:  #000000;
+  --c-accent-tint:  rgba(10, 10, 10, .05);
+  --c-accent-line:  rgba(10, 10, 10, .18);
   --c-on-accent:    #FFFFFF;
 
-  /* ---- Color: inverted surface ----------------------------------------- */
-  --c-dark:         #181623;
-  --c-dark-sunk:    #211F2E;
-  --c-dark-ink:     #EDECFB;
-  --c-dark-muted:   #C3C0DF;
-  --c-dark-line:    rgba(237, 236, 251, .16);
+  /* Искра. Единственный цвет в макете: цифры и подчёркивания в заголовках.
+     На белом фоне #C1FF0F не читается как текст (контраст 1.3:1), поэтому
+     на светлых секциях он работает только полосой под чёрными буквами, а
+     сами цифры остаются чёрными. */
+  --c-spark:        #C1FF0F;
+  --c-spark-ink:    #0A0A0A;   /* цифры на светлой полосе                   */
+
+  /* ---- Цвет: инвертированная поверхность ------------------------------- */
+  --c-dark:         #000000;
+  --c-dark-sunk:    #0B0B0B;
+  --c-dark-ink:     #FFFFFF;
+  --c-dark-muted:   #A1A1A6;
+  --c-dark-line:    rgba(255, 255, 255, .14);
 
   /* ---- Color: semantic (used sparingly, never as decoration) ----------- */
-  --c-caution:      #A05A2C;
-  --c-neg:          #D13438;   /* what this programme does not do */
-  --c-pos:          #21815A;   /* what it does */
+  /* Семантика в монохроме: «да» несёт искра, «нет» — приглушённый серый.
+     Второй зелёный рядом с #C1FF0F читался как ошибка печати. */
+  --c-caution:      #6B6B72;
+  --c-neg:          #8A8A93;   /* what this programme does not do */
+  --c-pos:          #0A0A0A;   /* what it does */
 
   /* ---- Type families --------------------------------------------------- */
   /* Geist is Vercel's typeface, SIL OFL, served by Google Fonts — the same
@@ -108,9 +119,9 @@
   --r-pill: 100px;
 
   /* ---- Elevation -------------------------------------------------------- */
-  --sh-sm: 0 1px 2px rgba(39, 39, 53, .05);
-  --sh-md: 0 1px 2px rgba(39, 39, 53, .04), 0 8px 20px -12px rgba(39, 39, 53, .16);
-  --sh-lg: 0 1px 3px rgba(39, 39, 53, .05), 0 24px 52px -28px rgba(39, 39, 53, .26);
+  --sh-sm: 0 1px 2px rgba(10, 10, 10, .05);
+  --sh-md: 0 1px 2px rgba(10, 10, 10, .04), 0 8px 20px -12px rgba(10, 10, 10, .16);
+  --sh-lg: 0 1px 3px rgba(10, 10, 10, .05), 0 24px 52px -28px rgba(10, 10, 10, .26);
 
   /* ---- Motion ----------------------------------------------------------- */
   --e-out:   cubic-bezier(.22, .68, .28, 1);
@@ -126,35 +137,40 @@
    -------------------------------------------------------------------------- */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --c-paper:       #120F17;
-    --c-paper-sunk:  #17131F;
+  --c-paper:       #000000;
+    --c-paper-sunk:  #0B0B0B;
     --c-surface:     rgba(255, 255, 255, .04);
-    --c-plate:       #221D2E;
+    --c-plate:       #111111;
     --c-surface-alt: rgba(255, 255, 255, .07);
     --c-ink:         #FFFFFF;
-    --c-ink-muted:   rgba(255, 255, 255, .72);
-    --c-ink-faint:   rgba(255, 255, 255, .55);
-    --c-line:        rgba(255, 255, 255, .08);
-    --c-line-strong: rgba(255, 255, 255, .16);
+    --c-ink-muted:   rgba(255, 255, 255, .70);
+    --c-ink-faint:   rgba(255, 255, 255, .48);
+    --c-line:        rgba(255, 255, 255, .10);
+    --c-line-strong: rgba(255, 255, 255, .20);
 
     --c-neutral-tint: rgba(255, 255, 255, .07);
-    --c-neutral-line: rgba(255, 255, 255, .10);
+    --c-neutral-line: rgba(255, 255, 255, .16);
 
-    --c-accent:      #A855F7;
-    --c-accent-deep: #9333EA;
-    --c-accent-tint: rgba(168, 85, 247, .14);
-    --c-accent-line: rgba(168, 85, 247, .34);
-    --c-on-accent:   #FFFFFF;
+    /* Кнопка на чёрном — белая. Дальше от подложки уйти уже некуда. */
+    --c-accent:      #FFFFFF;
+    --c-accent-deep: #E4E4E7;
+    --c-accent-tint: rgba(255, 255, 255, .07);
+    --c-accent-line: rgba(255, 255, 255, .22);
+    --c-on-accent:   #000000;
 
-    --c-dark:        #0B0910;
-    --c-dark-sunk:   #15111C;
+    /* Искра работает на чёрном во всю силу: контраст #C1FF0F к чёрному 16:1. */
+    --c-spark:       #C1FF0F;
+    --c-spark-ink:   #C1FF0F;
+
+    --c-dark:        #000000;
+    --c-dark-sunk:   #0B0B0B;
     --c-dark-ink:    #FFFFFF;
-    --c-dark-muted:  rgba(255, 255, 255, .72);
-    --c-dark-line:   rgba(255, 255, 255, .08);
+    --c-dark-muted:  rgba(255, 255, 255, .70);
+    --c-dark-line:   rgba(255, 255, 255, .12);
 
-    --c-caution:     #E0A45C;
-    --c-neg:         #F2555A;
-    --c-pos:         #3DD68C;
+    --c-caution:     rgba(255, 255, 255, .48);
+    --c-neg:         rgba(255, 255, 255, .42);
+    --c-pos:         #C1FF0F;
 
     --sh-sm: 0 1px 2px rgba(0, 0, 0, .4);
     --sh-md: 0 1px 2px rgba(0, 0, 0, .4), 0 10px 24px -14px rgba(0, 0, 0, .8);
@@ -163,35 +179,40 @@
 }
 
 :root[data-theme="dark"] {
-  --c-paper:       #120F17;
-  --c-paper-sunk:  #17131F;
+  --c-paper:       #000000;
+  --c-paper-sunk:  #0B0B0B;
   --c-surface:     rgba(255, 255, 255, .04);
-  --c-plate:       #221D2E;
+  --c-plate:       #111111;
   --c-surface-alt: rgba(255, 255, 255, .07);
   --c-ink:         #FFFFFF;
-  --c-ink-muted:   rgba(255, 255, 255, .72);
-  --c-ink-faint:   rgba(255, 255, 255, .55);
-  --c-line:        rgba(255, 255, 255, .08);
-  --c-line-strong: rgba(255, 255, 255, .16);
+  --c-ink-muted:   rgba(255, 255, 255, .70);
+  --c-ink-faint:   rgba(255, 255, 255, .48);
+  --c-line:        rgba(255, 255, 255, .10);
+  --c-line-strong: rgba(255, 255, 255, .20);
 
   --c-neutral-tint: rgba(255, 255, 255, .07);
-  --c-neutral-line: rgba(255, 255, 255, .10);
+  --c-neutral-line: rgba(255, 255, 255, .16);
 
-  --c-accent:      #A855F7;
-  --c-accent-deep: #9333EA;
-  --c-accent-tint: rgba(168, 85, 247, .14);
-  --c-accent-line: rgba(168, 85, 247, .34);
-  --c-on-accent:   #FFFFFF;
+  /* Кнопка на чёрном — белая. Дальше от подложки уйти уже некуда. */
+  --c-accent:      #FFFFFF;
+  --c-accent-deep: #E4E4E7;
+  --c-accent-tint: rgba(255, 255, 255, .07);
+  --c-accent-line: rgba(255, 255, 255, .22);
+  --c-on-accent:   #000000;
 
-  --c-dark:        #0B0910;
-  --c-dark-sunk:   #15111C;
+  /* Искра работает на чёрном во всю силу: контраст #C1FF0F к чёрному 16:1. */
+  --c-spark:       #C1FF0F;
+  --c-spark-ink:   #C1FF0F;
+
+  --c-dark:        #000000;
+  --c-dark-sunk:   #0B0B0B;
   --c-dark-ink:    #FFFFFF;
-  --c-dark-muted:  rgba(255, 255, 255, .72);
-  --c-dark-line:   rgba(255, 255, 255, .08);
+  --c-dark-muted:  rgba(255, 255, 255, .70);
+  --c-dark-line:   rgba(255, 255, 255, .12);
 
-  --c-caution:     #E0A45C;
-  --c-neg:         #F2555A;
-  --c-pos:         #3DD68C;
+  --c-caution:     rgba(255, 255, 255, .48);
+  --c-neg:         rgba(255, 255, 255, .42);
+  --c-pos:         #C1FF0F;
 
   --sh-sm: 0 1px 2px rgba(0, 0, 0, .4);
   --sh-md: 0 1px 2px rgba(0, 0, 0, .4), 0 10px 24px -14px rgba(0, 0, 0, .8);
