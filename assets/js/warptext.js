@@ -47,6 +47,7 @@
     'uniform float uActive;',
     'uniform float uTime;',
     'uniform float uAspect;',
+    'uniform vec2  uRes;',
     'uniform vec3  uColor;',
 
     'float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }',
@@ -62,27 +63,43 @@
     '  return s;',
     '}',
 
+    /* Кромка глифа в текстуре жёсткая. При смещении она рвалась ступеньками,
+       поэтому альфу берём средним по четырём точкам вокруг — этого хватает,
+       чтобы край остался гладким на любом сдвиге. */
+    'float alpha(vec2 p){',
+    '  vec2 e = 0.75 / uRes;',
+    '  return 0.25 * (texture(uTex, p + vec2(-e.x, -e.y)).a',
+    '              +  texture(uTex, p + vec2( e.x, -e.y)).a',
+    '              +  texture(uTex, p + vec2(-e.x,  e.y)).a',
+    '              +  texture(uTex, p + vec2( e.x,  e.y)).a);',
+    '}',
+
     'void main(){',
     '  vec2 uv = vUv;',
     /* Линза: чем ближе к курсору, тем сильнее смещение. По горизонтали
        расстояние правится пропорциями, иначе на широком слове пятно
-       превращается в овал. */
+       превращается в овал. Спад пологий — резкий давал видимую границу,
+       и эффект читался как обрезанный рамкой. */
     '  vec2 d = vec2((uv.x - uMouse.x) * uAspect, uv.y - uMouse.y);',
-    '  float lens = exp(-dot(d, d) * 26.0) * uActive;',
+    '  float lens = exp(-dot(d, d) * 13.0) * uActive;',
 
-    '  vec2 n = vec2(fbm(uv * 5.0 + uTime * 0.18),',
-    '                fbm(uv * 5.0 + 9.7 - uTime * 0.14)) - 0.5;',
-    '  vec2 off = n * 0.10 * lens;',
-    '  float ca = 0.010 * lens;',   /* хроматический развал по краям линзы */
+    /* Низкая частота шума: на высокой складки получались мелкими и рваными. */
+    '  vec2 n = vec2(fbm(uv * 2.6 + uTime * 0.18),',
+    '                fbm(uv * 2.6 + 9.7 - uTime * 0.14)) - 0.5;',
+    '  vec2 off = n * 0.075 * lens;',
 
-    '  float r = texture(uTex, uv + off + vec2(ca, 0.0)).a;',
-    '  float g = texture(uTex, uv + off).a;',
-    '  float b = texture(uTex, uv + off - vec2(ca, 0.0)).a;',
+    /* Хроматический развал идёт вдоль смещения, а не строго по горизонтали:
+       так кайма следует за складкой и не выглядит приклеенной сбоку. */
+    '  vec2 dir = normalize(off + vec2(1e-5));',
+    '  float ca = 0.0045 * lens;',
+    '  float r = alpha(uv + off + dir * ca);',
+    '  float g = alpha(uv + off);',
+    '  float b = alpha(uv + off - dir * ca);',
 
-    '  vec3 col = uColor * g + vec3(r - g, 0.0, b - g) * 0.55;',
-    '  float a = max(max(r, g), b);',
-    '  if (a < 0.002) discard;',
-    '  o = vec4(col, a);',
+    '  vec3 ch = mix(vec3(g), vec3(r, g, b), 0.45);',
+    '  float a = (r + g + b) / 3.0;',
+    '  if (a < 0.001) discard;',
+    '  o = vec4(uColor * ch, a);',
     '}'
   ].join('\n');
 
@@ -111,7 +128,7 @@
   gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
 
   var U = {};
-  ['uTex', 'uMouse', 'uActive', 'uTime', 'uAspect', 'uColor'].forEach(function (n) {
+  ['uTex', 'uMouse', 'uActive', 'uTime', 'uAspect', 'uRes', 'uColor'].forEach(function (n) {
     U[n] = gl.getUniformLocation(prog, n);
   });
 
@@ -151,6 +168,7 @@
     canvas.width = w; canvas.height = h;
     gl.viewport(0, 0, w, h);
     gl.uniform1f(U.uAspect, w / h);
+    gl.uniform2f(U.uRes, w, h);
 
     off.width = w; off.height = h;
     octx.clearRect(0, 0, w, h);
