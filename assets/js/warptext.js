@@ -63,15 +63,23 @@
     '  return s;',
     '}',
 
-    /* Кромка глифа в текстуре жёсткая. При смещении она рвалась ступеньками,
-       поэтому альфу берём средним по четырём точкам вокруг — этого хватает,
-       чтобы край остался гладким на любом сдвиге. */
-    'float alpha(vec2 p){',
-    '  vec2 e = 0.75 / uRes;',
-    '  return 0.25 * (texture(uTex, p + vec2(-e.x, -e.y)).a',
-    '              +  texture(uTex, p + vec2( e.x, -e.y)).a',
-    '              +  texture(uTex, p + vec2(-e.x,  e.y)).a',
-    '              +  texture(uTex, p + vec2( e.x,  e.y)).a);',
+    /* Смягчение кромки включается вместе с линзой и ровно на её силу.
+       Безусловное усреднение по четырём точкам размывало глиф целиком —
+       буквы становились ощутимо тоньше, чем в исходном SVG, и подмена
+       на наведении читалась как смена начертания. Вне линзы возвращаем
+       текстуру пиксель в пиксель. */
+    'float alpha(vec2 p, float k){',
+    '  float c = texture(uTex, p).a;',
+    '  if (k < 0.01) return c;',
+    '  vec2 e = (0.75 / uRes) * k;',
+    '  float s = 0.25 * (texture(uTex, p + vec2(-e.x, -e.y)).a',
+    '                 +  texture(uTex, p + vec2( e.x, -e.y)).a',
+    '                 +  texture(uTex, p + vec2(-e.x,  e.y)).a',
+    '                 +  texture(uTex, p + vec2( e.x,  e.y)).a);',
+    /* Размытие съедает вес: возвращаем его порогом по половинному покрытию,
+       так что толщина штриха остаётся прежней, а ступеньки — сглаженными. */
+    '  s = smoothstep(0.36, 0.64, s);',
+    '  return mix(c, s, k);',
     '}',
 
     'void main(){',
@@ -92,9 +100,9 @@
        так кайма следует за складкой и не выглядит приклеенной сбоку. */
     '  vec2 dir = normalize(off + vec2(1e-5));',
     '  float ca = 0.0045 * lens;',
-    '  float r = alpha(uv + off + dir * ca);',
-    '  float g = alpha(uv + off);',
-    '  float b = alpha(uv + off - dir * ca);',
+    '  float r = alpha(uv + off + dir * ca, lens);',
+    '  float g = alpha(uv + off, lens);',
+    '  float b = alpha(uv + off - dir * ca, lens);',
 
     '  vec3 ch = mix(vec3(g), vec3(r, g, b), 0.45);',
     '  float a = (r + g + b) / 3.0;',

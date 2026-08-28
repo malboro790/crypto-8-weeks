@@ -251,6 +251,44 @@
   })();
 
   /* ---------------------------------------------------------------------- */
+  /* Секции прилипают к верху, следующая наезжает сверху                    */
+  /* ---------------------------------------------------------------------- */
+  (function pinSections() {
+    var secs = $$('#main > section');
+    if (!secs.length) return;
+
+    function bg(el) { return el ? getComputedStyle(el).backgroundColor : ''; }
+
+    /* Два условия, и оба обязательны.
+
+       Первое — секция должна помещаться в окно целиком. Та, что выше окна,
+       замирает верхним краем на нуле, и всё, что ниже сгиба, становится
+       недостижимым. Ширина экрана здесь ни при чём: решает высота, поэтому
+       пересчёт идёт на каждый ресайз.
+
+       Второе — следующая секция должна быть другого цвета. Приём читается
+       как передача цвета: белое наезжает на чёрное. Между двумя одинаково
+       чёрными секциями видно только то, что текст ни с того ни с сего
+       замер, — обычная прокрутка там честнее. */
+    function apply() {
+      var vh = window.innerHeight;
+      secs.forEach(function (s, i) {
+        var next = secs[i + 1] || document.querySelector('.footer');
+        var fits = s.offsetHeight <= vh + 1;
+        s.classList.toggle('is-pinned', fits && bg(s) !== bg(next));
+      });
+    }
+    apply();
+
+    var t = null;
+    window.addEventListener('resize', function () {
+      clearTimeout(t);
+      t = setTimeout(apply, 120);
+    });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(apply);
+  })();
+
+  /* ---------------------------------------------------------------------- */
   /* Stats: numbers count up once                                           */
   /* ---------------------------------------------------------------------- */
   (function stats() {
