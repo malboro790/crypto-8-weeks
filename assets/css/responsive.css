@@ -535,13 +535,10 @@
 /* --------------------------------------------------------------------------
    ЮРИДИЧЕСКИЙ НИЗ НА УЗКИХ ЭКРАНАХ
    -------------------------------------------------------------------------- */
-@media (max-width: 900px) {
-  .req { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-}
 @media (max-width: 560px) {
-  .req { grid-template-columns: minmax(0, 1fr); gap: 14px; }
   /* Четыре документа в строку через точку на 375px дают рваный перенос:
      столбиком каждая ссылка остаётся целой строкой и её проще нажать. */
   .footer__docs { flex-direction: column; gap: 10px; align-items: flex-start; }
   .footer__docs a + a::before { content: none; }
+}
 }

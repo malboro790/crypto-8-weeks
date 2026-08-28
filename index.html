@@ -16,9 +16,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap">
 
-<link rel="stylesheet" href="assets/css/tokens.css?v=223">
-<link rel="stylesheet" href="assets/css/styles.css?v=223">
-<link rel="stylesheet" href="assets/css/responsive.css?v=223">
+<link rel="stylesheet" href="assets/css/tokens.css?v=224">
+<link rel="stylesheet" href="assets/css/styles.css?v=224">
+<link rel="stylesheet" href="assets/css/responsive.css?v=224">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='none' stroke='%23FFFFFF' stroke-width='2'/><circle cx='16' cy='16' r='6' fill='%23C1FF0F'/></svg>">
 </head>
 <body>
@@ -1310,22 +1310,16 @@
          ИНН и ОГРНИП — это чужие реальные номера, поэтому они оставлены
          пустыми и намеренно заметны, чтобы сайт нельзя было выложить,
          не заполнив их. -->
-    <div class="footer__law" id="requisites">
+    <!-- Реквизиты живут в разделе 17 оферты. В подвале они занимали шесть
+         строк на каждой странице и спорили с дисклеймером — а нужны они
+         ровно в момент, когда человек читает условия. -->
+    <div class="footer__law">
       <nav class="footer__docs" aria-label="Юридические документы">
         <a href="offer.html">Оферта</a>
         <a href="privacy.html">Политика конфиденциальности</a>
         <a href="consent.html">Согласие на обработку персональных данных</a>
-        <a href="#requisites">Реквизиты</a>
+        <a href="offer.html#s17">Реквизиты</a>
       </nav>
-
-      <dl class="req">
-        <div class="req__i"><dt>Исполнитель</dt><dd><span class="fill">ИП Фамилия Имя Отчество</span></dd></div>
-        <div class="req__i"><dt>ИНН</dt><dd><span class="fill">000000000000</span></dd></div>
-        <div class="req__i"><dt>ОГРНИП</dt><dd><span class="fill">000000000000000</span></dd></div>
-        <div class="req__i"><dt>Адрес для корреспонденции</dt><dd><span class="fill">индекс, город, улица</span></dd></div>
-        <div class="req__i"><dt>Электронная почта</dt><dd><span class="fill">mail@example.com</span></dd></div>
-        <div class="req__i"><dt>Связь</dt><dd><a href="https://t.me/Andrey_KERBERagency" target="_blank" rel="noopener">@Andrey_KERBERagency</a></dd></div>
-      </dl>
     </div>
 
     <div class="footer__bottom">
@@ -1346,7 +1340,7 @@
 
 
 
-<script src="assets/js/coinpit.js?v=223"></script>
-<script src="assets/js/main.js?v=223"></script>
+<script src="assets/js/coinpit.js?v=224"></script>
+<script src="assets/js/main.js?v=224"></script>
 </body>
 </html>

@@ -1947,7 +1947,7 @@ p { margin: 0; max-width: 62ch; }
 /* --------------------------------------------------------------------------
    ЮРИДИЧЕСКИЙ НИЗ
    -------------------------------------------------------------------------- */
-.footer__law { padding-top: 28px; border-top: 1px solid var(--c-dark-line); margin-top: 28px; }
+.footer__law { padding-top: 24px; border-top: 1px solid var(--c-dark-line); margin-top: 24px; }
 /* На юридических страницах юрблок идёт сразу за навигацией, у которой уже
    есть нижняя граница: две линии подряд читаются как пустая полоса. */
 .footer__top + .footer__law { border-top: 0; margin-top: 0; }
@@ -1962,21 +1962,6 @@ p { margin: 0; max-width: 62ch; }
 /* Разделитель рисуем псевдоэлементом, а не символом в разметке: иначе точка
    попадает в область ссылки и подчёркивается вместе с ней. */
 .footer__docs a + a::before { content: "·"; margin: 0 10px; color: rgba(255, 255, 255, .3); text-decoration: none; display: inline-block; }
-
-.req {
-  margin: 22px 0 0;
-  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px 32px;
-}
-.req__i { min-width: 0; }
-.req dt {
-  font-family: var(--f-mono); font-size: 0.6875rem;
-  letter-spacing: var(--ls-label); text-transform: uppercase;
-  color: rgba(255, 255, 255, .38);
-}
-.req dd { margin: 5px 0 0; font-size: var(--t-subtext); color: var(--c-dark-muted); overflow-wrap: anywhere; }
-.req dd a { color: var(--c-dark-muted); text-decoration: underline; text-underline-offset: 3px; }
-.req dd a:hover { color: var(--c-dark-ink); }
 
 /* Незаполненное поле. Видно сразу и на светлых, и на тёмных подложках —
    чтобы страницу нельзя было выложить с рыбой в реквизитах. */
