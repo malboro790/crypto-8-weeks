@@ -57,6 +57,10 @@
 
   .risks { grid-template-columns: minmax(0, 1fr); }
 
+  /* Целый пустой экран на телефоне — это лишние полсекунды пролистывания
+     без содержимого. Хватает двух третей. */
+  .section--leadin { padding-top: calc(68svh + var(--sp-section)); }
+
   /* Four scenarios go two-up before they go single-file. */
   .scens { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }

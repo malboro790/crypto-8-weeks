@@ -157,11 +157,22 @@
   var octx = off.getContext('2d');
   var W = 0, H = 0;
 
+  /* Поле вокруг слова. Канвас ровно по буквам означает, что смещение
+     у правого края тянет выборку за пределы текстуры: CLAMP_TO_EDGE
+     размазывает последний столбец, и на «O» появлялся прямой вертикальный
+     срез — тот самый «эффект в рамке». Запас в 8% с каждой стороны даёт
+     искажению куда деваться. */
+  var PAD = 0.08;
+  var padFrac = [0, 0];
+
   function paint() {
     var r = host.getBoundingClientRect();
     if (!r.width || !r.height) return false;
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    var w = Math.round(r.width * dpr), h = Math.round(r.height * dpr);
+    var iw = Math.round(r.width * dpr), ih = Math.round(r.height * dpr);
+    var px = Math.round(iw * PAD), py = Math.round(ih * PAD);
+    var w = iw + px * 2, h = ih + py * 2;
+    padFrac = [px / w, py / h];
     if (w === W && h === H) return true;
     W = w; H = h;
 
@@ -183,9 +194,9 @@
        совпадение точное по построению. */
     var vb = (svg.getAttribute('viewBox') || '').split(/[\s,]+/).map(Number);
     if (vb.length !== 4) return false;
-    var scale = Math.min(w / vb[2], h / vb[3]);          /* xMidYMid meet */
-    var ox = (w - vb[2] * scale) / 2;
-    var oy = (h - vb[3] * scale) / 2;
+    var scale = Math.min(iw / vb[2], ih / vb[3]);        /* xMidYMid meet */
+    var ox = px + (iw - vb[2] * scale) / 2;
+    var oy = py + (ih - vb[3] * scale) / 2;
 
     octx.font = (cs.fontWeight || '600') + ' ' + (fontSize * scale) + 'px ' + (cs.fontFamily || 'Geist');
     octx.fillText(src.textContent.trim(),
@@ -206,7 +217,9 @@
     raf = requestAnimationFrame(frame);
     paint();
     active += (target - active) * 0.12;
-    gl.uniform2f(U.uMouse, mouse[0], mouse[1]);
+    gl.uniform2f(U.uMouse,
+                 padFrac[0] + mouse[0] * (1 - 2 * padFrac[0]),
+                 padFrac[1] + mouse[1] * (1 - 2 * padFrac[1]));
     gl.uniform1f(U.uActive, active);
     gl.uniform1f(U.uTime, (now - t0) / 1000);
     gl.clearColor(0, 0, 0, 0);

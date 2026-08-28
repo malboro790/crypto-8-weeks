@@ -113,6 +113,13 @@ main { overflow-x: clip; }
 
 .section--hairline { border-top: 1px solid var(--c-line); }
 
+/* Переход с первого экрана на второй. Белая полоса выезжает на весь экран
+   пустой, и только потом в неё поднимается содержимое — оно проявляется
+   собственным data-reveal, отсюда и ощущение разной скорости слоёв.
+   Пустой экран сделан полем секции, а не отдельным блоком: так он живёт
+   в потоке и ничего не перекрывает. */
+.section--leadin { padding-top: calc(100svh + var(--sp-cinematic)); }
+
 /* An inverted band on an otherwise dark site. Token-level only, so every
    component inside it flips without knowing anything about the theme.
    The lavender accent is too pale on white, so this block uses a deeper cut. */
@@ -364,9 +371,13 @@ p { margin: 0; max-width: 62ch; }
   /* Крупнее прежнего: раньше цифра сидела на белом кружке 13px и была
      всего 9px — без кружка ей нужен собственный вес. */
   font-size: 15px; font-weight: 700; line-height: 1;
-  letter-spacing: -.02em;
+  /* Трекинг нулевой: отрицательный добавлял хвост после цифры, и грид
+     центрировал бокс вместе с этим хвостом — восьмёрка уезжала вправо. */
+  letter-spacing: 0;
   color: var(--c-paper);
-  transform: translateY(.5px);
+  /* Сдвиг снят с метрик Geist на кегле 15: чернила цифры лежат на 0.51px
+     правее центра адванса и на 0.18px ниже центра строки. */
+  transform: translate(-.51px, -.18px);
 }
 
 .wordmark__sub { color: var(--c-ink-faint); font-weight: var(--w-text); }
@@ -1743,9 +1754,16 @@ p { margin: 0; max-width: 62ch; }
 /* Искажение под курсором. Канвас ложится ровно на слово и включается только
    на время наведения; всё остальное время на экране исходный SVG, который
    не зависит ни от WebGL, ни от JS. */
+/* Отрицательный инсет — то самое поле вокруг слова, в которое уходит
+   искажение. Без него смещение упиралось в край канваса и срезало букву
+   прямой линией. Размер поля продублирован константой PAD в warptext.js. */
 .hero__warp {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
+  position: absolute;
+  /* Размер задан явно, а не через inset: канвас — замещаемый элемент,
+     и с width: auto он берёт собственный размер в пикселях, а не растяжку
+     по отступам. Без этого поле превращало слово в гигантское. */
+  left: -8%; top: -8%;
+  width: 116%; height: 116%;
   pointer-events: none;
 }
 .hero__word:not(.is-warping) .hero__warp { display: none; }
@@ -1777,15 +1795,15 @@ p { margin: 0; max-width: 62ch; }
      с запасом на любой кегль из clamp. */
   max-width: 40ch;
   font-family: var(--f-display);
-  /* Тоньше и мельче заголовка: под сплошным CRYPTO плотное полужирное
-     начертание спорило с ним, а не поясняло его. */
-  font-weight: 400;
+  /* Тоньше и мельче заголовка: под сплошным CRYPTO плотное начертание
+     спорило с ним, а не поясняло его. Geist подключён с осью 300..700,
+     поэтому светлое начертание настоящее, а не синтетическое. */
+  font-weight: 300;
   font-size: clamp(1rem, 0.55rem + 1.25vw, 1.75rem);
   line-height: 1.25;
   letter-spacing: -.005em;
   text-wrap: balance;
-  /* На тон тише белого заголовка: строка поясняет слово, а не спорит с ним. */
-  color: rgba(255, 255, 255, .8);
+  color: #FFFFFF;
 }
 /* Кнопка идёт сразу за строкой под заголовком — между ними больше ничего нет. */
 .hero .cta-row { margin-top: clamp(28px, 3vw, 40px); }
