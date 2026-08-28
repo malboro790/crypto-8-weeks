@@ -439,20 +439,6 @@ p { margin: 0; max-width: 62ch; }
   background-color: var(--c-paper);
 }
 
-/* Тканевый фон лежит между чёрной подложкой и монетами. Непрозрачность
-   ниже единицы намеренно: в полную силу серо-лиловая ткань съедает контраст
-   у белого CRYPTO, а сквозь неё чёрный фон гасит светлые складки. */
-.hero__silk {
-  position: absolute;
-  top: 0; bottom: 0;
-  left: 50%; transform: translateX(-50%);
-  width: 100vw; max-width: 100vw;
-  height: 100%;
-  z-index: 0;
-  opacity: .5;
-  pointer-events: none;
-}
-
 .hero__pit {
   position: absolute;
   top: 0; bottom: 0;
@@ -839,10 +825,40 @@ p { margin: 0; max-width: 62ch; }
    пунктов за краем экрана — а это единственное место на странице, где
    сказано, что человек в итоге будет уметь.
    -------------------------------------------------------------------------- */
-.skills {
-  list-style: none; margin: var(--sp-tight) 0 0; padding: 0;
-  border-top: 1px solid var(--c-line);
+/* Список прокручивается внутри себя, а не растягивает страницу на полтора
+   экрана. Сверху и снизу — растворение в фон: обрезанная строка на границе
+   и есть подсказка, что список длиннее видимой части. */
+.animlist { position: relative; margin-top: var(--sp-tight); }
+.animlist__fade {
+  position: absolute; left: 0; right: 0;
+  height: 64px; z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--d-base) var(--e-out);
 }
+.animlist__fade--top { top: 0;    background: linear-gradient(to bottom, var(--c-paper) 8%, transparent); }
+.animlist__fade--bot { bottom: 0; background: linear-gradient(to top,    var(--c-paper) 8%, transparent); }
+.animlist__fade.is-on { opacity: 1; }
+
+.skills {
+  list-style: none; margin: 0; padding: 0;
+  border-top: 1px solid var(--c-line);
+  max-height: clamp(420px, 58vh, 640px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+}
+.skills::-webkit-scrollbar { display: none; }
+
+/* Каждая строка проявляется, когда доезжает до кадра. Начальное состояние
+   задаётся классом, а не стилем по умолчанию: без JS список просто виден
+   целиком, а не остаётся невидимым навсегда. */
+.skills.is-armed .skill {
+  opacity: 0;
+  transform: translateY(16px) scale(.985);
+  transition: opacity var(--d-slow) var(--e-out), transform var(--d-slow) var(--e-out);
+}
+.skills.is-armed .skill.is-in { opacity: 1; transform: none; }
 .skill {
   display: grid;
   grid-template-columns: clamp(148px, 15vw, 196px) minmax(0, 1fr);
@@ -1742,9 +1758,10 @@ p { margin: 0; max-width: 62ch; }
 /* Строка под словом — ровно вполовину кегля заголовка. */
 .hero__claim {
   margin-top: clamp(16px, 2vw, 28px);
-  /* Три строки. 24ch и уже ломают текст на четыре, 31ch и шире схлопывают
-     в две — 27ch с запасом держит три на любом кегле из clamp. */
-  max-width: 27ch;
+  /* Две строки: с перечислением на 27ch получалось три, и строка начинала
+     конкурировать с заголовком по высоте. 32ch и шире дают две, 40ch взято
+     с запасом на любой кегль из clamp. */
+  max-width: 40ch;
   font-family: var(--f-display);
   /* Тоньше и мельче заголовка: под сплошным CRYPTO плотное полужирное
      начертание спорило с ним, а не поясняло его. */

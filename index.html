@@ -16,9 +16,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap">
 
-<link rel="stylesheet" href="assets/css/tokens.css?v=250">
-<link rel="stylesheet" href="assets/css/styles.css?v=250">
-<link rel="stylesheet" href="assets/css/responsive.css?v=250">
+<link rel="stylesheet" href="assets/css/tokens.css?v=260">
+<link rel="stylesheet" href="assets/css/styles.css?v=260">
+<link rel="stylesheet" href="assets/css/responsive.css?v=260">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='none' stroke='%23FFFFFF' stroke-width='2'/><circle cx='16' cy='16' r='6' fill='%23C1FF0F'/></svg>">
 </head>
 <body>
@@ -74,11 +74,6 @@
      ====================================================================== -->
 <section class="section hero" id="hero">
   <div class="hero__bg" aria-hidden="true"></div>
-  <!-- Тканевый фон Silk. Параметры лежат в атрибутах, чтобы крутить их здесь,
-       а не в шейдере: цвет, скорость, масштаб, зерно и поворот. -->
-  <canvas class="hero__silk" data-silk aria-hidden="true"
-          data-color="#7B7481" data-speed="5" data-scale="1"
-          data-noise="1.5" data-rotation="0"></canvas>
   <canvas class="hero__pit" id="heroPit" data-coinpit="drop" aria-hidden="true"></canvas>
 
   <div class="container hero__inner">
@@ -86,14 +81,14 @@
          только так строка гарантированно упирается в оба края контейнера на
          любой ширине экрана. viewBox снят с натуральных метрик Geist, поэтому
          буквы не растянуты — textLength лишь добирает доли пикселя. -->
-    <h1 class="hero__word" data-reveal style="--reveal-delay:60ms">
+    <h1 class="hero__word" data-shuffle data-reveal style="--reveal-delay:60ms">
       <svg class="hero__word-svg" viewBox="10.92 15.6 980.45 188.47" role="img" aria-label="CRYPTO">
         <text x="0" y="200">CRYPTO</text>
       </svg>
     </h1>
 
     <p class="hero__claim" data-reveal style="--reveal-delay:120ms">
-      8 недель личного сопровождения
+      8 недель личного сопровождения: звонки 1:1, практика и поддержка в чате
     </p>
 
     <div class="cta-row" data-reveal style="--reveal-delay:220ms">
@@ -400,7 +395,8 @@
          Лента прокруткой прятала половину пунктов за краем экрана — а это
          единственное место, где сказано, что человек в итоге будет уметь.
          Графика собрана из тех же .mock, что и в продуктовом блоке. -->
-    <ul class="skills" data-reveal>
+    <div class="animlist" data-animlist data-reveal>
+    <ul class="skills">
     <li class="skill">
       <div class="mock mock--theory skill__art" aria-hidden="true">
         <span class="mock__row">USDT</span>
@@ -525,6 +521,9 @@
       </div>
     </li>
     </ul>
+      <span class="animlist__fade animlist__fade--top" aria-hidden="true"></span>
+      <span class="animlist__fade animlist__fade--bot" aria-hidden="true"></span>
+    </div>
   </div>
 </section>
 
@@ -629,35 +628,35 @@
           <div class="week__body-inner"><div class="week__content">
             <div class="week__topics"><span class="tag">Crypto</span><span class="tag">Blockchain</span><span class="tag">Stablecoins</span><span class="tag">Networks</span><span class="tag">Wallet</span><span class="tag">CEX</span><span class="tag">DEX</span><span class="tag">P2P</span><span class="tag">KYC</span></div>
 
-            <p class="week__lead">Вводная неделя для человека, который может вообще ничего не знать о крипте. Собираем базовый словарь и простую картину того, как устроена система: что такое криптовалюта, блокчейн, сети, кошельки и биржи, как обычные деньги превращаются в USDT и как затем перемещаются внутри криптоинфраструктуры.</p>
+            <p class="week__lead">Базовый словарь и общая картина: как обычные деньги превращаются в USDT и как перемещаются дальше.</p>
 
             <div class="week__cols">
               <div>
                 <p class="week__h">Что разберём</p>
                 <ul class="week__list">
-              <li>что такое криптовалюта и чем она отличается от обычных денег</li>
-              <li>что такое blockchain — простая механика без технической перегрузки</li>
-              <li>монеты и токены: BTC, ETH и USDT как три разных примера</li>
-              <li>stablecoin: почему USDT ≈ $1 и чем он отличается от доллара</li>
-              <li>сети: Ethereum, TRON, Solana и почему сеть важна при переводах</li>
-              <li>что такое криптокошелёк и где на самом деле находятся активы</li>
-              <li>биржа и CEX: зачем нужна и какую функцию выполняет</li>
-              <li>DEX: что существует другой тип бирж и в чём базовая разница</li>
-              <li>как деньги попадают в крипту: fiat → CEX / P2P / обменник → USDT</li>
+              <li>криптовалюта и чем она отличается от денег</li>
+              <li>blockchain: механика без перегрузки</li>
+              <li>монеты и токены: BTC, ETH, USDT</li>
+              <li>stablecoin: почему USDT ≈ $1</li>
+              <li>сети: Ethereum, TRON, Solana</li>
+              <li>кошелёк: где на самом деле активы</li>
+              <li>биржа и CEX: зачем нужна</li>
+              <li>DEX: второй тип бирж</li>
+              <li>путь денег: fiat → CEX / P2P / обменник → USDT</li>
               <li>P2P и обменники: принцип работы</li>
               <li>KYC: зачем биржи требуют документы</li>
-              <li>как крипта перемещается: биржа → сеть → кошелёк → другой пользователь</li>
-              <li>главные риски новичка: неправильная сеть или адрес, seed phrase, scam, необратимость транзакций</li>
-              <li>карта следующих восьми недель и конечный результат программы</li>
+              <li>маршрут крипты: биржа → сеть → кошелёк → получатель</li>
+              <li>риски: сеть, адрес, seed phrase, scam, необратимость</li>
+              <li>карта восьми недель</li>
                 </ul>
               </div>
               <div>
                 <p class="week__h">После недели</p>
-                <p class="week__res">Вы будете понимать базовый язык крипты и общую логику движения средств: от обычных денег до биржи, сети и собственного кошелька. Термины USDT, blockchain, network, wallet, CEX, DEX и KYC перестанут выглядеть набором случайных слов.</p>
+                <p class="week__res">Базовый язык крипты и логика движения средств: от денег до биржи, сети и своего кошелька.</p>
               </div>
             </div>
 
-            <p class="week__practice"><b>Практика:</b> создать аккаунт Bybit, пройти KYC, включить 2FA и разобраться в основных разделах аккаунта.</p>
+            <p class="week__practice"><b>Практика:</b> создать аккаунт Bybit, пройти KYC, включить 2FA и разобраться в разделах.</p>
           </div></div>
         </div>
       </article>
@@ -672,41 +671,41 @@
           <div class="week__body-inner"><div class="week__content">
             <div class="week__topics"><span class="tag">CEX</span><span class="tag">Bybit</span><span class="tag">KYC</span><span class="tag">2FA</span><span class="tag">P2P</span><span class="tag">USDT</span><span class="tag">Deposit</span><span class="tag">Withdrawal</span><span class="tag">Spot</span></div>
 
-            <p class="week__lead">Разбираемся с централизованной биржей как с основным рабочим инструментом новичка. Изучаем Bybit руками: от безопасности аккаунта и P2P до покупки крипты, внутренних переводов и вывода средств on-chain.</p>
+            <p class="week__lead">Централизованная биржа руками: безопасность аккаунта, P2P, покупка, переводы и вывод on-chain.</p>
 
             <div class="week__cols">
               <div>
                 <p class="week__h">Что разберём</p>
                 <ul class="week__list">
-              <li>что такое CEX и зачем нужна централизованная биржа</li>
-              <li>Bybit, Binance, OKX: основные площадки и различия</li>
-              <li>аккаунт и KYC: регистрация, верификация, ограничения</li>
-              <li>безопасность: 2FA, anti-phishing code, passkey, trusted devices</li>
-              <li>интерфейс Bybit и основные разделы</li>
+              <li>зачем нужна централизованная биржа</li>
+              <li>Bybit, Binance, OKX</li>
+              <li>аккаунт и KYC: верификация и лимиты</li>
+              <li>2FA, anti-phishing code, passkey, trusted devices</li>
+              <li>интерфейс Bybit</li>
               <li>Funding и Unified Trading: типы счетов</li>
-              <li>способы покупки крипты за обычные деньги</li>
-              <li>как работает P2P</li>
-              <li>как выбирать P2P-контрагента</li>
+              <li>покупка крипты за фиат</li>
+              <li>как работает P2P</li>
+              <li>выбор P2P-контрагента</li>
               <li>основные P2P-риски</li>
               <li>практическая P2P-сделка</li>
-              <li>Convert и Spot: покупка и обмен крипты</li>
+              <li>Convert и Spot: покупка и обмен</li>
               <li>переводы между счетами Bybit</li>
               <li>on-chain deposit</li>
               <li>on-chain withdrawal</li>
               <li>выбор сети при выводе</li>
-              <li>TXID и проверка транзакции через explorer</li>
+              <li>TXID и проверка в explorer</li>
               <li>комиссии и лимиты</li>
-              <li>способы использования и вывода крипты</li>
-              <li>support, appeal и действия при проблемной операции</li>
+              <li>способы вывода крипты</li>
+              <li>support и appeal</li>
                 </ul>
               </div>
               <div>
                 <p class="week__h">После недели</p>
-                <p class="week__res">Вы сможете самостоятельно ориентироваться в Bybit, купить крипту, обменять активы, понимать устройство счетов и подготовить ввод или вывод средств.</p>
+                <p class="week__res">Купить и обменять крипту на Bybit, понимать счета и подготовить ввод или вывод.</p>
               </div>
             </div>
 
-            <p class="week__practice"><b>Практика:</b> пополнить биржу через P2P небольшой суммой — с демонстрацией процесса через показ экрана.</p>
+            <p class="week__practice"><b>Практика:</b> пополнить биржу через P2P небольшой суммой — с показом экрана.</p>
           </div></div>
         </div>
       </article>
@@ -721,23 +720,23 @@
           <div class="week__body-inner"><div class="week__content">
             <div class="week__topics"><span class="tag">Wallet</span><span class="tag">Seed phrase</span><span class="tag">Private key</span><span class="tag">Address</span><span class="tag">MetaMask</span><span class="tag">Trust Wallet</span><span class="tag">Explorer</span></div>
 
-            <p class="week__lead">Переходим от хранения средств на бирже к собственному кошельку. Разбираем, кто на самом деле контролирует криптоактивы, как работают адрес, private key и seed phrase, и создаём собственный non-custodial wallet.</p>
+            <p class="week__lead">От хранения на бирже к своему кошельку: кто на самом деле контролирует активы.</p>
 
             <div class="week__cols">
               <div>
                 <p class="week__h">Что разберём</p>
                 <ul class="week__list">
               <li>custodial и non-custodial</li>
-              <li>как устроен криптокошелёк</li>
+              <li>как устроен криптокошелёк</li>
               <li>wallet address</li>
               <li>public и private key</li>
-              <li>seed phrase и восстановление доступа</li>
-              <li>как безопасно хранить seed phrase</li>
-              <li>Trust Wallet, MetaMask и другие кошельки</li>
-              <li>один кошелёк и несколько сетей</li>
+              <li>seed phrase и восстановление</li>
+              <li>безопасное хранение seed phrase</li>
+              <li>Trust Wallet, MetaMask</li>
+              <li>один кошелёк, несколько сетей</li>
               <li>добавление сетей и токенов</li>
               <li>получение крипты</li>
-              <li>отправка крипты: recipient, network, amount, gas, confirmations</li>
+              <li>отправка: network, amount, gas, confirmations</li>
               <li>test transaction</li>
               <li>blockchain explorer</li>
               <li>hot, cold и hardware wallets</li>
@@ -745,11 +744,11 @@
               </div>
               <div>
                 <p class="week__h">После недели</p>
-                <p class="week__res">Вы будете понимать разницу между «деньги лежат на бирже» и реальным самостоятельным контролем над активами, создадите собственный кошелёк и научитесь восстанавливать к нему доступ.</p>
+                <p class="week__res">Свой кошелёк создан, восстановление проверено, разница с хранением на бирже понятна.</p>
               </div>
             </div>
 
-            <p class="week__practice"><b>Практика:</b> создать wallet, сохранить seed phrase, проверить восстановление, получить адрес, вывести небольшую сумму с Bybit, найти транзакцию в explorer и отправить часть обратно.</p>
+            <p class="week__practice"><b>Практика:</b> создать wallet, сохранить seed phrase, проверить восстановление, вывести небольшую сумму с Bybit, найти её в explorer и отправить часть обратно.</p>
           </div></div>
         </div>
       </article>
@@ -764,18 +763,18 @@
           <div class="week__body-inner"><div class="week__content">
             <div class="week__topics"><span class="tag">BTC</span><span class="tag">ETH</span><span class="tag">L1 / L2</span><span class="tag">DeFi</span><span class="tag">NFT</span><span class="tag">RWA</span><span class="tag">DePIN</span><span class="tag">DAO</span><span class="tag">AI × Crypto</span></div>
 
-            <p class="week__lead">Собираем целостную карту криптоиндустрии. Цель не в том, чтобы научиться пользоваться каждым продуктом, а понять, какие технологии, активы и направления вообще существуют, зачем они нужны и как связаны между собой.</p>
+            <p class="week__lead">Карта индустрии: что вообще существует, зачем нужно и как связано между собой.</p>
 
             <div class="week__cols">
               <div>
                 <p class="week__h">Что разберём</p>
                 <ul class="week__list">
               <li>криптоактивы: coin, token, stablecoin, NFT</li>
-              <li>категории токенов: BTC, L1/L2, DeFi, utility, governance, RWA, DePIN, meme</li>
+              <li>категории: L1/L2, DeFi, utility, governance, RWA, DePIN, meme</li>
               <li>топ-10 CoinMarketCap</li>
               <li>stablecoins: USDT, USDC, DAI</li>
-              <li>blockchain и L1: Bitcoin, Ethereum, Solana, TON, TRON</li>
-              <li>consensus: PoW и PoS, майнинг и валидаторы</li>
+              <li>L1: Bitcoin, Ethereum, Solana, TON, TRON</li>
+              <li>consensus: PoW и PoS</li>
               <li>L2 и масштабирование: Base, Arbitrum, Optimism</li>
               <li>smart contracts и oracles</li>
               <li>CEX и DEX</li>
@@ -794,7 +793,7 @@
               </div>
               <div>
                 <p class="week__h">После недели</p>
-                <p class="week__res">Вы сможете смотреть на криптоиндустрию как на систему, а не набор непонятных монет. Большинство базовых терминов из CoinMarketCap, криптосервисов и новостей будут иметь понятное место на общей карте.</p>
+                <p class="week__res">Термины из CoinMarketCap, сервисов и новостей получают место на общей карте.</p>
               </div>
             </div>
 
@@ -813,37 +812,37 @@
           <div class="week__body-inner"><div class="week__content">
             <div class="week__topics"><span class="tag">Bitcoin</span><span class="tag">Ethereum</span><span class="tag">Mining</span><span class="tag">PoW</span><span class="tag">PoS</span><span class="tag">Smart contracts</span><span class="tag">L1 / L2</span><span class="tag">AI</span></div>
 
-            <p class="week__lead">После общей карты идём глубже в две главные архитектуры криптомира. Через Bitcoin и Ethereum разбираемся, почему blockchain вообще способен работать без банка или центрального сервера, откуда появляются монеты и кто обеспечивает работу сети.</p>
+            <p class="week__lead">Через Bitcoin и Ethereum: почему blockchain работает без банка и кто держит сеть.</p>
 
             <div class="week__cols">
               <div>
                 <p class="week__h">Что разберём</p>
                 <ul class="week__list">
               <li>зачем был создан Bitcoin</li>
-              <li>как устроен Bitcoin: blockchain, блоки, транзакции, распределённый реестр</li>
-              <li>эмиссия BTC, mining rewards и ограничение в 21 млн</li>
-              <li>что реально делают майнеры</li>
+              <li>устройство Bitcoin: блоки и реестр</li>
+              <li>эмиссия BTC и предел в 21 млн</li>
+              <li>что реально делают майнеры</li>
               <li>proof of work</li>
               <li>halving и экономика Bitcoin</li>
               <li>зачем появился Ethereum</li>
               <li>smart contracts</li>
-              <li>Ethereum Virtual Machine и gas</li>
+              <li>EVM и gas</li>
               <li>proof of stake</li>
               <li>PoW и PoS в сравнении</li>
               <li>другие механизмы consensus</li>
               <li>L1 и L2</li>
-              <li>Solana, TON, TRON как другие архитектуры</li>
-              <li>BTC, ETH и SOL: почему это разные по назначению системы</li>
+              <li>Solana, TON, TRON</li>
+              <li>BTC, ETH, SOL: разное назначение</li>
               <li>mining и staking</li>
               <li>почему Ethereum больше нельзя майнить</li>
-              <li>blockchain × AI: decentralized compute, GPU-сети, inference; Gonka как пример</li>
-              <li>где blockchain действительно нужен, а где нет</li>
-              <li>scaling, interoperability, modular blockchains и дальнейшее развитие индустрии</li>
+              <li>blockchain × AI: GPU-сети, inference, Gonka</li>
+              <li>где blockchain нужен, а где нет</li>
+              <li>scaling и modular blockchains</li>
                 </ul>
               </div>
               <div>
                 <p class="week__h">После недели</p>
-                <p class="week__res">Вы будете понимать фундаментальные различия Bitcoin, Ethereum и других блокчейнов, откуда берётся безопасность сети, зачем нужны майнеры и валидаторы и почему разные сети нельзя воспринимать просто как разные «монеты».</p>
+                <p class="week__res">Чем отличаются Bitcoin, Ethereum и другие сети и откуда берётся их безопасность.</p>
               </div>
             </div>
           </div></div>
@@ -860,7 +859,7 @@
           <div class="week__body-inner"><div class="week__content">
             <div class="week__topics"><span class="tag">DEX</span><span class="tag">Swap</span><span class="tag">AMM</span><span class="tag">Liquidity</span><span class="tag">Slippage</span><span class="tag">Approval</span><span class="tag">Uniswap</span><span class="tag">Jupiter</span><span class="tag">Bridges</span></div>
 
-            <p class="week__lead">Переходим от централизованной биржи к работе непосредственно on-chain. Разбираем, как DEX взаимодействует с кошельком, откуда берётся ликвидность, что происходит при swap и какие проверки нужно сделать до подписания транзакции.</p>
+            <p class="week__lead">Работа on-chain: как DEX общается с кошельком и что проверить до подписи.</p>
 
             <div class="week__cols">
               <div>
@@ -869,7 +868,7 @@
               <li>CEX и DEX: архитектура и custody</li>
               <li>Uniswap, Jupiter, PancakeSwap, Curve</li>
               <li>connect wallet</li>
-              <li>что происходит после нажатия swap</li>
+              <li>что происходит после swap</li>
               <li>smart contract interaction</li>
               <li>gas и network fee</li>
               <li>token approval и unlimited approvals</li>
@@ -878,23 +877,23 @@
               <li>liquidity providers</li>
               <li>price impact</li>
               <li>slippage</li>
-              <li>DEX-агрегаторы: 1inch, Jupiter</li>
+              <li>агрегаторы: 1inch, Jupiter</li>
               <li>маршрутизация swap</li>
-              <li>проверка токена по contract address</li>
-              <li>проверка DEX: домен, TVL, объём, ликвидность, репутация</li>
-              <li>phishing, поддельные DEX, malicious contracts, honeypots, scam-токены</li>
+              <li>проверка token contract address</li>
+              <li>проверка DEX: домен, TVL, ликвидность</li>
+              <li>phishing, поддельные DEX, honeypots, scam-токены</li>
               <li>bridges и cross-chain</li>
               <li>explorer после DEX-транзакции</li>
-              <li>perpetual DEX и Hyperliquid — обзорно, без обучения трейдингу</li>
+              <li>perpetual DEX и Hyperliquid — обзорно</li>
                 </ul>
               </div>
               <div>
                 <p class="week__h">После недели</p>
-                <p class="week__res">Вы сможете самостоятельно подключить кошелёк к DEX, проверить площадку и токен, понимать параметры обмена и совершить простой swap, осознавая, что именно подписываете.</p>
+                <p class="week__res">Проверить площадку и токен, сделать swap, понимая, что именно подписываете.</p>
               </div>
             </div>
 
-            <p class="week__practice"><b>Практика:</b> проверить DEX, подключить wallet, выбрать сеть, проверить token contract, посмотреть ликвидность, настроить swap, проверить price impact и slippage, обменять $10–20, найти транзакцию в explorer и проверить approvals.</p>
+            <p class="week__practice"><b>Практика:</b> проверить DEX и token contract, подключить wallet, настроить swap, проверить price impact и slippage, обменять $10–20, найти транзакцию в explorer и проверить approvals.</p>
           </div></div>
         </div>
       </article>
@@ -909,13 +908,13 @@
           <div class="week__body-inner"><div class="week__content">
             <div class="week__topics"><span class="tag">Trading terminal</span><span class="tag">BTC-USDT</span><span class="tag">Candles</span><span class="tag">Order book</span><span class="tag">Market</span><span class="tag">Limit</span><span class="tag">TradingView</span><span class="tag">CMC</span></div>
 
-            <p class="week__lead">Учимся читать интерфейс биржи и график без обучения трейдингу. Цель — открыть Bybit, Binance или TradingView и понимать, что означают основные цифры, свечи, заявки и типы ордеров.</p>
+            <p class="week__lead">Интерфейс биржи и график — без обучения трейдингу.</p>
 
             <div class="week__cols">
               <div>
                 <p class="week__h">Что разберём</p>
                 <ul class="week__list">
-              <li>как устроен торговый терминал</li>
+              <li>как устроен торговый терминал</li>
               <li>торговая пара: BTC/USDT, ETH/USDT</li>
               <li>почему движется график цены</li>
               <li>свечи: open, high, low, close</li>
@@ -924,18 +923,18 @@
               <li>market и limit order</li>
               <li>market cap, circulating supply, FDV</li>
               <li>spot, margin и futures</li>
-              <li>long, short, leverage, liquidation — только терминология и риски</li>
-              <li>TradingView: актив, таймфрейм, объём, сравнение графиков</li>
-              <li>CoinMarketCap и CoinGecko: связь данных об активе с терминалом</li>
+              <li>long, short, leverage, liquidation — только риски</li>
+              <li>TradingView: актив, таймфрейм, объём</li>
+              <li>CoinMarketCap и CoinGecko</li>
                 </ul>
               </div>
               <div>
                 <p class="week__h">После недели</p>
-                <p class="week__res">Вы сможете открыть торговый терминал и понимать график, свечи, стакан, торговые пары и основные типы заявок — без необходимости заниматься трейдингом или техническим анализом.</p>
+                <p class="week__res">Читать график, свечи, стакан, пары и типы заявок — без трейдинга и теханализа.</p>
               </div>
             </div>
 
-            <p class="week__practice"><b>Практика:</b> открыть одну небольшую spot-сделку через limit order и посмотреть, как заявка появляется и исполняется.</p>
+            <p class="week__practice"><b>Практика:</b> открыть небольшую spot-сделку через limit order и посмотреть, как заявка исполняется.</p>
           </div></div>
         </div>
       </article>
@@ -950,37 +949,37 @@
           <div class="week__body-inner"><div class="week__content">
             <div class="week__topics"><span class="tag">Cycles</span><span class="tag">Macro</span><span class="tag">Liquidity</span><span class="tag">BTC dominance</span><span class="tag">Regulation</span><span class="tag">KYC</span><span class="tag">AML</span><span class="tag">Risk</span></div>
 
-            <p class="week__lead">Финальная неделя собирает крипторынок в более широкий контекст. Разбираем циклы, глобальную экономику, текущую фазу рынка, регулирование и системные риски — чтобы понимать не только, как нажать кнопку, но и среду, в которой существуют ваши активы.</p>
+            <p class="week__lead">Крипторынок в контексте: циклы, макроэкономика, регулирование и системные риски.</p>
 
             <div class="week__cols">
               <div>
                 <p class="week__h">Что разберём</p>
                 <ul class="week__list">
               <li>почему крипторынок движется циклами</li>
-              <li>история циклов BTC: 2013, 2017, 2021 и текущий</li>
-              <li>Bitcoin halving и его историческая роль</li>
+              <li>циклы BTC: 2013, 2017, 2021, текущий</li>
+              <li>halving и его роль</li>
               <li>фазы рыночного цикла</li>
               <li>BTC dominance</li>
-              <li>BTC → ETH → альткоины → мемкоины и движение ликвидности</li>
+              <li>BTC → ETH → альткоины → мемкоины</li>
               <li>глобальная ликвидность</li>
               <li>процентные ставки ФРС</li>
               <li>инфляция, доллар и облигации</li>
               <li>risk-on и risk-off</li>
               <li>ETF и институциональный капитал</li>
-              <li>где рынок находится сейчас — актуальный разбор на момент созвона</li>
-              <li>как самостоятельно оценивать состояние рынка</li>
-              <li>регулирование крипты в мире: США, ЕС, Азия</li>
+              <li>где рынок сейчас — разбор на момент созвона</li>
+              <li>как оценивать состояние рынка</li>
+              <li>регулирование в мире: США, ЕС, Азия</li>
               <li>правовой статус криптовалюты в России</li>
-              <li>налоги в РФ: базовые принципы и документация</li>
+              <li>налоги в РФ: принципы и документы</li>
               <li>KYC, AML, travel rule</li>
               <li>релокация и налоговое резидентство</li>
-              <li>системные риски: CEX, депег стейблкоина, смарт-контракты, мосты, санкции, регулирование</li>
-              <li>как жить с этим дальше: система хранения, переводов, документов и управления риском</li>
+              <li>системные риски: CEX, депег, контракты, мосты, санкции</li>
+              <li>своя система хранения, переводов и риска</li>
                 </ul>
               </div>
               <div>
                 <p class="week__h">После недели</p>
-                <p class="week__res">Вы будете понимать крипторынок не изолированно, а как часть глобальной финансовой системы: почему меняются рыночные циклы, как макроэкономика влияет на крипту, какие существуют юридические и инфраструктурные риски и какие показатели стоит отслеживать самостоятельно.</p>
+                <p class="week__res">Видеть крипторынок частью глобальной финансовой системы и знать, что отслеживать.</p>
               </div>
             </div>
 
@@ -1267,8 +1266,8 @@
 
 
 
-<script src="assets/js/silk.js?v=250" defer></script>
-<script src="assets/js/coinpit.js?v=250"></script>
-<script src="assets/js/main.js?v=250"></script>
+<script src="assets/js/shuffle.js?v=260" defer></script>
+<script src="assets/js/coinpit.js?v=260"></script>
+<script src="assets/js/main.js?v=260"></script>
 </body>
 </html>
