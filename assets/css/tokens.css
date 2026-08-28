@@ -138,7 +138,7 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
   --c-paper:       #000000;
-    --c-paper-sunk:  #0B0B0B;
+    --c-paper-sunk:  #000000;
     --c-surface:     rgba(255, 255, 255, .04);
     --c-plate:       #111111;
     --c-surface-alt: rgba(255, 255, 255, .07);
@@ -180,7 +180,7 @@
 
 :root[data-theme="dark"] {
   --c-paper:       #000000;
-  --c-paper-sunk:  #0B0B0B;
+  --c-paper-sunk:  #000000;
   --c-surface:     rgba(255, 255, 255, .04);
   --c-plate:       #111111;
   --c-surface-alt: rgba(255, 255, 255, .07);

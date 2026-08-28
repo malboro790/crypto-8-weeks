@@ -674,61 +674,44 @@ p { margin: 0; max-width: 62ch; }
    RISK FIELD
    ========================================================================== */
 
-.riskfield {
-  position: relative; margin-top: var(--sp-tight);
-  min-height: 460px; display: grid; place-items: center;
-}
+/* --------------------------------------------------------------------------
+   БЕЗОПАСНОСТЬ
 
-/* The hairline layer sits out of flow. Left static it becomes a grid item and,
-   being a 1:1 viewBox at full width, stretches the field to its own width. */
-.riskfield__svg {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  pointer-events: none;
+   Слева заголовок и абзац, справа облако плашек. Прежняя радиальная схема
+   с центральным узлом и лучами требовала JS, отдельной раскладки для
+   телефона и полутора экранов высоты — при том что говорила ровно то же:
+   рисков много и они разные.
+   -------------------------------------------------------------------------- */
+.risks {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(28px, 4vw, 72px);
+  align-items: start;
 }
-.riskfield__svg line {
-  stroke: var(--c-line-strong); stroke-width: 1;
-  vector-effect: non-scaling-stroke;
-}
+.risks__copy .lead { margin-top: var(--sp-stack); max-width: 34ch; }
 
-.riskfield__core {
-  position: relative; z-index: 2;
-  background: var(--c-plate); border: 1px solid var(--c-line-strong);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06),
-              0 14px 34px -18px rgba(0, 0, 0, .85);
-  border-radius: var(--r-lg); padding: 20px 26px; text-align: center;
+.risks__cloud {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-wrap: wrap; gap: 10px;
+  /* Строки прижаты к верху колонки, но сама лента чуть опущена: заголовок
+     слева набран крупнее, и без этого плашки вставали выше его первой строки. */
+  padding-top: 6px;
 }
-/* Outline mark with a soft bloom, in the manner of the reference: the node is
-   the one hero element on this map, so it reads differently from the filled
-   glyphs on the surrounding plates. */
-.riskfield__icon {
-  width: 32px; height: 32px;
-  margin: 0 auto 12px;
-  color: var(--c-accent);
-  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--c-accent) 45%, transparent));
-}
+/* Ровная решётка из плашек читалась бы как таблица. Небольшой сдвиг по
+   вертикали через одну возвращает ощущение облака, не превращая ряд в кашу:
+   амплитуда меньше половины зазора, поэтому строки не слипаются. */
+.risks__cloud .risk:nth-child(3n+2) { transform: translateY(7px); }
+.risks__cloud .risk:nth-child(3n)   { transform: translateY(-5px); }
 
-.riskfield__core .mono { font-family: var(--f-display); font-size: 1.0625rem; letter-spacing: -.015em; }
-.riskfield__core span {
-  display: block; font-size: var(--t-subtext);
-  color: var(--c-ink-faint); margin-top: 4px;
-}
 .risk {
-  /* Placed on the field by --x/--y; the JS draws the hairlines to these points. */
-  position: absolute;
-  left: var(--x); top: var(--y);
-  transform: translate(-50%, -50%);
-  z-index: 1;
   display: inline-flex; align-items: center; gap: 8px;
-  /* One size and one weight for every item — the map should read as a set of
-     equals, not a ranking. Set in the display face: the mono one spaced the
-     Cyrillic so widely that words looked double-spaced. */
+  /* Один кегль и одно начертание на все пункты — набор равных, а не рейтинг.
+     Набрано текстовой гарнитурой: моноширинная так разгоняла кириллицу, что
+     слова выглядели набранными через пробел. */
   font-family: var(--f-display);
   font-size: .875rem; font-weight: 500; letter-spacing: 0;
   white-space: nowrap;
   padding: 9px 13px; border-radius: var(--r-md);
-  /* Opaque, not a tint: the hairlines run underneath and must not show through.
-     The inset highlight and drop shadow give the plate its matte lift. */
   background: var(--c-plate); border: 1px solid var(--c-line);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05),
               0 8px 20px -14px rgba(0, 0, 0, .8);
@@ -739,7 +722,6 @@ p { margin: 0; max-width: 62ch; }
 .risk svg { width: 15px; height: 15px; flex: none; fill: currentColor; opacity: .7; }
 .risk:hover { border-color: var(--c-accent-line); color: var(--c-accent); }
 
-.risk__note { display: block; font-family: var(--f-text); font-size: var(--t-subtext); color: var(--c-ink-faint); letter-spacing: 0; margin-top: 2px; }
 
 /* ==========================================================================
    SOLUTION
@@ -1378,7 +1360,22 @@ p { margin: 0; max-width: 62ch; }
 
 .finalcta__grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: clamp(32px, 5vw, 96px); align-items: start; }
 
-.footer { background: var(--c-dark); color: var(--c-dark-ink); padding-block: clamp(48px, 5vw, 80px); }
+/* Полоса под кучу монет: нижнее поле подвала считает высоту самой кучи
+   плюс отбивку от последней строки. */
+.footer {
+  background: var(--c-dark); color: var(--c-dark-ink);
+  padding-top: clamp(48px, 5vw, 80px);
+  padding-bottom: clamp(150px, 15vw, 210px);
+  position: relative; overflow: hidden;
+}
+.footer > .container { position: relative; z-index: 2; }
+/* Селектор с двумя классами намеренно: .pit объявлен ниже по файлу
+   и своей height: 100% растягивал кучу на весь подвал. */
+.footer .footer__pit {
+  top: auto; bottom: 0;
+  height: clamp(110px, 11vw, 150px);
+  z-index: 1;
+}
 .footer__top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 32px; padding-bottom: 36px; border-bottom: 1px solid var(--c-dark-line); }
 .footer__links { display: flex; flex-wrap: wrap; gap: 8px 26px; }
 .footer__links a {
@@ -1555,8 +1552,6 @@ p { margin: 0; max-width: 62ch; }
    The canvas is full-bleed like the hero's, so the pile sits on the section
    edge rather than on the content grid.
    ========================================================================== */
-.relocation { position: relative; isolation: isolate; overflow: hidden; }
-.relocation > .container { position: relative; z-index: 2; }
 
 .pit {
   position: absolute;
@@ -1740,10 +1735,12 @@ p { margin: 0; max-width: 62ch; }
      в две — 27ch с запасом держит три на любом кегле из clamp. */
   max-width: 27ch;
   font-family: var(--f-display);
-  font-weight: var(--w-display);
-  font-size: clamp(1.0625rem, 0.475rem + 1.65vw, 2.0625rem);
-  line-height: 1.18;
-  letter-spacing: -.01em;
+  /* Тоньше и мельче заголовка: под сплошным CRYPTO плотное полужирное
+     начертание спорило с ним, а не поясняло его. */
+  font-weight: 400;
+  font-size: clamp(1rem, 0.55rem + 1.25vw, 1.75rem);
+  line-height: 1.25;
+  letter-spacing: -.005em;
   text-wrap: balance;
 }
 /* Кнопка идёт сразу за строкой под заголовком — между ними больше ничего нет. */

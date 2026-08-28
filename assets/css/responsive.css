@@ -55,7 +55,7 @@
 
   .eco__node { font-size: var(--t-subtext); padding: 7px 10px; min-height: 32px; }
 
-  .riskfield { min-height: 400px; }
+  .risks { grid-template-columns: minmax(0, 1fr); }
 
   /* Four scenarios go two-up before they go single-file. */
   .scens { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -77,43 +77,11 @@
   /* Схема остаётся схемой: ядро сверху, риски двумя колонками под ним, лучи
      веером вниз. Круговая раскладка с десктопа на 400px не помещается —
      плашки налезали бы на ядро, — поэтому кольцо разворачивается в веер. */
-  .riskfield { min-height: 760px; display: block; }
-  .riskfield__core {
-    position: absolute; left: 50%; top: 0; transform: translateX(-50%);
-    padding: 16px 20px; width: min(230px, 62%);
-  }
-  .risk {
-    /* Одинаковая ширина вместо «по содержимому»: разброс 92–153px превращал
-       две колонки в россыпь коробок разного калибра. */
-    width: 45%;
-    max-width: 45%;
-    box-sizing: border-box;
-    padding: 8px 10px;
-    font-size: .8125rem;
-    /* Плашка в две строки: наследованный интерлиньяж 1.6 разводил их слишком
-       далеко — подпись переставала читаться как одно название. */
-    line-height: 1.25;
-    white-space: normal;
-    text-align: left;
-  }
-  .risk__note { display: none; }
-
-  /* Левая и правая колонки чередуются: нечётные слева, чётные справа.
-     nth-of-type, а не nth-child: в поле лежат ещё <svg> и ядро, и обычный
-     счётчик сдвигал нумерацию плашек на две позиции — две из них попадали
-     в один ряд и наезжали друг на друга.
-     !important здесь не украшение: координаты десктопа заданы инлайново,
-     а инлайн выигрывает у любого правила таблицы стилей. */
-  .risk:nth-of-type(odd)  { --x: 27% !important; }
-  .risk:nth-of-type(even) { --x: 73% !important; }
-  /* Шаг между рядами задан с запасом на плашку в две строки: раньше они
-     наезжали друг на друга там, где подпись не помещалась в одну. */
-  .risk:nth-of-type(1),  .risk:nth-of-type(2)  { --y: 25% !important; }
-  .risk:nth-of-type(3),  .risk:nth-of-type(4)  { --y: 39% !important; }
-  .risk:nth-of-type(5),  .risk:nth-of-type(6)  { --y: 53% !important; }
-  .risk:nth-of-type(7),  .risk:nth-of-type(8)  { --y: 67% !important; }
-  .risk:nth-of-type(9),  .risk:nth-of-type(10) { --y: 81% !important; }
-  .risk:nth-of-type(11), .risk:nth-of-type(12) { --y: 95% !important; }
+  /* Облако плашек на телефоне остаётся облаком, только кегль мельче
+     и сдвиг по вертикали снят: на узкой колонке он ломал ряды. */
+  .risk { font-size: .8125rem; padding: 8px 11px; }
+  .risks__cloud { gap: 8px; padding-top: 0; }
+  .risks__cloud .risk:nth-child(n) { transform: none; }
 
   .pillar { grid-template-columns: 64px 1fr; }
   .pillar__d { grid-column: 2; padding-top: 4px; }
@@ -382,15 +350,7 @@
    Мобильные правки по записям с реального устройства
    -------------------------------------------------------------------------- */
 @media (max-width: 900px) {
-  /* Монеты остаются и на телефоне. Чтобы они не лезли на текст, секции даётся
-     высота экрана, содержимое прижимается к верху, а внизу резервируется полоса
-     под кучу — ровно та высота, на которой монеты успокаиваются. */
-  .section--screen.relocation {
-    min-height: 100svh;
-    align-content: start;
-    padding-bottom: 180px;
-  }
-  .relocation > .container { align-self: start; }  /* ------------------------------------------------------------------
+/* ------------------------------------------------------------------
      Шкала на телефоне сведена к двум текстовым размерам: 15 и 13.
      Аудит показал 44 сочетания «размер + вес + интерлиньяж» при шести
      объявленных ролях; больше всего мусора давали 17 и 12 — оба почти
@@ -452,5 +412,4 @@
      столбиком каждая ссылка остаётся целой строкой и её проще нажать. */
   .footer__docs { flex-direction: column; gap: 10px; align-items: flex-start; }
   .footer__docs a + a::before { content: none; }
-}
 }
