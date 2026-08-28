@@ -81,7 +81,6 @@
      и сдвиг по вертикали снят: на узкой колонке он ломал ряды. */
   .risk { font-size: .8125rem; padding: 8px 11px; }
   .risks__cloud { gap: 8px; padding-top: 0; }
-  .risks__cloud .risk:nth-child(n) { transform: none; }
 
   .pillar { grid-template-columns: 64px 1fr; }
   .pillar__d { grid-column: 2; padding-top: 4px; }
@@ -376,7 +375,6 @@
   /* Остатки семнадцатого: заголовки внутри карточек и подписи в макете
      экрана. Ниже — к пятнадцати, как весь остальной текст. */
   .part__t,
-  .riskfield__core .mono,
   .art-pill--hot,
   .art-row--hot b { font-size: var(--t-text); }
 

@@ -147,17 +147,10 @@ main { overflow-x: clip; }
   /* The dark-theme pair is far too light on white — the green reads 1.87:1. */
   --c-neg: #8A8A93;
   --c-pos: #0A0A0A;
-}
-
-/* Centred variant: heading, lead and footnote sit on the section's axis.
-   Used where the graphic below is itself radial, so the block reads symmetric. */
-.section--center { text-align: center; }
-.section--center .h2,
+}.section--center .h2,
 .section--center .lead,
 .section--center .body,
 .section--center .small,
-.section--center .meta { margin-inline: auto; }
-
 .section--dark {
   background: var(--c-dark);
   color: var(--c-dark-ink);
@@ -238,10 +231,7 @@ p { margin: 0; max-width: 62ch; }
 .lead    { font-size: var(--t-h4); line-height: var(--lh-h4); letter-spacing: var(--ls-h4); color: var(--c-ink-muted); max-width: 52ch; }
 .body    { font-size: var(--t-text); line-height: var(--lh-text); color: var(--c-ink-muted); max-width: 62ch; }
 .small   { font-size: var(--t-subtext); line-height: var(--lh-subtext); color: var(--c-ink-muted); max-width: 68ch; }
-.meta    { font-size: var(--t-subtext); line-height: var(--lh-subtext); color: var(--c-ink-faint); max-width: 72ch; }
-
-.mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
-.accent { color: var(--c-accent); }
+.meta    { font-size: var(--t-subtext); line-height: var(--lh-subtext); color: var(--c-ink-faint); max-width: 72ch; }.accent { color: var(--c-accent); }
 .nowrap { white-space: nowrap; }
 
 /* ==========================================================================
@@ -697,12 +687,6 @@ p { margin: 0; max-width: 62ch; }
      слева набран крупнее, и без этого плашки вставали выше его первой строки. */
   padding-top: 6px;
 }
-/* Ровная решётка из плашек читалась бы как таблица. Небольшой сдвиг по
-   вертикали через одну возвращает ощущение облака, не превращая ряд в кашу:
-   амплитуда меньше половины зазора, поэтому строки не слипаются. */
-.risks__cloud .risk:nth-child(3n+2) { transform: translateY(7px); }
-.risks__cloud .risk:nth-child(3n)   { transform: translateY(-5px); }
-
 .risk {
   display: inline-flex; align-items: center; gap: 8px;
   /* Один кегль и одно начертание на все пункты — набор равных, а не рейтинг.
@@ -721,7 +705,6 @@ p { margin: 0; max-width: 62ch; }
 }
 .risk svg { width: 15px; height: 15px; flex: none; fill: currentColor; opacity: .7; }
 .risk:hover { border-color: var(--c-accent-line); color: var(--c-accent); }
-
 
 /* ==========================================================================
    SOLUTION
