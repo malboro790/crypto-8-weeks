@@ -712,9 +712,10 @@ p { margin: 0; max-width: 62ch; }
 
 .solution {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: clamp(32px, 5vw, 80px);
-  margin-top: var(--sp-tight);
+  /* Отбивки сверху нет: секция сама центрирует содержимое по высоте экрана,
+     и внешний отступ сдвигал бы центр. */
   align-items: start;
 }
 .solution__parts { display: flex; flex-direction: column; }
