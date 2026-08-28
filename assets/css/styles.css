@@ -292,17 +292,18 @@ p { margin: 0; max-width: 62ch; }
 }
 .btn--primary:hover { background: var(--c-accent-deep); border-color: var(--c-accent-deep); }
 
-/* Кнопка первого экрана — искрой. Единственный призыв, который человек
-   видит до того, как начал читать: на чёрном рядом с белым заголовком
-   и приглушённой строкой она остаётся единственным цветным пятном.
-   Остальные кнопки на сайте белые — если нужно так же везде, это одно
-   значение --c-accent в тёмной теме. */
-.hero .btn--primary {
+/* Кнопки-призывы — искрой. Их две: на первом экране и в карточке формата,
+   то есть в двух точках, где человек решает написать. Остальные кнопки
+   на сайте белые, и это не забывчивость: если искрой красить всё подряд,
+   она перестаёт означать «сюда». */
+.hero .btn--primary,
+.tier__cta.btn--primary {
   background: var(--c-spark);
   border-color: var(--c-spark);
   color: #0A0A0A;
 }
-.hero .btn--primary:hover {
+.hero .btn--primary:hover,
+.tier__cta.btn--primary:hover {
   background: color-mix(in srgb, var(--c-spark) 86%, #000);
   border-color: color-mix(in srgb, var(--c-spark) 86%, #000);
 }
@@ -1335,7 +1336,7 @@ p { margin: 0; max-width: 62ch; }
 }
 .week__content > * { grid-column: 2; }
 .week__topics { display: flex; flex-wrap: wrap; gap: 6px; align-content: flex-start; }
-.week__practice { color: var(--c-ink-muted); font-size: var(--t-subtext); border-left: 2px solid var(--c-accent); padding-left: 16px; }
+.week__practice { color: var(--c-ink-muted); font-size: var(--t-text); line-height: var(--lh-text); border-left: 2px solid var(--c-spark); padding-left: 16px; }
 .week__practice b { color: var(--c-ink); font-weight: var(--w-medium); }
 
 .tag {
@@ -1949,11 +1950,14 @@ p { margin: 0; max-width: 62ch; }
   color: var(--c-ink-muted);
   max-width: 68ch;
 }
+/* Темы занимают всю ширину и делятся на две колонки, итог недели идёт под
+   ними абзацем. Раньше итог стоял справа отдельной колонкой и забирал
+   треть ширины под три строки текста, а список тем ужимался до колонок
+   в шесть слов. */
 .week__cols {
   display: grid;
-  grid-template-columns: 1.25fr 1fr;
-  gap: clamp(24px, 3vw, 56px);
-  align-items: start;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(22px, 2.4vw, 34px);
 }
 .week__h {
   font-family: var(--f-mono);
@@ -1974,9 +1978,11 @@ p { margin: 0; max-width: 62ch; }
 .week__list li {
   break-inside: avoid;
   display: flex; gap: 9px;
-  padding: 5px 0;
-  font-size: var(--t-subtext);
-  line-height: var(--lh-subtext);
+  padding: 6px 0;
+  /* Полный текстовый кегль, а не подписной: это основное содержание недели,
+     и на тринадцати пунктах список читался как сноска. */
+  font-size: var(--t-text);
+  line-height: var(--lh-text);
   color: var(--c-ink-muted);
 }
 .week__list li::before {
@@ -1988,9 +1994,10 @@ p { margin: 0; max-width: 62ch; }
   position: relative; top: .62em;
 }
 .week__res {
-  font-size: var(--t-subtext);
-  line-height: var(--lh-subtext);
+  font-size: var(--t-text);
+  line-height: var(--lh-text);
   color: var(--c-ink);
+  max-width: 80ch;
 }
 
 /* --------------------------------------------------------------------------
@@ -2128,10 +2135,10 @@ p { margin: 0; max-width: 62ch; }
      с запасом на любой кегль из clamp. */
   max-width: 40ch;
   font-family: var(--f-display);
-  /* Тоньше и мельче заголовка: под сплошным CRYPTO плотное начертание
-     спорило с ним, а не поясняло его. Geist подключён с осью 300..700,
-     поэтому светлое начертание настоящее, а не синтетическое. */
-  font-weight: 300;
+  /* Средний вес: на светлом начертании строка проваливалась под сплошным
+     CRYPTO и читалась как подпись к картинке, а не как продолжение фразы.
+     Geist подключён с осью 300..700, так что вес настоящий. */
+  font-weight: 500;
   font-size: clamp(0.9375rem, 0.52rem + 1.02vw, 1.5rem);
   line-height: 1.25;
   letter-spacing: -.005em;
