@@ -439,6 +439,20 @@ p { margin: 0; max-width: 62ch; }
   background-color: var(--c-paper);
 }
 
+/* Тканевый фон лежит между чёрной подложкой и монетами. Непрозрачность
+   ниже единицы намеренно: в полную силу серо-лиловая ткань съедает контраст
+   у белого CRYPTO, а сквозь неё чёрный фон гасит светлые складки. */
+.hero__silk {
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 50%; transform: translateX(-50%);
+  width: 100vw; max-width: 100vw;
+  height: 100%;
+  z-index: 0;
+  opacity: .5;
+  pointer-events: none;
+}
+
 .hero__pit {
   position: absolute;
   top: 0; bottom: 0;
