@@ -154,6 +154,16 @@
     flex: 0 0 88%;
     scroll-snap-align: center;
   }
+  /* Одна карточка — не лента: горизонтальная прокрутка с единственным
+     элементом только мешает. Возвращаем обычный блок и один столбец внутри. */
+  .tiers--single { display: block; margin-inline: 0; padding-inline: 0; padding-block: 0; }
+  .tiers--single .tier { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; }
+  .tiers--single .tier > .label,
+  .tiers--single .tier__sum, .tiers--single .tier__vol, .tiers--single .tier__key,
+  .tiers--single .tier__note, .tiers--single .tier__cta, .tiers--single .tier__more { grid-area: auto; }
+  .tiers--single .tier__more { margin-top: var(--sp-block); }
+  .tiers--single .tier__list { margin-top: 0; }
+
   .tier__more-sum { display: flex; }
   .tier__more[open] .tier__list { margin-top: var(--sp-stack); }
 
@@ -440,8 +450,6 @@
     align-content: start;
     padding-bottom: 180px;
   }
-  /* Компактный вариант высоту экрана не берёт — только полосу под кучу. */
-  .relocation--compact { min-height: 0; padding-bottom: 150px; }
   .relocation > .container { align-self: start; }
 
   /* Строка во всю ширину телефона читается тяжело: глаз теряет начало
