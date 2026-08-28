@@ -111,7 +111,6 @@ main { overflow-x: clip; }
   align-content: center;
 }
 
-
 .section--hairline { border-top: 1px solid var(--c-line); }
 
 /* An inverted band on an otherwise dark site. Token-level only, so every
@@ -237,7 +236,6 @@ p { margin: 0; max-width: 62ch; }
 /* Legacy aliases kept so existing markup maps onto the six roles. */
 .display { font-size: var(--t-h1); line-height: var(--lh-h1); letter-spacing: var(--ls-h1); font-weight: var(--w-h1); text-wrap: balance; }
 .lead    { font-size: var(--t-h4); line-height: var(--lh-h4); letter-spacing: var(--ls-h4); color: var(--c-ink-muted); max-width: 52ch; }
-.lead--ink { color: var(--c-ink); }
 .body    { font-size: var(--t-text); line-height: var(--lh-text); color: var(--c-ink-muted); max-width: 62ch; }
 .small   { font-size: var(--t-subtext); line-height: var(--lh-subtext); color: var(--c-ink-muted); max-width: 68ch; }
 .meta    { font-size: var(--t-subtext); line-height: var(--lh-subtext); color: var(--c-ink-faint); max-width: 72ch; }
@@ -451,7 +449,6 @@ p { margin: 0; max-width: 62ch; }
   background-color: var(--c-paper);
 }
 
-
 .hero__pit {
   position: absolute;
   top: 0; bottom: 0;
@@ -496,10 +493,6 @@ p { margin: 0; max-width: 62ch; }
 /* Запрет переноса на .hl нужен ради подчёркивания: разорванная строка дала бы
    две отдельные полосы. У плоского акцента полосы нет, а запрет остаётся и
    выталкивает длинную фразу за пределы колонки — поэтому снимаем его. */
-/* Мера заголовка задаётся в em, поэтому она едет вместе с кеглем и держит
-   одинаковое число строк на любой ширине — в отличие от жёсткой ширины. */
-.h2--narrow { max-width: 15em; }
-
 .hl--flat { white-space: normal; }
 .hl--flat::after { display: none; }
 .hl::after {
@@ -507,18 +500,7 @@ p { margin: 0; max-width: 62ch; }
   height: .13em; border-radius: 2px;
   background: color-mix(in srgb, var(--c-spark) 45%, transparent);
   z-index: -1;
-}
-
-.hero__sub {
-  /* Шире общей меры .lead: строка идёт по центру под трёхстрочным заголовком,
-     и на 60ch она ломалась на четыре. 72ch схлопнули бы её до двух и оторвали
-     от ритма заголовка. */
-  max-width: 66ch;
-  margin-top: 32px;
-  font-size: var(--t-h4);
-  line-height: 1.6;
-}
-.hero .cta-row { margin-top: 48px; justify-content: center; gap: 16px; }
+}.hero .cta-row { margin-top: 48px; justify-content: center; gap: 16px; }
 
 /* Над полем монет полупрозрачная заливка вторичной кнопки исчезает: на пёстром
    фоне 7% белого не читаются, и остаётся текст, висящий поверх монет.
@@ -637,36 +619,7 @@ p { margin: 0; max-width: 62ch; }
   /* Тёмная подложка, а не светлая: белый на осветлённом фиолетовом даёт 4.28,
      ниже порога для мелкого текста. */
   background: rgba(0, 0, 0, .20);
-}
-
-/* ==========================================================================
-   STORY — editorial narrative
-   ========================================================================== */
-
-.story__line {
-  font-family: var(--f-display);
-  font-weight: var(--w-display);
-  font-size: var(--t-h3);
-  line-height: 1.16;
-  letter-spacing: -.006em;
-  max-width: 20ch;
-  color: var(--c-ink-muted);
-  transition: color var(--d-slow) var(--e-out);
-}
-.story__line.is-lit { color: var(--c-ink); }
-.story__lines { display: flex; flex-direction: column; gap: clamp(1.25rem, 2.4vw, 2.5rem); }
-.story__quote {
-  border-left: 2px solid var(--c-accent);
-  padding-left: clamp(16px, 2vw, 28px);
-  color: var(--c-ink-muted);
-}
-.story__turn {
-  font-family: var(--f-display); font-weight: var(--w-display);
-  font-size: var(--t-h3);
-  letter-spacing: -.006em; line-height: 1.14; max-width: 18ch;
-}
-
-/* ==========================================================================
+}/* ==========================================================================
    COMPARE — banking vs crypto
    ========================================================================== */
 
@@ -1072,88 +1025,10 @@ p { margin: 0; max-width: 62ch; }
   margin-inline: .18em; font-family: var(--f-text);
 }
 .stat__t { font-family: var(--f-display); font-weight: var(--w-medium); font-size: var(--t-text); margin-top: 12px; letter-spacing: var(--ls-h4); }
-.stat__d { font-size: var(--t-subtext); color: var(--c-ink-muted); margin-top: 6px; line-height: var(--lh-subtext); }
-
-/* ==========================================================================
-   LIVE SUPPORT (screen-share abstraction)
-   ========================================================================== */
-
-.share {
-  border: 1px solid var(--c-line); border-radius: var(--r-lg);
-  background: var(--c-surface); overflow: hidden; box-shadow: var(--sh-md);
-}
-.share__bar {
-  display: flex; align-items: center; gap: 10px;
-  padding: 12px 16px; border-bottom: 1px solid var(--c-line);
-  font-family: var(--f-mono); font-size: var(--t-subtext); color: var(--c-ink-faint);
-  min-width: 0;
-}
-.share__bar > span:not(.share__dots):not(.share__live) {
-  min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-.share__dots { display: flex; gap: 5px; flex: none; }
-.share__dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--c-line-strong); display: block; }
-.share__live { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; color: var(--c-spark-ink); flex: none; }
-.share__live i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; animation: pulse 2s var(--e-inout) infinite; }
-@keyframes pulse { 0%, 100% { opacity: 1 } 50% { opacity: .25 } }
-
-.share__body { padding: clamp(18px, 2.4vw, 32px); display: flex; flex-direction: column; gap: 12px; position: relative; }
-.share__field {
-  display: flex; align-items: center; justify-content: space-between; gap: 14px;
-  padding: 13px 15px; border: 1px solid var(--c-line); border-radius: var(--r-md);
-  font-family: var(--f-mono); font-size: var(--t-subtext); background: var(--c-paper);
-}
-.share__field-k { color: var(--c-ink-faint); font-size: var(--t-subtext); letter-spacing: .08em; text-transform: uppercase; }
-.share__field.is-marked { border-color: var(--c-accent); background: var(--c-accent-tint); }
-.share__callout {
-  display: inline-flex; align-items: center; gap: 8px; align-self: flex-start;
-  font-family: var(--f-text); font-size: var(--t-subtext); color: var(--c-accent);
-  background: var(--c-accent-tint); border-radius: var(--r-pill); padding: 7px 13px;
-}
-.share__cursor { width: 13px; height: 13px; flex: none; }
-.share__foot { border-top: 1px solid var(--c-line); padding: 14px 16px; font-size: var(--t-subtext); color: var(--c-ink-muted); }
-
-/* ==========================================================================
-   CASE SEQUENCE
-   ========================================================================== */
-
-.sequence { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0; margin-top: var(--sp-tight); border-top: 1px solid var(--c-line); }
-.sequence__step { padding: clamp(20px, 2.2vw, 32px) clamp(14px, 1.6vw, 24px) clamp(20px, 2.2vw, 32px) 0; position: relative; }
-.sequence__step + .sequence__step { border-left: 1px solid var(--c-line); padding-left: clamp(14px, 1.6vw, 24px); }
-.sequence__i { font-family: var(--f-mono); font-size: var(--t-subtext); letter-spacing: .12em; color: var(--c-accent); }
-.sequence__t { font-family: var(--f-display); font-weight: var(--w-medium); font-size: var(--t-h4); letter-spacing: var(--ls-h4); margin-top: 12px; }
-.sequence__d { font-size: var(--t-subtext); color: var(--c-ink-muted); margin-top: 7px; line-height: var(--lh-subtext); }
-
-/* Sits to the right of the sequence it closes, marked rather than enlarged. */
-.closing-note {
-  display: flex; align-items: center; gap: 12px;
-  margin-top: var(--sp-tight);
-  margin-left: auto;
-  width: fit-content; max-width: 46ch;
-  font-family: var(--f-display); font-weight: 500;
-  font-size: var(--t-text); line-height: var(--lh-h4); letter-spacing: var(--ls-h4);
-  color: var(--c-accent);
-  text-align: left;
-}
-.closing-note svg { width: 20px; height: 20px; flex: none; fill: currentColor; }
-
+.stat__d { font-size: var(--t-subtext); color: var(--c-ink-muted); margin-top: 6px; line-height: var(--lh-subtext); }@keyframes pulse { 0%, 100% { opacity: 1 } 50% { opacity: .25 } }
 /* ==========================================================================
    BOUNDARIES
    ========================================================================== */
-
-/* Subgrid keeps the two intros in one row and the two lists in another, so the
-   items line up across the columns even when the intros differ in length. */
-.bounds {
-  display: grid; grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto auto;
-  column-gap: clamp(28px, 5vw, 96px); row-gap: 24px;
-  margin-top: var(--sp-tight);
-}
-.bounds > * {
-  grid-row: span 2;
-  display: grid; grid-template-rows: subgrid; row-gap: 24px;
-  align-content: start;
-}
 /* A plate: white surface, hairline that starts neon at the top-left and fades
    out before it gets round the box. Two stacked backgrounds — one clipped to the
    padding box, one to the border box — draw the 1px edge, so the gradient can go
@@ -1175,52 +1050,8 @@ p { margin: 0; max-width: 62ch; }
   box-shadow: 0 1px 2px rgba(0, 0, 0, .06),
               0 18px 40px -24px rgba(0, 0, 0, .38);
 }
-/* Inside a plate the closing rule would sit on the padding edge. */
-.plate .bounds__list li:last-child,
-/* Последний пункт не подчёркиваем: линия упиралась бы в нижний край плашки.
-   Раньше правило смотрело на .plate как на предка, но класс висит на самом
-   списке — и до объединения плашек на мобильном это просто не срабатывало. */
-.outcome__list li:last-child { border-bottom: 0; }
-
-/* When the two columns are plates they carry their own padding, so the gap
-   between them is a plain 40px rather than the wide editorial gutter. */
-.bounds:has(.plate) { column-gap: 20px; }
-
-/* The line each plate opens with is its heading — it should read as one. */
-.plate > .lead {
-  font-size: var(--t-h3);
-  line-height: var(--lh-h3);
-  letter-spacing: var(--ls-h3);
-  font-weight: 500;
-  color: var(--c-ink);
-  max-width: 30ch;
-}
-
-.bounds__h { font-family: var(--f-mono); font-size: var(--t-subtext); letter-spacing: .12em; text-transform: uppercase; color: var(--c-ink-faint); padding-bottom: 14px; border-bottom: 1px solid var(--c-line); }
-.bounds__list { list-style: none; margin: 0; padding: 0; align-self: start; }
-.bounds__list li {
-  display: flex; gap: 13px; align-items: baseline;
-  padding: clamp(9px, 1vw, 13px) 0; border-bottom: 1px solid var(--c-line);
-  font-size: var(--t-text); color: var(--c-ink-muted);
-}
-/* Masked glyphs rather than inline SVG: the mark takes its colour from a token,
-   so it reads correctly on a light section and on a dark one alike. */
-.bounds__list li::before {
-  content: ""; flex: none;
-  width: 16px; height: 16px; position: relative; top: .18em;
-  -webkit-mask: var(--mark) center / contain no-repeat;
-          mask: var(--mark) center / contain no-repeat;
-}
-.bounds__list--no li::before {
-  --mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M4.2 4.2l7.6 7.6M11.8 4.2l-7.6 7.6'/%3E%3C/svg%3E");
-  background-color: var(--c-neg);
-}
-.bounds__list--yes li::before {
-  --mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 8.6l3.4 3.4L13 4.6'/%3E%3C/svg%3E");
-  background-color: var(--c-pos);
-}
-
-/* ==========================================================================
+/* Последний пункт не подчёркиваем: линия упиралась бы в нижний край плашки. */
+.outcome__list li:last-child { border-bottom: 0; }/* ==========================================================================
    FOUNDER
    ========================================================================== */
 
@@ -1400,8 +1231,6 @@ p { margin: 0; max-width: 62ch; }
   background-clip: padding-box, border-box;
 }
 
-
-
 .tier__sum {
   margin-top: var(--sp-stack);
   font-size: var(--t-h3);
@@ -1434,7 +1263,9 @@ p { margin: 0; max-width: 62ch; }
   margin-right: 2px;
 }
 .tier__vol-x { color: var(--c-ink-faint); margin: 0 4px; }
-.tier__vol--lead b { color: var(--c-accent); }
+/* Раньше цифры в основном тарифе красились акцентом — теперь акцент это
+   белый, и правило гасило искру, заданную в .tier__vol b. */
+.tier__vol--lead b { color: var(--c-spark-ink); }
 
 /* Список входящего сворачивается на телефоне: карточка иначе уезжает на
    полтора экрана. На широком экране раскрыт всегда — там места хватает,
@@ -1516,13 +1347,7 @@ p { margin: 0; max-width: 62ch; }
   width: 16px; height: 16px; position: relative; top: .16em;
   -webkit-mask: var(--mark) center / contain no-repeat;
           mask: var(--mark) center / contain no-repeat;
-}
-.tier__key--no {
-  color: var(--c-neg);
-  --mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M4.2 4.2l7.6 7.6M11.8 4.2l-7.6 7.6'/%3E%3C/svg%3E");
-}
-.tier__key--no::before { background-color: var(--c-neg); }
-.tier__key--yes {
+}.tier__key--yes {
   color: var(--c-pos);
   --mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 8.6l3.4 3.4L13 4.6'/%3E%3C/svg%3E");
 }
@@ -1580,12 +1405,9 @@ p { margin: 0; max-width: 62ch; }
 .footer .wordmark { color: var(--c-dark-ink); }
 .footer .wordmark__sub { color: var(--c-dark-muted); }
 
-
 /* ==========================================================================
    HERO A/B VARIANTS
    ========================================================================== */
-
-
 
 /* ==========================================================================
    MOTION
@@ -1607,7 +1429,6 @@ p { margin: 0; max-width: 62ch; }
   }
   [data-reveal] { opacity: 1; transform: none; }
 }
-
 
 /* --------------------------------------------------------------------------
    CLIENTS — real agency cases as a text list. No logos: a client mark is the
@@ -1681,62 +1502,6 @@ p { margin: 0; max-width: 62ch; }
   .clients { grid-template-columns: 1fr; }
   .client { border-left: 0 !important; padding-left: 0 !important; }
 }
-
-/* The turn line sits in the right column, where it has a full column to run
-   across — the 18ch measure is for when it stands alone under the grid. */
-.story__turn--wide { max-width: 34ch; }
-
-/* ==========================================================================
-   AUTHOR — the face behind the programme
-   The whole offer rests on one person being present, so the portrait sits with
-   the promise rather than in a separate "about" strip.
-   ========================================================================== */
-
-.author {
-  display: flex; align-items: center; gap: 16px;
-  padding-top: var(--sp-stack);
-  border-top: 1px solid var(--c-line);
-}
-/* The frame is what holds the layout: if the portrait is missing or fails to
-   load the circle stays, labelled, instead of the row collapsing sideways. */
-.author__frame {
-  flex: none; position: relative;
-  width: 88px; height: 88px;
-  border-radius: 50%;
-  background: var(--c-neutral-tint);
-  border: 1px solid var(--c-line);
-  overflow: hidden;
-  display: grid; place-items: center;
-}
-.author__frame::before {
-  content: "фото";
-  font-family: var(--f-mono); font-size: .625rem;
-  letter-spacing: var(--ls-label); text-transform: uppercase;
-  color: var(--c-ink-faint);
-}
-.author__photo {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  /* Slightly above centre: a portrait cropped to a circle reads better when the
-     eyes sit on the upper third rather than dead centre. */
-  object-position: 50% 38%;
-}
-.author__name {
-  font-size: var(--t-h3);
-  line-height: var(--lh-h3);
-  letter-spacing: var(--ls-h3);
-  font-weight: 500;
-  color: var(--c-ink);
-}
-.author__role {
-  margin-top: 4px;
-  font-size: var(--t-subtext);
-  line-height: var(--lh-subtext);
-  color: var(--c-ink-muted);
-  max-width: 42ch;
-}
-
 /* ==========================================================================
    VIDEO — a 16:9 well that holds a poster now and a player later
    ========================================================================== */
@@ -1785,7 +1550,6 @@ p { margin: 0; max-width: 62ch; }
   border-color: transparent transparent transparent #FFFFFF;
 }
 
-
 /* ==========================================================================
    RELOCATION — the same pit as the hero, already at rest
    The canvas is full-bleed like the hero's, so the pile sits on the section
@@ -1793,7 +1557,6 @@ p { margin: 0; max-width: 62ch; }
    ========================================================================== */
 .relocation { position: relative; isolation: isolate; overflow: hidden; }
 .relocation > .container { position: relative; z-index: 2; }
-
 
 .pit {
   position: absolute;
@@ -1805,7 +1568,6 @@ p { margin: 0; max-width: 62ch; }
   height: 100%;
   z-index: 1;
 }
-
 
 /* --------------------------------------------------------------------------
    Expanded week: the chips say what the topics are, this says what actually
@@ -1861,7 +1623,6 @@ p { margin: 0; max-width: 62ch; }
   line-height: var(--lh-subtext);
   color: var(--c-ink);
 }
-
 
 /* --------------------------------------------------------------------------
    PERKS — три строки под цифрами сопровождения
