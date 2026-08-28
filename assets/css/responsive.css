@@ -311,7 +311,7 @@
 /* The mini mocks need their own column; below the tablet break the parts stack
    so the panel sits above its text instead of squeezing it. */
 @media (max-width: 900px) {
-  .part { grid-template-columns: 116px 1fr; column-gap: 20px; }
+  .part { grid-template-columns: 132px 1fr; column-gap: 20px; }
 }
 @media (max-width: 600px) {  /* Строка подписи под опорой на всю ширину экрана читается тяжело:
      глаз теряет начало следующей. */
@@ -321,6 +321,9 @@
      в узкий столбец слева — рядом с ней всё равно ничего нет. */
   .part { grid-template-columns: 1fr; row-gap: 18px; }
   .mock { height: 132px; max-width: none; padding: 16px; }
+  /* В одну колонку квадрат во всю ширину — это пол-экрана под картинку.
+     Ограничиваем ширину, пропорция держится сама. */
+  .part__art { height: auto; max-width: 200px; padding: .85em; }
   .mock__row { padding: 10px 12px; font-size: .6875rem; }
   .mock__bub { padding: 9px 12px; font-size: .6875rem; }
 }

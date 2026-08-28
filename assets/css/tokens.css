@@ -67,6 +67,7 @@
   --t-h2:      clamp(1.625rem, 0.95rem + 1.90vw, 2.625rem); /* 26 → 42      */
   --t-h3:      clamp(1.125rem, 0.85rem + 0.80vw, 1.5rem);   /* 18 → 24      */
   --t-h4:      0.9375rem;                                    /* 15          */
+  --t-lead:    clamp(1.0625rem, 0.85rem + 0.6vw, 1.25rem); /* 17 → 20     */
   --t-text:    1.0625rem;                                    /* 17          */
   --t-subtext: 0.8125rem;                                    /* 13 → 16 деск */
 
