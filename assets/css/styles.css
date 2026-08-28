@@ -86,7 +86,16 @@ main { overflow-x: clip; }
   .container--wide { max-width: calc(var(--container-wide) + 40px); }
 }
 
-.section { padding-block: var(--sp-section); position: relative; }
+/* Каждая секция непрозрачна и лежит слоем выше первого экрана: первый
+   прилипает к верху окна, а следующие наезжают на него. Без собственного
+   фона у тёмных секций прилипший герой просвечивал бы сквозь них.
+   Значение через background-color, а не background: тени и градиентные
+   кромки плашек заданы отдельными свойствами и не должны сбрасываться. */
+.section {
+  padding-block: var(--sp-section);
+  position: relative; z-index: 1;
+  background-color: var(--c-paper);
+}
 
 /* A section supplies its own top padding, so whatever leads it must not add a
    margin on top of that. Guards the blocks that used to sit under a label. */
@@ -429,7 +438,11 @@ p { margin: 0; max-width: 62ch; }
 /* Centred hero over a physics field of coin marks: oversized headline with one
    highlighted phrase, a two-line sub, and a pair of rectangular buttons. */
 .hero {
-  position: relative;
+  /* Первый экран прилипает к верху окна, второй наезжает на него сверху —
+     как на awequatic.com. Слой ниже всех остальных секций, поэтому после
+     перекрытия его просто не видно. */
+  position: sticky; top: 0;
+  z-index: 0;
   overflow: hidden;
   /* Tied to the viewport, so the pit always rests on the bottom edge of the
      first screen whatever the monitor. `svh` keeps mobile browser chrome from
@@ -725,6 +738,10 @@ p { margin: 0; max-width: 62ch; }
 .cloud {
   font-size: 16px;
   display: flex; flex-wrap: wrap; align-content: center; justify-content: center;
+  /* Без этого пилюли в ряду со знаком вопроса растягивались до его высоты,
+     а текст в них оставался прижатым к верху: flex по умолчанию тянет
+     элементы по поперечной оси. */
+  align-items: center;
   gap: 5px;
 }
 .cloud span {
@@ -1492,6 +1509,7 @@ p { margin: 0; max-width: 62ch; }
 /* Полоса под кучу монет: нижнее поле подвала считает высоту самой кучи
    плюс отбивку от последней строки. */
 .footer {
+  position: relative; z-index: 1;
   background: var(--c-dark); color: var(--c-dark-ink);
   padding-top: clamp(48px, 5vw, 80px);
   /* Высота кучи плюс отбивка от текста плюс сто пикселей воздуха под ней. */
