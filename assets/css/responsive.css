@@ -153,52 +153,21 @@
      палитры и больше не существует, а ссылка на несуществующую переменную
      делает всё свойство недействительным — фон схлопывался в none, и обводка
      пропадала целиком. */
-  .outcome .plate, .tier--lead {
+  /* Кромка плашки уходит вниз. На широком экране плашки стоят рядом и светятся
+     с верхнего угла; в столбик тот же угол оказывается прижат к предыдущей
+     плашке, и подсветка читается как щель между ними. */
+  .tier--lead {
     background-image:
       linear-gradient(var(--c-plate), var(--c-plate)),
       linear-gradient(45deg,
         var(--c-accent) 0%,
         color-mix(in srgb, var(--c-accent) 55%, transparent) 26%,
         transparent 58%);
-  }  /* Stacked, the column gap is far too tight: one card's copy would sit right
-     on the next card's art panel. */
-  .scens { grid-template-columns: 1fr; row-gap: var(--sp-tight); }
-  .scen { min-height: 0; }
-
-  /* Две плашки итогов держались в два столбца до самого узкого экрана:
-     каждый пункт ломался на три-четыре строки и переставал читаться. */
-  /* Две плашки сливаются в одну: в столбик они читались как два разных
-     списка, хотя это один перечень умений. Оболочку берёт на себя .outcome,
-     а сами списки теряют вид плашки — иначе получилась бы рамка в рамке. */
-  .outcome {
-    grid-template-columns: 1fr;
-    gap: 0;
-    padding: clamp(20px, 4vw, 28px);
-    border: 1px solid transparent;
-    border-radius: var(--r-lg);
-    background-image:
-      linear-gradient(var(--c-plate), var(--c-plate)),
-      linear-gradient(45deg,
-        var(--c-accent) 0%,
-        color-mix(in srgb, var(--c-accent) 55%, transparent) 26%,
-        transparent 58%);
-    background-origin: border-box;
-    background-clip: padding-box, border-box;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, .06), 0 18px 40px -24px rgba(0, 0, 0, .38);
   }
-  .outcome .plate {
-    background: none;
-    border: 0;
-    border-radius: 0;
-    box-shadow: none;
-    padding: 0;
-  }
-  /* Стык двух списков не должен выдавать себя двойной линией. */
-  .outcome .plate:first-child li:last-child { border-bottom: 0; }
 
-  /* Сужаем только текст: padding-right упирает строку раньше правого края,
-     а разделительная линия рисуется по padding-box и остаётся во всю ширину. */
-  .outcome__list li { padding-right: 16%; }  /* Портрет во всю колонку, доказательства в один столбец: на 375px две
+  /* Карточки умений на телефоне уже: две с половиной в кадре подсказывают,
+     что лента листается. */
+  .skill { flex: 0 0 72%; }
      колонки .proof дают строки по три слова. */
   .founder__shot { max-width: none; aspect-ratio: 4 / 4.4; }
   .proof { grid-template-columns: minmax(0, 1fr); }

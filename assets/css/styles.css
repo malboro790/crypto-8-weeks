@@ -817,33 +817,51 @@ p { margin: 0; max-width: 62ch; }
    OUTCOME
    ========================================================================== */
 
-.outcome { display: grid; grid-template-columns: 1fr 1fr; gap: var(--grid-gap); }
-.outcome__list { list-style: none; margin: 0; padding: 0; }
-.outcome__list li {
-  display: flex; gap: 14px; align-items: baseline;
-  padding: clamp(10px, 1vw, 15px) 0;
-  border-bottom: 1px solid var(--c-line);
-  break-inside: avoid;
-  font-size: var(--t-text);
-  letter-spacing: -.006em;
+/* --------------------------------------------------------------------------
+   ЧТО ВЫ СМОЖЕТЕ — лента карточек
+
+   Двенадцать умений стояли двумя колонками галочек: список, который
+   пролистывают не читая. Лента заставляет разглядывать их по одной,
+   а картинка на карточке говорит, о чём пункт, раньше подписи.
+
+   Лента начинается по левому краю сетки и уходит в правый край экрана:
+   отрицательное поле справа ровно на половину разницы между шириной
+   контейнера и шириной окна. Обрез справа — это и есть подсказка,
+   что ленту можно листать.
+   -------------------------------------------------------------------------- */
+.skills {
+  list-style: none; margin: var(--sp-tight) 0 0; padding: 0;
+  display: flex; gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  margin-right: calc(50% - 50vw);
+  padding-right: var(--gutter);
+  padding-bottom: 4px;
 }
-.outcome__check {
-  flex: none; width: 14px; height: 14px; border-radius: 50%;
-  border: 1px solid var(--c-line-strong); position: relative; top: .22em;
-  transition: background var(--d-base) var(--e-out), border-color var(--d-base) var(--e-out);
+.skills::-webkit-scrollbar { display: none; }
+
+.skill {
+  flex: 0 0 clamp(212px, 19vw, 258px);
+  scroll-snap-align: start;
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-lg);
+  padding: 12px;
+  display: flex; flex-direction: column;
 }
-.outcome__check::after {
-  content: ""; position: absolute; left: 4px; top: 2px;
-  width: 3.5px; height: 6.5px; border: solid var(--c-paper);
-  border-width: 0 1.5px 1.5px 0; transform: rotate(45deg) scale(0);
-  transition: transform var(--d-base) var(--e-out);
+.skill__art { height: 118px; }
+.skill__t {
+  margin-top: 14px;
+  font-size: var(--t-h4);
+  line-height: 1.4;
+  font-weight: 500;
+  color: var(--c-ink);
+  /* Подпись прижата к низу карточки: строки бывают в одну и в три, и без
+     этого картинки вставали на разной высоте. */
+  margin-top: auto; padding-top: 14px;
 }
-/* Neutral, not accent: twelve purple ticks in a row pulled more attention than
-   the list deserves. */
-.outcome__list li.is-on .outcome__check {
-  background: var(--c-pos); border-color: var(--c-pos);
-}
-.outcome__list li.is-on .outcome__check::after { transform: rotate(45deg) scale(1); }
 
 /* ==========================================================================
    ECOSYSTEM MAP
@@ -1017,7 +1035,7 @@ p { margin: 0; max-width: 62ch; }
               0 18px 40px -24px rgba(0, 0, 0, .38);
 }
 /* Последний пункт не подчёркиваем: линия упиралась бы в нижний край плашки. */
-.outcome__list li:last-child { border-bottom: 0; }/* ==========================================================================
+/* ==========================================================================
    FOUNDER
    ========================================================================== */
 
@@ -1349,14 +1367,15 @@ p { margin: 0; max-width: 62ch; }
 .footer {
   background: var(--c-dark); color: var(--c-dark-ink);
   padding-top: clamp(48px, 5vw, 80px);
-  padding-bottom: clamp(150px, 15vw, 210px);
+  /* Высота кучи плюс отбивка от текста плюс сто пикселей воздуха под ней. */
+  padding-bottom: clamp(250px, 15vw + 100px, 310px);
   position: relative; overflow: hidden;
 }
 .footer > .container { position: relative; z-index: 2; }
 /* Селектор с двумя классами намеренно: .pit объявлен ниже по файлу
    и своей height: 100% растягивал кучу на весь подвал. */
 .footer .footer__pit {
-  top: auto; bottom: 0;
+  top: auto; bottom: 100px;
   height: clamp(110px, 11vw, 150px);
   z-index: 1;
 }

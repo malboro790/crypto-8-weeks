@@ -16,9 +16,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap">
 
-<link rel="stylesheet" href="assets/css/tokens.css?v=245">
-<link rel="stylesheet" href="assets/css/styles.css?v=245">
-<link rel="stylesheet" href="assets/css/responsive.css?v=245">
+<link rel="stylesheet" href="assets/css/tokens.css?v=246">
+<link rel="stylesheet" href="assets/css/styles.css?v=246">
+<link rel="stylesheet" href="assets/css/responsive.css?v=246">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='none' stroke='%23FFFFFF' stroke-width='2'/><circle cx='16' cy='16' r='6' fill='%23C1FF0F'/></svg>">
 </head>
 <body>
@@ -88,8 +88,7 @@
     </h1>
 
     <p class="hero__claim" data-reveal style="--reveal-delay:120ms">
-      8 недель личного сопровождения и обучения использованию
-      криптоинфраструктуры
+      8 недель личного сопровождения
     </p>
 
     <div class="cta-row" data-reveal style="--reveal-delay:220ms">
@@ -392,24 +391,99 @@
     <h2 class="h2" data-reveal>Через 8 недель вам не нужно знать <span class="hl hl--flat">всё о крипте</span>.</h2>
     <p class="lead" data-reveal style="margin-top: var(--sp-stack)">Нужно уверенно пользоваться тем, что вам действительно необходимо.</p>
 
-    <div class="outcome" id="outcome" data-reveal style="margin-top: var(--sp-tight)">
-        <ul class="outcome__list plate">
-          <li><span class="outcome__check" aria-hidden="true"></span>Купить USDT</li>
-          <li><span class="outcome__check" aria-hidden="true"></span>Вывести средства с биржи</li>
-          <li><span class="outcome__check" aria-hidden="true"></span>Создать non-custodial wallet</li>
-          <li><span class="outcome__check" aria-hidden="true"></span>Понимать, что такое seed phrase и как её хранить</li>
-          <li><span class="outcome__check" aria-hidden="true"></span>Выбирать сеть перед переводом</li>
-          <li><span class="outcome__check" aria-hidden="true"></span>Проверять адрес получателя</li>
-        </ul>
-        <ul class="outcome__list plate">
-          <li><span class="outcome__check" aria-hidden="true"></span>Выполнять тестовую транзакцию</li>
-          <li><span class="outcome__check" aria-hidden="true"></span>Читать blockchain explorer</li>
-          <li><span class="outcome__check" aria-hidden="true"></span>Понимать комиссии</li>
-          <li><span class="outcome__check" aria-hidden="true"></span>Видеть базовые риски</li>
-          <li><span class="outcome__check" aria-hidden="true"></span>Понимать основные элементы индустрии</li>
-          <li><span class="outcome__check" aria-hidden="true"></span>Иметь собственную схему хранения и переводов</li>
-        </ul>
+    <!-- Двенадцать умений были двумя колонками галочек — списком, который
+         пролистывают не читая. Лента карточек заставляет их разглядывать
+         по одной, а картинка на каждой говорит, о чём пункт, раньше подписи.
+         Графика собрана из тех же .mock, что и в продуктовом блоке. -->
+    <ul class="skills" data-reveal>
+    <li class="skill">
+      <div class="mock mock--theory skill__art" aria-hidden="true">
+        <span class="mock__row">USDT</span>
+        <span class="mock__row mock__row--hot">купить →</span>
       </div>
+      <p class="skill__t">Купить USDT</p>
+    </li>
+    <li class="skill">
+      <div class="mock mock--practice skill__art" aria-hidden="true">
+        <span class="mock__row">CEX</span>
+        <span class="mock__row mock__row--hot">вывод →</span>
+      </div>
+      <p class="skill__t">Вывести средства с биржи</p>
+    </li>
+    <li class="skill">
+      <div class="mock mock--support skill__art" aria-hidden="true">
+        <span class="mock__row">wallet</span>
+        <span class="mock__row mock__row--dim">seed</span>
+        <span class="mock__row mock__row--hot">create</span>
+      </div>
+      <p class="skill__t">Создать non-custodial wallet</p>
+    </li>
+    <li class="skill">
+      <div class="mock mock--theory skill__art" aria-hidden="true">
+        <span class="mock__row">1 … 12</span>
+        <span class="mock__row">не в облаке</span>
+      </div>
+      <p class="skill__t">Понимать, что такое seed phrase и как её хранить</p>
+    </li>
+    <li class="skill">
+      <div class="mock mock--practice skill__art" aria-hidden="true">
+        <span class="mock__row mock__row--dim">TRC20</span>
+        <span class="mock__row mock__row--hot">ERC20</span>
+      </div>
+      <p class="skill__t">Выбирать сеть перед переводом</p>
+    </li>
+    <li class="skill">
+      <div class="mock mock--support skill__art" aria-hidden="true">
+        <span class="mock__row">TX7f…92F</span>
+        <span class="mock__row mock__row--hot">совпал</span>
+      </div>
+      <p class="skill__t">Проверять адрес получателя</p>
+    </li>
+    <li class="skill">
+      <div class="mock mock--practice skill__art" aria-hidden="true">
+        <span class="mock__row mock__row--dim">тест <b>10</b></span>
+        <span class="mock__row mock__row--hot">перевод →</span>
+      </div>
+      <p class="skill__t">Выполнять тестовую транзакцию</p>
+    </li>
+    <li class="skill">
+      <div class="mock mock--theory skill__art" aria-hidden="true">
+        <span class="mock__row">explorer</span>
+        <span class="mock__row">confirmed</span>
+      </div>
+      <p class="skill__t">Читать blockchain explorer</p>
+    </li>
+    <li class="skill">
+      <div class="mock mock--theory skill__art" aria-hidden="true">
+        <span class="mock__row">fee</span>
+        <span class="mock__row">gas</span>
+      </div>
+      <p class="skill__t">Понимать комиссии</p>
+    </li>
+    <li class="skill">
+      <div class="mock mock--support skill__art" aria-hidden="true">
+        <span class="mock__row mock__row--dim">approval</span>
+        <span class="mock__row mock__row--hot">revoke</span>
+      </div>
+      <p class="skill__t">Видеть базовые риски</p>
+    </li>
+    <li class="skill">
+      <div class="mock mock--practice skill__art" aria-hidden="true">
+        <span class="mock__row mock__row--dim">CEX</span>
+        <span class="mock__row mock__row--dim">DEX</span>
+        <span class="mock__row mock__row--hot">L2</span>
+      </div>
+      <p class="skill__t">Понимать основные элементы индустрии</p>
+    </li>
+    <li class="skill">
+      <div class="mock mock--support skill__art" aria-hidden="true">
+        <span class="mock__row mock__row--dim">hot</span>
+        <span class="mock__row">cold</span>
+        <span class="mock__row mock__row--hot">→ схема</span>
+      </div>
+      <p class="skill__t">Иметь собственную схему хранения и переводов</p>
+    </li>
+    </ul>
   </div>
 </section>
 
@@ -1152,7 +1226,7 @@
 
 
 
-<script src="assets/js/coinpit.js?v=245"></script>
-<script src="assets/js/main.js?v=245"></script>
+<script src="assets/js/coinpit.js?v=246"></script>
+<script src="assets/js/main.js?v=246"></script>
 </body>
 </html>

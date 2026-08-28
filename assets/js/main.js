@@ -234,29 +234,6 @@
   })();
 
   /* ---------------------------------------------------------------------- */
-  /* Outcome: capabilities check in sequence                                */
-  /* ---------------------------------------------------------------------- */
-  (function outcome() {
-    var list = $('#outcome');
-    if (!list) return;
-    var items = $$('li', list);
-    if (!('IntersectionObserver' in window) || reduceMotion) {
-      items.forEach(function (li) { li.classList.add('is-on'); });
-      return;
-    }
-    var oo = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        if (!en.isIntersecting) return;
-        oo.disconnect();
-        items.forEach(function (li, i) {
-          setTimeout(function () { li.classList.add('is-on'); }, 90 * i);
-        });
-      });
-    }, { threshold: 0.2 });
-    oo.observe(list);
-  })();
-
-  /* ---------------------------------------------------------------------- */
   /* Stats: numbers count up once                                           */
   /* ---------------------------------------------------------------------- */
   (function stats() {
