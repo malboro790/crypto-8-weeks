@@ -116,7 +116,10 @@
   });
 
   var cs = getComputedStyle(src);
-  var fill = cs.fill || 'rgb(193, 255, 15)';
+  var fill = cs.fill || 'rgb(255, 255, 255)';
+  var fontSize = parseFloat(cs.fontSize) || 254;
+  var baseline = parseFloat(src.getAttribute('y')) || 0;
+  var startX   = parseFloat(src.getAttribute('x')) || 0;
 
   var tex = gl.createTexture();
   gl.bindTexture(gl.TEXTURE_2D, tex);
@@ -133,8 +136,6 @@
   if (rgb.length < 3) rgb = [0.757 * 255, 255, 0.059 * 255];
   gl.uniform3f(U.uColor, rgb[0] / 255, rgb[1] / 255, rgb[2] / 255);
 
-  /* Слово перерисовываем в текстуру тем же кеглем и с теми же метриками,
-     что и SVG, — иначе при наведении оно прыгало бы на пару пикселей. */
   var off = document.createElement('canvas');
   var octx = off.getContext('2d');
   var W = 0, H = 0;
@@ -156,17 +157,22 @@
     octx.fillStyle = fill;
     octx.textBaseline = 'alphabetic';
 
-    /* Кегль подбираем так, чтобы чернила заняли всю ширину: та же логика,
-       что у viewBox в разметке, только в пикселях канваса. */
-    var word = src.textContent.trim();
-    var probe = 100;
-    octx.font = (cs.fontWeight || '600') + ' ' + probe + 'px ' + (cs.fontFamily || 'Geist');
-    var m = octx.measureText(word);
-    var inkW = m.actualBoundingBoxRight + m.actualBoundingBoxLeft;
-    var size = probe * (w / inkW);
-    octx.font = (cs.fontWeight || '600') + ' ' + size + 'px ' + (cs.fontFamily || 'Geist');
-    var m2 = octx.measureText(word);
-    octx.fillText(word, m2.actualBoundingBoxLeft, m2.actualBoundingBoxAscent);
+    /* Позицию и кегль считаем по тем же числам, что использует сам SVG:
+       viewBox, координаты строки и font-size. Раньше кегль подбирался
+       по метрикам канваса — и слово на канвасе выходило чуть у́же, чем
+       в SVG, отчего при наведении оно заметно прыгало. Здесь же повторяется
+       ровно то преобразование, которое делает браузер с viewBox, поэтому
+       совпадение точное по построению. */
+    var vb = (svg.getAttribute('viewBox') || '').split(/[\s,]+/).map(Number);
+    if (vb.length !== 4) return false;
+    var scale = Math.min(w / vb[2], h / vb[3]);          /* xMidYMid meet */
+    var ox = (w - vb[2] * scale) / 2;
+    var oy = (h - vb[3] * scale) / 2;
+
+    octx.font = (cs.fontWeight || '600') + ' ' + (fontSize * scale) + 'px ' + (cs.fontFamily || 'Geist');
+    octx.fillText(src.textContent.trim(),
+                  ox + (startX - vb[0]) * scale,
+                  oy + (baseline - vb[1]) * scale);
 
     gl.bindTexture(gl.TEXTURE_2D, tex);
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
