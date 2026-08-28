@@ -706,8 +706,11 @@ p { margin: 0; max-width: 62ch; }
 .phone__scr {
   border-radius: 22px;
   background: #141416;
-  padding: 24px 11px 12px;
-  min-height: 212px;
+  /* В em, а не в пикселях: макет телефона переиспользуется в списке умений
+     на вчетверо меньшем кегле, и абсолютная высота экрана распирала там
+     квадрат картинки. */
+  padding: 1.5em .7em .75em;
+  min-height: 13.25em;
   display: flex; flex-direction: column; gap: 7px;
   color: #FFFFFF;
 }
@@ -1056,9 +1059,159 @@ p { margin: 0; max-width: 62ch; }
   padding: clamp(14px, 1.6vw, 20px) 0;
   border-bottom: 1px solid var(--c-line);
 }
-/* Картинка ниже, чем в продуктовом блоке: там она сама по себе иллюстрация,
-   здесь — метка строки, и высота держится в габарите двух строк текста. */
-.skill__art { height: 88px; }
+/* Картинка квадратная и живёт по тем же правилам, что макеты в карточках
+   сценариев: настоящий кусок интерфейса, а не абстрактная плашка. Всё
+   внутри задано в em от одной ручки — на узкой колонке достаточно
+   уменьшить её, и содержимое ужимается пропорционально. */
+.skill__art {
+  height: auto;
+  aspect-ratio: 1;
+  /* Грид-элемент по умолчанию не может стать уже своего содержимого,
+     а строки внутри макета не переносятся — картинка вылезала из колонки
+     и наезжала на заголовок. */
+  min-width: 0;
+  font-size: 16px;
+  padding: .85em;
+  gap: .3em;
+  justify-content: center;
+}
+
+/* --- общие детали макетов ----------------------------------------------- */
+.sk-t {
+  font-family: var(--f-mono); font-size: .5em;
+  letter-spacing: .08em; text-transform: uppercase;
+  opacity: .45; margin-bottom: .4em;
+}
+.sk-r {
+  display: flex; align-items: center; justify-content: space-between; gap: .5em;
+  font-family: var(--f-mono); font-size: .56em;
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+  padding: .5em .62em; border-radius: .7em;
+  background: rgba(255, 255, 255, .07);
+}
+.scen__art--a .sk-r, .scen__art--c .sk-r,
+.skill__art--light .sk-r { background: rgba(10, 10, 10, .06); }
+.sk-r b { font-weight: 500; }
+.sk-r--dim { opacity: .55; }
+.sk-r--hot { background: var(--c-spark); color: #0A0A0A; }
+.sk-r--hot b { font-weight: 600; }
+.sk-r--ok { background: rgba(193, 255, 15, .14); color: var(--c-spark); }
+.sk-coin { width: 1.1em; height: 1.1em; flex: none; }
+.sk-arrow { font-family: var(--f-mono); font-size: .55em; opacity: .4; padding-left: .8em; line-height: 1; }
+.sk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .3em; }
+.sk-chip {
+  font-family: var(--f-mono); font-size: .5em;
+  padding: .38em .5em; border-radius: .6em;
+  background: rgba(255, 255, 255, .07);
+  display: flex; align-items: center; gap: .4em;
+  white-space: nowrap;
+}
+.sk-chip i { font-style: normal; opacity: .4; }
+/* Замазанные слова: точками подменяется само слово, номер остаётся видимым.
+   Размытие фильтром на таком кегле превращается в серое пятно без ритма,
+   а спрятать вместе со словом и номер значило бы потерять счёт до двенадцати. */
+.sk-hide { color: transparent; position: relative; font-weight: 400; }
+.sk-hide::after {
+  content: "••••••";
+  position: absolute; left: 0; top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, .32); letter-spacing: .04em;
+}
+.sk-net { display: flex; align-items: center; gap: .45em; }
+.sk-mark { display: flex; gap: .25em; }
+.sk-mark img { width: 1.25em; height: 1.25em; }
+
+/* Совпадающие части адреса подсвечены — глаз сравнивает начало и конец,
+   а не всю строку. */
+.sk-r em { font-style: normal; color: var(--c-spark); }
+.sk-r--ok em { color: inherit; }
+.sk-note { font-family: var(--f-mono); font-size: .46em; opacity: .4; margin-top: .3em; }
+
+/* --- окно браузера ------------------------------------------------------ */
+.sk-bar {
+  display: flex; align-items: center; gap: .5em;
+  padding: .42em .55em; border-radius: .7em;
+  background: rgba(255, 255, 255, .07);
+  margin-bottom: .35em;
+}
+.scen__art--a .sk-bar, .mock--theory .sk-bar { background: rgba(10, 10, 10, .06); }
+.sk-dots {
+  width: 1.6em; height: .34em; flex: none; border-radius: 999px;
+  background: currentColor; opacity: .25;
+}
+.sk-url { font-family: var(--f-mono); font-size: .5em; opacity: .6; }
+
+/* --- пуш о доступе ------------------------------------------------------ */
+.sk-push {
+  border-radius: .8em; padding: .7em;
+  background: rgba(255, 255, 255, .07);
+}
+.sk-push__h {
+  font-family: var(--f-mono); font-size: .5em;
+  letter-spacing: .06em; text-transform: uppercase; opacity: .5;
+}
+.sk-push__b { font-size: .58em; line-height: 1.4; margin-top: .5em; }
+.sk-push__b b { font-family: var(--f-mono); font-weight: 500; }
+.sk-push__row { display: flex; gap: .4em; margin-top: .7em; }
+.sk-push__no, .sk-push__yes {
+  flex: 1; text-align: center;
+  font-size: .52em; padding: .5em; border-radius: .6em;
+}
+.sk-push__no  { background: rgba(255, 255, 255, .09); }
+.sk-push__yes { background: var(--c-spark); color: #0A0A0A; font-weight: 600; }
+
+/* --- сеть токенов ------------------------------------------------------- */
+.sk-web { position: relative; flex: 1; min-height: 0; }
+.sk-web__l {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  fill: none; stroke: currentColor; stroke-width: .4;
+  opacity: .22; vector-effect: non-scaling-stroke;
+}
+.sk-node {
+  position: absolute; left: var(--x); top: var(--y);
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  display: grid; place-items: center;
+}
+.sk-node img { width: 1.5em; height: 1.5em; }
+
+/* --- сейф --------------------------------------------------------------- */
+.sk-safe { position: relative; flex: 1; min-height: 0; display: grid; place-items: center; }
+/* Лучи от сейфа к местам, куда уходят средства: без них три подписи по углам
+   читались как случайные плашки, а не как маршруты из одной точки. */
+.sk-safe__l {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  fill: none; stroke: currentColor; stroke-width: .5;
+  opacity: .2; vector-effect: non-scaling-stroke;
+}
+.sk-safe__box {
+  width: 2.6em; height: 2.6em; display: grid; place-items: center;
+  border-radius: .7em;
+  background: var(--c-spark); color: #0A0A0A;
+  z-index: 1;
+}
+.sk-safe__box svg { width: 1.5em; height: 1.5em; fill: currentColor; }
+.sk-safe__a, .sk-safe__b, .sk-safe__c {
+  position: absolute;
+  font-family: var(--f-mono); font-size: .48em;
+  padding: .35em .5em; border-radius: .6em;
+  background: rgba(255, 255, 255, .07);
+  white-space: nowrap;
+}
+.sk-safe__a { left: 0; top: 4%; }
+.sk-safe__b { right: 0; top: 40%; }
+.sk-safe__c { left: 6%; bottom: 4%; }
+
+/* --- телефон внутри строки списка --------------------------------------- */
+.skill__art .phone { font-size: 7.4px; width: 74%; margin-inline: auto; }
+.phone__pair { display: flex; gap: .4em; margin: .2em 0 .4em; }
+.phone__btn {
+  flex: 1; text-align: center;
+  font-family: var(--f-display); font-weight: 600; font-size: .6em;
+  padding: .55em; border-radius: .8em;
+  background: rgba(255, 255, 255, .1);
+}
+.phone__btn:first-child { background: var(--c-spark); color: #0A0A0A; }
 .skill__t {
   font-size: var(--t-h3);
   line-height: var(--lh-h3);

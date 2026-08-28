@@ -180,9 +180,12 @@
 
   /* Картинка в строке ужимается, но остаётся: без неё список умений
      превращается в двенадцать одинаковых абзацев. */
-  .skill { grid-template-columns: 108px minmax(0, 1fr); gap: 14px; }
-  .skill__art { height: 72px; padding: 8px; }
-  .skill .mock__row { padding: 4px 6px; }
+  .skill { grid-template-columns: 128px minmax(0, 1fr); gap: 14px; align-items: start; }
+  /* Та же ручка, что и в карточках сценариев: макет ужимается целиком,
+     а не ломает строки. Кегль подобран так, чтобы самая длинная строка
+     макета помещалась в колонку без обрезки. */
+  .skill__art { font-size: 10px; padding: .7em; }
+  .skill__art .phone { font-size: 6.4px; width: 82%; }
      колонки .proof дают строки по три слова. */
   .founder__shot { max-width: none; aspect-ratio: 4 / 4.4; }
   .proof { grid-template-columns: minmax(0, 1fr); }

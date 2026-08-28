@@ -16,9 +16,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap">
 
-<link rel="stylesheet" href="assets/css/tokens.css?v=315">
-<link rel="stylesheet" href="assets/css/styles.css?v=315">
-<link rel="stylesheet" href="assets/css/responsive.css?v=315">
+<link rel="stylesheet" href="assets/css/tokens.css?v=320">
+<link rel="stylesheet" href="assets/css/styles.css?v=320">
+<link rel="stylesheet" href="assets/css/responsive.css?v=320">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='none' stroke='%23FFFFFF' stroke-width='2'/><circle cx='16' cy='16' r='6' fill='%23C1FF0F'/></svg>">
 </head>
 <body>
@@ -427,8 +427,11 @@
     <ul class="skills" data-reveal>
     <li class="skill">
       <div class="mock mock--theory skill__art" aria-hidden="true">
-        <span class="mock__row">USDT</span>
-        <span class="mock__row mock__row--hot">купить →</span>
+        <p class="sk-t">Покупка</p>
+        <div class="sk-r"><span>Оплата</span><b>8 000 ₽</b></div>
+        <span class="sk-arrow">↓</span>
+        <div class="sk-r sk-r--hot"><img class="sk-coin" src="assets/coins/usdt.png" alt="" loading="lazy"><span>USDT</span><b>100.00</b></div>
+        <div class="sk-r sk-r--dim"><span>Курс</span><b>80.00 ₽</b></div>
       </div>
       <div class="skill__copy">
         <p class="skill__t">Купить USDT</p>
@@ -437,8 +440,11 @@
     </li>
     <li class="skill">
       <div class="mock mock--practice skill__art" aria-hidden="true">
-        <span class="mock__row">CEX</span>
-        <span class="mock__row mock__row--hot">вывод →</span>
+        <p class="sk-t">Вывод</p>
+        <div class="sk-r"><span>Сумма</span><b>100.00</b></div>
+        <div class="sk-r"><span>Сеть</span><b>TRC20</b></div>
+        <div class="sk-r"><span>Комиссия</span><b>1.00</b></div>
+        <div class="sk-r sk-r--hot"><span>К получению</span><b>99.00</b></div>
       </div>
       <div class="skill__copy">
         <p class="skill__t">Вывести средства с биржи</p>
@@ -447,9 +453,18 @@
     </li>
     <li class="skill">
       <div class="mock mock--support skill__art" aria-hidden="true">
-        <span class="mock__row">wallet</span>
-        <span class="mock__row mock__row--dim">seed</span>
-        <span class="mock__row mock__row--hot">create</span>
+        <div class="phone">
+          <div class="phone__island"></div>
+          <div class="phone__scr">
+            <p class="phone__h">Баланс</p>
+            <div class="phone__amt"><b>$1 240</b></div>
+            <div class="phone__pair">
+              <span class="phone__btn">Отправить</span><span class="phone__btn">Получить</span>
+            </div>
+            <div class="phone__f"><img class="sk-coin" src="assets/coins/usdt.png" alt="" loading="lazy"><span>USDT</span><b>980</b></div>
+            <div class="phone__f"><img class="sk-coin" src="assets/coins/eth.png" alt="" loading="lazy"><span>ETH</span><b>0.09</b></div>
+          </div>
+        </div>
       </div>
       <div class="skill__copy">
         <p class="skill__t">Создать non-custodial wallet</p>
@@ -458,8 +473,17 @@
     </li>
     <li class="skill">
       <div class="mock mock--theory skill__art" aria-hidden="true">
-        <span class="mock__row">1 … 12</span>
-        <span class="mock__row">не в облаке</span>
+        <p class="sk-t">Seed phrase</p>
+        <div class="sk-grid">
+          <span class="sk-chip"><i>01</i>ocean</span>
+          <span class="sk-chip"><i>02</i>ridge</span>
+          <span class="sk-chip"><i>03</i><b class="sk-hide">hidden</b></span>
+          <span class="sk-chip"><i>04</i>lunar</span>
+          <span class="sk-chip"><i>05</i><b class="sk-hide">hidden</b></span>
+          <span class="sk-chip"><i>06</i>amber</span>
+          <span class="sk-chip"><i>07</i>quiet</span>
+          <span class="sk-chip"><i>08</i><b class="sk-hide">hidden</b></span>
+        </div>
       </div>
       <div class="skill__copy">
         <p class="skill__t">Хранить seed phrase</p>
@@ -468,8 +492,10 @@
     </li>
     <li class="skill">
       <div class="mock mock--practice skill__art" aria-hidden="true">
-        <span class="mock__row mock__row--dim">TRC20</span>
-        <span class="mock__row mock__row--hot">ERC20</span>
+        <p class="sk-t">Сеть перевода</p>
+        <div class="sk-r sk-r--hot"><span class="sk-net"><img class="sk-coin" src="assets/coins/trx.png" alt="" loading="lazy"> TRC20</span><b>1.0 $</b></div>
+        <div class="sk-r"><span class="sk-net"><img class="sk-coin" src="assets/coins/eth.png" alt="" loading="lazy"> ERC20</span><b>4.2 $</b></div>
+        <div class="sk-r"><span class="sk-net"><img class="sk-coin" src="assets/coins/bnb.png" alt="" loading="lazy"> BEP20</span><b>0.2 $</b></div>
       </div>
       <div class="skill__copy">
         <p class="skill__t">Выбирать сеть перед переводом</p>
@@ -478,8 +504,10 @@
     </li>
     <li class="skill">
       <div class="mock mock--support skill__art" aria-hidden="true">
-        <span class="mock__row">TX7f…92F</span>
-        <span class="mock__row mock__row--hot">совпал</span>
+        <p class="sk-t">Проверка адреса</p>
+        <div class="sk-r"><span>В кошельке</span><b><em>TR7N</em>…<em>9Qv3</em></b></div>
+        <div class="sk-r"><span>В переводе</span><b><em>TR7N</em>…<em>9Qv3</em></b></div>
+        <div class="sk-r sk-r--ok"><span>Совпадает</span><b>✓</b></div>
       </div>
       <div class="skill__copy">
         <p class="skill__t">Проверять адрес получателя</p>
@@ -488,8 +516,10 @@
     </li>
     <li class="skill">
       <div class="mock mock--practice skill__art" aria-hidden="true">
-        <span class="mock__row mock__row--dim">тест <b>10</b></span>
-        <span class="mock__row mock__row--hot">перевод →</span>
+        <p class="sk-t">Порядок</p>
+        <div class="sk-r sk-r--dim"><span>Тестовая</span><b>10.00</b></div>
+        <span class="sk-arrow">↓</span>
+        <div class="sk-r sk-r--hot"><span>Основная</span><b>100 000</b></div>
       </div>
       <div class="skill__copy">
         <p class="skill__t">Выполнять тестовую транзакцию</p>
@@ -498,8 +528,11 @@
     </li>
     <li class="skill">
       <div class="mock mock--theory skill__art" aria-hidden="true">
-        <span class="mock__row">explorer</span>
-        <span class="mock__row">confirmed</span>
+        <div class="sk-bar"><span class="sk-dots"></span><span class="sk-url">tronscan.org</span></div>
+        <div class="sk-r sk-r--dim"><span>Кошелёк</span><b>TR7N…9Qv3</b></div>
+        <div class="sk-r"><span>−100.00</span><b>✓ 19 блоков</b></div>
+        <div class="sk-r"><span>+250.00</span><b>✓ 41 блок</b></div>
+        <div class="sk-r"><span>−12.00</span><b>✓ 88 блоков</b></div>
       </div>
       <div class="skill__copy">
         <p class="skill__t">Читать blockchain explorer</p>
@@ -508,8 +541,11 @@
     </li>
     <li class="skill">
       <div class="mock mock--theory skill__art" aria-hidden="true">
-        <span class="mock__row">fee</span>
-        <span class="mock__row">gas</span>
+        <p class="sk-t">Комиссия сети</p>
+        <div class="sk-r"><span>Медленно</span><b>0.4 $</b></div>
+        <div class="sk-r sk-r--hot"><span>Обычно</span><b>1.0 $</b></div>
+        <div class="sk-r"><span>Быстро</span><b>3.6 $</b></div>
+        <p class="sk-note">цена зависит от загрузки сети</p>
       </div>
       <div class="skill__copy">
         <p class="skill__t">Понимать комиссии</p>
@@ -518,8 +554,11 @@
     </li>
     <li class="skill">
       <div class="mock mock--support skill__art" aria-hidden="true">
-        <span class="mock__row mock__row--dim">approval</span>
-        <span class="mock__row mock__row--hot">revoke</span>
+        <div class="sk-push">
+          <p class="sk-push__h">Запрос доступа</p>
+          <p class="sk-push__b">Контракт <b>0x9f…21c4</b> просит право распоряжаться вашими USDT</p>
+          <div class="sk-push__row"><span class="sk-push__no">Отклонить</span><span class="sk-push__yes">Разрешить</span></div>
+        </div>
       </div>
       <div class="skill__copy">
         <p class="skill__t">Видеть базовые риски</p>
@@ -528,9 +567,17 @@
     </li>
     <li class="skill">
       <div class="mock mock--practice skill__art" aria-hidden="true">
-        <span class="mock__row mock__row--dim">CEX</span>
-        <span class="mock__row mock__row--dim">DEX</span>
-        <span class="mock__row mock__row--hot">L2</span>
+        <p class="sk-t">Топ рынка</p>
+        <div class="sk-web">
+          <span class="sk-node" style="--x:50%; --y:14%"><img class="sk-coin" src="assets/coins/btc.png" alt="" loading="lazy"></span>
+          <span class="sk-node" style="--x:16%; --y:44%"><img class="sk-coin" src="assets/coins/eth.png" alt="" loading="lazy"></span>
+          <span class="sk-node" style="--x:84%; --y:44%"><img class="sk-coin" src="assets/coins/usdt.png" alt="" loading="lazy"></span>
+          <span class="sk-node" style="--x:30%; --y:82%"><img class="sk-coin" src="assets/coins/sol.png" alt="" loading="lazy"></span>
+          <span class="sk-node" style="--x:70%; --y:82%"><img class="sk-coin" src="assets/coins/bnb.png" alt="" loading="lazy"></span>
+          <svg class="sk-web__l" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M50 14 16 44M50 14 84 44M16 44 30 82M84 44 70 82M30 82 70 82M16 44 84 44"/>
+          </svg>
+        </div>
       </div>
       <div class="skill__copy">
         <p class="skill__t">Понимать устройство индустрии</p>
@@ -539,9 +586,18 @@
     </li>
     <li class="skill">
       <div class="mock mock--support skill__art" aria-hidden="true">
-        <span class="mock__row mock__row--dim">hot</span>
-        <span class="mock__row">cold</span>
-        <span class="mock__row mock__row--hot">→ схема</span>
+        <p class="sk-t">Своя схема</p>
+        <div class="sk-safe">
+          <svg class="sk-safe__l" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M50 50 14 12M50 50 92 44M50 50 20 90"/>
+          </svg>
+          <span class="sk-safe__box">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10V7a5 5 0 0 1 10 0v3h2v12H5V10zm2 0h6V7a3 3 0 0 0-6 0z"/></svg>
+          </span>
+          <span class="sk-safe__a">биржа</span>
+          <span class="sk-safe__b">кошелёк</span>
+          <span class="sk-safe__c">холодный</span>
+        </div>
       </div>
       <div class="skill__copy">
         <p class="skill__t">Иметь собственную схему</p>
@@ -1293,8 +1349,8 @@
 
 
 
-<script src="assets/js/warptext.js?v=315" defer></script>
-<script src="assets/js/coinpit.js?v=315"></script>
-<script src="assets/js/main.js?v=315"></script>
+<script src="assets/js/warptext.js?v=320" defer></script>
+<script src="assets/js/coinpit.js?v=320"></script>
+<script src="assets/js/main.js?v=320"></script>
 </body>
 </html>
