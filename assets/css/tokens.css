@@ -1,0 +1,199 @@
+/* ==========================================================================
+   DESIGN TOKENS
+   Calibrated against mercury.com/vc-funds: its background ramp, type scale,
+   8px-based vertical rhythm and restrained button sizing. Values below are the
+   measured Mercury figures, adapted where Cyrillic needs different treatment.
+   ========================================================================== */
+
+:root {
+  /* ---- Color: neutrals (Mercury's cool, violet-leaning ramp) ----------- */
+  --c-paper:        #FBFCFD;  /* page ground                                */
+  --c-paper-sunk:   #F4F5F9;  /* recessed section                           */
+  --c-surface:      #FFFFFF;  /* raised card                                */
+  --c-plate:        #FFFFFF;  /* opaque plate that must hide what is behind it */
+  --c-surface-alt:  #F8F9FC;
+  --c-ink:          #272735;  /* near-black with a violet cast, never #000   */
+  --c-ink-muted:    #535461;
+  --c-ink-faint:    #8A8B99;
+  --c-line:         #E6E7EF;
+  --c-line-strong:  rgba(112, 115, 147, .28);
+
+  /* Mercury's neutral tint — the fill and border behind secondary controls */
+  --c-neutral-tint: rgba(112, 115, 147, .10);
+  --c-neutral-line: rgba(112, 115, 147, .22);
+
+  /* ---- Color: accent --------------------------------------------------- */
+  /* Light theme: the purple has to hold contrast on white, so it sits deeper
+     than the #A855F7 used on the dark ground. */
+  --c-accent:       #6E5BD6;
+  --c-accent-deep:  #5A47C2;
+  --c-accent-tint:  rgba(110, 91, 214, .09);
+  --c-accent-line:  rgba(110, 91, 214, .26);
+  --c-on-accent:    #FFFFFF;
+
+  /* ---- Color: inverted surface ----------------------------------------- */
+  --c-dark:         #181623;
+  --c-dark-sunk:    #211F2E;
+  --c-dark-ink:     #EDECFB;
+  --c-dark-muted:   #C3C0DF;
+  --c-dark-line:    rgba(237, 236, 251, .16);
+
+  /* ---- Color: semantic (used sparingly, never as decoration) ----------- */
+  --c-caution:      #A05A2C;
+  --c-neg:          #D13438;   /* what this programme does not do */
+  --c-pos:          #21815A;   /* what it does */
+
+  /* ---- Type families --------------------------------------------------- */
+  /* Geist is Vercel's typeface, SIL OFL, served by Google Fonts — the same
+     family reactbits.dev uses, so this is the real thing rather than a match. */
+  --f-display: 'Geist', 'Golos Text', -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  --f-text:    'Geist', 'Golos Text', -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  --f-mono:    'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* ---- Type scale — measured on reactbits.dev at 1440 ------------------- */
+  /* 66 H1 · 42 H2 · 24 H3 · 15 H4 · 17 text · 13 subtext, all at 500/400.   */
+  --t-h1:      clamp(2.125rem, 0.95rem + 3.30vw, 4.125rem); /* 34 → 66      */
+  --t-h2:      clamp(1.625rem, 0.95rem + 1.90vw, 2.625rem); /* 26 → 42      */
+  --t-h3:      clamp(1.125rem, 0.85rem + 0.80vw, 1.5rem);   /* 18 → 24      */
+  --t-h4:      0.9375rem;                                    /* 15          */
+  --t-text:    1.0625rem;                                    /* 17          */
+  --t-subtext: 0.8125rem;                                    /* 13          */
+
+  /* ---- Type detail, one set per role ------------------------------------ */
+  --lh-h1: 1.06;   --ls-h1: -0.025em;
+  --lh-h2: 1.1;    --ls-h2: -0.02em;
+  --lh-h3: 1.25;   --ls-h3: -0.015em;
+  --lh-h4: 1.5;    --ls-h4: -0.01em;
+  --lh-text: 1.6;      --ls-text: 0em;
+  --lh-subtext: 1.55;  --ls-subtext: 0em;
+  --ls-label: 0.04em;
+
+  --w-h1:      500;
+  --w-h2:      500;
+  --w-h3:      500;
+  --w-h4:      600;
+  --w-display: 500;
+  --w-text:    400;
+  --w-medium:  500;
+
+  /* ---- Layout ----------------------------------------------------------- */
+  /* These are CONTENT widths — the grid itself, excluding the page gutter.
+     `.container` adds the gutter outside them, so the columns measure exactly
+     this much on any viewport wide enough to allow it. Section backgrounds are
+     painted on the <section>, so they always run to the viewport edges. */
+  --container:      1280px;
+  --container-wide: 1440px;
+  --container-text: 62ch;
+  /* Below 1320 the gutter breathes with the viewport; at and above 1320 it
+     locks to 20px so the content grid measures exactly 1280 (see .container). */
+  --gutter:   clamp(1.125rem, 0.5rem + 2vw, 2rem);     /* 18 → 32           */
+  --grid-gap: clamp(1rem, 0.60rem + 1.6vw, 2rem);      /* 16 → 32 (Mercury) */
+
+  /* ---- Vertical rhythm (Phantom: 48 / 96 / 128) ------------------------- */
+  --sp-section:   clamp(4rem,   2.6rem + 3.7vw, 6rem);     /* 64 → 96      */
+  --sp-cinematic: clamp(5rem,   3.2rem + 5.0vw, 8rem);     /* 80 → 128     */
+  /* One step above cinematic, for the few places where a section change needs
+     a real pause rather than a beat. */
+  --sp-vast:      clamp(6.5rem, 4.2rem + 6.4vw, 10.5rem);  /* 104 → 168    */
+  --sp-tight:     clamp(2.5rem, 1.9rem + 1.2vw, 3rem);     /* 40 → 48      */
+  --sp-block:     clamp(1.5rem, 1.1rem + 1.0vw, 2rem);     /* 24 → 32      */
+  --sp-stack:     clamp(0.75rem, 0.6rem + 0.5vw, 1.5rem);  /* 12 → 24      */
+
+  /* ---- Radii (reactbits: 12 controls & panels, 10 chips, 6/4 small) ----- */
+  --r-xs:   4px;
+  --r-sm:   6px;
+  --r-md:   10px;
+  --r-lg:   12px;
+  --r-xl:   16px;
+  --r-pill: 100px;
+
+  /* ---- Elevation -------------------------------------------------------- */
+  --sh-sm: 0 1px 2px rgba(39, 39, 53, .05);
+  --sh-md: 0 1px 2px rgba(39, 39, 53, .04), 0 8px 20px -12px rgba(39, 39, 53, .16);
+  --sh-lg: 0 1px 3px rgba(39, 39, 53, .05), 0 24px 52px -28px rgba(39, 39, 53, .26);
+
+  /* ---- Motion ----------------------------------------------------------- */
+  --e-out:   cubic-bezier(.22, .68, .28, 1);
+  --e-inout: cubic-bezier(.5, .12, .2, 1);
+  --d-fast:  .18s;
+  --d-base:  .3s;
+  --d-slow:  .6s;
+}
+
+/* --------------------------------------------------------------------------
+   Dark theme. Every color is redefined at token level only, so components
+   never need to know which theme they are in.
+   -------------------------------------------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --c-paper:       #120F17;
+    --c-paper-sunk:  #17131F;
+    --c-surface:     rgba(255, 255, 255, .04);
+    --c-plate:       #221D2E;
+    --c-surface-alt: rgba(255, 255, 255, .07);
+    --c-ink:         #FFFFFF;
+    --c-ink-muted:   rgba(255, 255, 255, .72);
+    --c-ink-faint:   rgba(255, 255, 255, .55);
+    --c-line:        rgba(255, 255, 255, .08);
+    --c-line-strong: rgba(255, 255, 255, .16);
+
+    --c-neutral-tint: rgba(255, 255, 255, .07);
+    --c-neutral-line: rgba(255, 255, 255, .10);
+
+    --c-accent:      #A855F7;
+    --c-accent-deep: #9333EA;
+    --c-accent-tint: rgba(168, 85, 247, .14);
+    --c-accent-line: rgba(168, 85, 247, .34);
+    --c-on-accent:   #FFFFFF;
+
+    --c-dark:        #0B0910;
+    --c-dark-sunk:   #15111C;
+    --c-dark-ink:    #FFFFFF;
+    --c-dark-muted:  rgba(255, 255, 255, .72);
+    --c-dark-line:   rgba(255, 255, 255, .08);
+
+    --c-caution:     #E0A45C;
+    --c-neg:         #F2555A;
+    --c-pos:         #3DD68C;
+
+    --sh-sm: 0 1px 2px rgba(0, 0, 0, .4);
+    --sh-md: 0 1px 2px rgba(0, 0, 0, .4), 0 10px 24px -14px rgba(0, 0, 0, .8);
+    --sh-lg: 0 1px 3px rgba(0, 0, 0, .5), 0 28px 56px -30px rgba(0, 0, 0, .95);
+  }
+}
+
+:root[data-theme="dark"] {
+  --c-paper:       #120F17;
+  --c-paper-sunk:  #17131F;
+  --c-surface:     rgba(255, 255, 255, .04);
+  --c-plate:       #221D2E;
+  --c-surface-alt: rgba(255, 255, 255, .07);
+  --c-ink:         #FFFFFF;
+  --c-ink-muted:   rgba(255, 255, 255, .72);
+  --c-ink-faint:   rgba(255, 255, 255, .55);
+  --c-line:        rgba(255, 255, 255, .08);
+  --c-line-strong: rgba(255, 255, 255, .16);
+
+  --c-neutral-tint: rgba(255, 255, 255, .07);
+  --c-neutral-line: rgba(255, 255, 255, .10);
+
+  --c-accent:      #A855F7;
+  --c-accent-deep: #9333EA;
+  --c-accent-tint: rgba(168, 85, 247, .14);
+  --c-accent-line: rgba(168, 85, 247, .34);
+  --c-on-accent:   #FFFFFF;
+
+  --c-dark:        #0B0910;
+  --c-dark-sunk:   #15111C;
+  --c-dark-ink:    #FFFFFF;
+  --c-dark-muted:  rgba(255, 255, 255, .72);
+  --c-dark-line:   rgba(255, 255, 255, .08);
+
+  --c-caution:     #E0A45C;
+  --c-neg:         #F2555A;
+  --c-pos:         #3DD68C;
+
+  --sh-sm: 0 1px 2px rgba(0, 0, 0, .4);
+  --sh-md: 0 1px 2px rgba(0, 0, 0, .4), 0 10px 24px -14px rgba(0, 0, 0, .8);
+  --sh-lg: 0 1px 3px rgba(0, 0, 0, .5), 0 28px 56px -30px rgba(0, 0, 0, .95);
+}
