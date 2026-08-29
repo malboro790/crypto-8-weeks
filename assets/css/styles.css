@@ -8,6 +8,18 @@ html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
   scroll-padding-top: 96px;
+  /* Фон холста страницы, а не декорация.
+
+     При быстрой прокрутке композитор показывает кадр раньше, чем растеризован
+     край, въезжающий в окно. Незакрашенную область он заливает базовым цветом
+     слоя — и если у корневого элемента фона нет, этот цвет белый. Снизу вверх
+     это и читалось как белая вспышка по низу экрана, причём только на чёрных
+     секциях: на белых она незаметна.
+
+     Фон body сюда не поднимался: перенос фона на холст ломается, когда body
+     сам становится скролл-контейнером (см. ниже про overflow-x). Поэтому цвет
+     задан корню напрямую. */
+  background-color: var(--c-paper);
 }
 
 body {
@@ -20,7 +32,11 @@ body {
   line-height: var(--lh-text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
+  /* overflow-x: hidden здесь больше нет. Он вычислял overflow-y в auto и делал
+     body полноценным скролл-контейнером — а это и мешало фону перейти на холст,
+     и заставляло браузер держать липкие секции в отдельном прокручиваемом
+     боксе. Горизонтальное переполнение режет main (overflow-x: clip), причём
+     clip, в отличие от hidden, не создаёт скролл-контейнер вовсе. */
 }
 
 body.is-locked { overflow: hidden; }
@@ -86,7 +102,16 @@ main { overflow-x: clip; }
   .container--wide { max-width: calc(var(--container-wide) + 40px); }
 }
 
-.section { padding-block: var(--sp-section); position: relative; }
+/* Каждая секция непрозрачна и лежит слоем выше первого экрана: первый
+   прилипает к верху окна, а следующие наезжают на него. Без собственного
+   фона у тёмных секций прилипший герой просвечивал бы сквозь них.
+   Значение через background-color, а не background: тени и градиентные
+   кромки плашек заданы отдельными свойствами и не должны сбрасываться. */
+.section {
+  padding-block: var(--sp-section);
+  position: relative; z-index: 1;
+  background-color: var(--c-paper);
+}
 
 /* A section supplies its own top padding, so whatever leads it must not add a
    margin on top of that. Guards the blocks that used to sit under a label. */
@@ -96,7 +121,28 @@ main { overflow-x: clip; }
 /* Две светлые секции подряд перекрываем на пиксель. Секции одного цвета, но
    при дробной высоте на плотных экранах между ними проступает тёмный фон
    страницы — тонкой полосой во всю ширину. */
-.section--light + .section--light { margin-top: -1px; }
+/* Каждая секция заходит на предыдущую на пиксель.
+
+   Высоты секций дробные — их задаёт clamp() в вертикальных отступах: 905.27,
+   925.84, 3167.92. Соседние секции стыкуются встык по дробной координате, и
+   при переводе в пиксели устройства округление краёв может разойтись: снизу
+   вниз, сверху вверх. Между ними открывается прореха в один пиксель.
+
+   Показывать в этой прорехе есть что. Прилипающая секция остаётся прилипшей
+   до конца #main — то есть белый экран, отдавший цвет чёрному, продолжает
+   стоять на top:0 позади всех следующих секций до самого подвала. Чёрные
+   секции его перекрывают, потому что идут позже по DOM при том же z-index, —
+   но ровно до тех пор, пока перекрывают без щелей. Шов на стыке двух чёрных
+   секций показывает припаркованный за ними белый: при быстрой прокрутке это
+   и читается как белая вспышка по низу экрана.
+
+   Раньше правило стояло только на паре светлая+светлая — то есть там, где
+   шов однажды уже заметили. Механизм от цвета не зависит, поэтому теперь
+   перекрываются все стыки. Верхний пиксель следующей секции ложится на
+   нижний пиксель предыдущей: следующая красится позже, граница не смещается,
+   а прорехе взяться неоткуда. */
+#main > section + section,
+.footer { margin-top: -1px; }
 .section--sunk { background: var(--c-paper-sunk); }
 /* Fills the viewport with its content on the vertical centre. `svh` so mobile
    browser chrome cannot push the block taller than the screen. */
@@ -111,51 +157,73 @@ main { overflow-x: clip; }
   align-content: center;
 }
 
-
 .section--hairline { border-top: 1px solid var(--c-line); }
+
+/* Секция прилипает к верху окна, и следующая наезжает на неё сверху — тот же
+   переход, что у первого экрана. Слой не задаём: у всех секций он одинаковый,
+   и при равном z-index более поздняя в разметке рисуется поверх.
+
+   Класс вешает JS и только тем секциям, которые помещаются в окно целиком:
+   прилипшая секция выше окна замирает верхним краем на нуле, и всё, что
+   ниже сгиба, становится недостижимым. Проверка идёт на каждый ресайз,
+   потому что «помещается» зависит от высоты окна, а не от ширины экрана. */
+.is-pinned { position: sticky; top: 0; }
+/* Запас краски под нижним краем прилипшей секции.
+
+   Пиксельная арифметика может сойтись идеально и всё равно дать шов: при
+   быстрой прокрутке позиция sticky обновляется композитором, и на долю кадра
+   между низом секции и низом окна проскакивает полоска того, что лежит ниже.
+   Собственный фон секции, продолженный на четыре пикселя вниз, закрывать
+   нечего не мешает: следующая секция идёт в потоке сразу за ней, тот же
+   z-index и позже по DOM, поэтому в обычном состоянии она эту полосу
+   перекрывает. Видно её только тогда, когда она и должна быть видна. */
+.is-pinned::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 100%;
+  height: 4px;
+  background-color: inherit;
+  pointer-events: none;
+}
 
 /* An inverted band on an otherwise dark site. Token-level only, so every
    component inside it flips without knowing anything about the theme.
    The lavender accent is too pale on white, so this block uses a deeper cut. */
 .section--light {
-  background: #FBFCFD;
-  color: #272735;
-  --c-ink: #272735;
-  --c-ink-muted: #535461;
-  --c-ink-faint: #6C6D7E;
-  --c-line: #E6E7EF;
-  --c-line-strong: rgba(112, 115, 147, .28);
-  --c-paper: #FBFCFD;
-  --c-paper-sunk: #F1F2F7;
+  background: #FFFFFF;
+  color: #0A0A0A;
+  --c-ink: #0A0A0A;
+  --c-ink-muted: #52525B;
+  --c-ink-faint: #71717A;
+  --c-line: #E4E4E7;
+  --c-line-strong: rgba(10, 10, 10, .22);
+  --c-paper: #FFFFFF;
+  --c-paper-sunk: #F4F4F5;
   --c-surface: #FFFFFF;
   /* Plates carry their own opaque fill, so they need a light-theme value of
      their own — without it they keep the dark-theme plate on a white ground. */
   --c-plate: #FFFFFF;
-  --c-surface-alt: #F4F5F9;
-  --sh-sm: 0 1px 2px rgba(39, 39, 53, .05);
-  --sh-md: 0 1px 2px rgba(39, 39, 53, .04), 0 8px 20px -12px rgba(39, 39, 53, .16);
-  --sh-lg: 0 1px 3px rgba(39, 39, 53, .05), 0 24px 52px -28px rgba(39, 39, 53, .26);
-  --c-accent: #6E5BD6;
-  --c-accent-deep: #5A47C2;
-  --c-accent-tint: rgba(110, 91, 214, .09);
-  --c-accent-line: rgba(110, 91, 214, .26);
+  --c-surface-alt: #FAFAFA;
+  --sh-sm: 0 1px 2px rgba(10, 10, 10, .05);
+  --sh-md: 0 1px 2px rgba(10, 10, 10, .04), 0 8px 20px -12px rgba(10, 10, 10, .14);
+  --sh-lg: 0 1px 3px rgba(10, 10, 10, .05), 0 24px 52px -28px rgba(10, 10, 10, .22);
+  --c-accent: #0A0A0A;
+  --c-accent-deep: #000000;
+  --c-accent-tint: rgba(10, 10, 10, .05);
+  --c-accent-line: rgba(10, 10, 10, .16);
   --c-on-accent: #FFFFFF;
-  --c-neutral-tint: rgba(112, 115, 147, .10);
-  --c-neutral-line: rgba(112, 115, 147, .22);
+  /* Полоса выделения остаётся кислотной, но буквы поверх неё — чёрные. */
+  --c-spark: #C1FF0F;
+  --c-spark-ink: #0A0A0A;
+  --c-neutral-tint: rgba(10, 10, 10, .06);
+  --c-neutral-line: rgba(10, 10, 10, .16);
   /* The dark-theme pair is far too light on white — the green reads 1.87:1. */
-  --c-neg: #C42B2F;
-  --c-pos: #1B7A52;
-}
-
-/* Centred variant: heading, lead and footnote sit on the section's axis.
-   Used where the graphic below is itself radial, so the block reads symmetric. */
-.section--center { text-align: center; }
-.section--center .h2,
+  --c-neg: #8A8A93;
+  --c-pos: #0A0A0A;
+}.section--center .h2,
 .section--center .lead,
 .section--center .body,
 .section--center .small,
-.section--center .meta { margin-inline: auto; }
-
 .section--dark {
   background: var(--c-dark);
   color: var(--c-dark-ink);
@@ -165,12 +233,14 @@ main { overflow-x: clip; }
   --c-line: var(--c-dark-line);
   --c-line-strong: var(--c-dark-line);
   --c-surface: var(--c-dark-sunk);
-  --c-accent: #A855F7;
-  --c-accent-tint: rgba(168, 85, 247, .14);
-  --c-accent-line: rgba(168, 85, 247, .34);
-  --c-on-accent: #FFFFFF;
-  --c-neutral-tint: rgba(237, 236, 251, .08);
-  --c-neutral-line: rgba(237, 236, 251, .2);
+  --c-accent: #FFFFFF;
+  --c-accent-tint: rgba(255, 255, 255, .07);
+  --c-accent-line: rgba(255, 255, 255, .22);
+  --c-on-accent: #000000;
+  --c-spark: #C1FF0F;
+  --c-spark-ink: #C1FF0F;
+  --c-neutral-tint: rgba(255, 255, 255, .08);
+  --c-neutral-line: rgba(255, 255, 255, .2);
 }
 
 /* 12-column editorial grid, Mercury-style gutters */
@@ -231,14 +301,14 @@ p { margin: 0; max-width: 62ch; }
 
 /* Legacy aliases kept so existing markup maps onto the six roles. */
 .display { font-size: var(--t-h1); line-height: var(--lh-h1); letter-spacing: var(--ls-h1); font-weight: var(--w-h1); text-wrap: balance; }
-.lead    { font-size: var(--t-h4); line-height: var(--lh-h4); letter-spacing: var(--ls-h4); color: var(--c-ink-muted); max-width: 52ch; }
-.lead--ink { color: var(--c-ink); }
+/* Своя ступень, а не --t-h4. Лид сидел на кегле мелких подзаголовков — 15px,
+   и после подъёма служебного текста до 16 оказался самым мелким текстом на
+   сайте: подзаголовок раздела под заголовком в 42px был мельче подписей под
+   картинками. Теперь порядок восстановлен: 24 → 20 → 17 → 16. */
+.lead    { font-size: var(--t-lead); line-height: 1.45; letter-spacing: -.01em; color: var(--c-ink-muted); max-width: 52ch; }
 .body    { font-size: var(--t-text); line-height: var(--lh-text); color: var(--c-ink-muted); max-width: 62ch; }
 .small   { font-size: var(--t-subtext); line-height: var(--lh-subtext); color: var(--c-ink-muted); max-width: 68ch; }
-.meta    { font-size: var(--t-subtext); line-height: var(--lh-subtext); color: var(--c-ink-faint); max-width: 72ch; }
-
-.mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
-.accent { color: var(--c-accent); }
+.meta    { font-size: var(--t-subtext); line-height: var(--lh-subtext); color: var(--c-ink-faint); max-width: 72ch; }.accent { color: var(--c-accent); }
 .nowrap { white-space: nowrap; }
 
 /* ==========================================================================
@@ -265,18 +335,36 @@ p { margin: 0; max-width: 62ch; }
               border-color var(--d-fast) var(--e-out);
 }
 
-/* One step deeper than the brand accent. White on #A855F7 measures 3.96, under
-   the 4.5 a 14px label needs; #9333EA reads 5.4 and stays the same purple.
+/* Тёмная плитка вместо фиолетовой: белое на чёрном — 21:1, вопрос контраста
+   в монохроме снимается сам.
    Stated literally rather than through --c-accent-deep: that token shifts to a
    deeper indigo on light sections, and the main call to action should be the
    same colour everywhere on the page. 5.4 against white, 5.0 against the dark
    ground — it clears AA on both. */
+/* Основная кнопка всегда максимально далеко от подложки: на чёрном белая,
+   на светлой полосе чёрная. Раньше цвет был вписан числом и не слушал тему. */
 .btn--primary {
-  background: #9333EA;
-  color: #FFFFFF;
-  border-color: #9333EA;
+  background: var(--c-accent);
+  color: var(--c-on-accent);
+  border-color: var(--c-accent);
 }
-.btn--primary:hover { background: #7C3AED; border-color: #7C3AED; }
+.btn--primary:hover { background: var(--c-accent-deep); border-color: var(--c-accent-deep); }
+
+/* Кнопки-призывы — искрой. Их две: на первом экране и в карточке формата,
+   то есть в двух точках, где человек решает написать. Остальные кнопки
+   на сайте белые, и это не забывчивость: если искрой красить всё подряд,
+   она перестаёт означать «сюда». */
+.hero .btn--primary,
+.tier__cta.btn--primary {
+  background: var(--c-spark);
+  border-color: var(--c-spark);
+  color: #0A0A0A;
+}
+.hero .btn--primary:hover,
+.tier__cta.btn--primary:hover {
+  background: color-mix(in srgb, var(--c-spark) 86%, #000);
+  border-color: color-mix(in srgb, var(--c-spark) 86%, #000);
+}
 
 .btn--ghost {
   background: var(--c-neutral-tint);
@@ -286,7 +374,7 @@ p { margin: 0; max-width: 62ch; }
 .btn--ghost:hover { background: var(--c-neutral-line); }
 
 /* Their header controls: shorter, 10px radius, 13px label at 600. */
-.btn--sm { height: 36px; padding: 0 20px; border-radius: var(--r-md); font-size: .8125rem; font-weight: 600; }
+.btn--sm { height: 40px; padding: 0 20px; border-radius: var(--r-md); font-size: var(--t-subtext); font-weight: 600; }
 .btn--lg { height: 52px; padding: 0 28px; font-size: 1rem; }
 
 .btn__arrow { font-family: var(--f-mono); font-weight: 400; transition: transform var(--d-fast) var(--e-out); }
@@ -331,56 +419,38 @@ p { margin: 0; max-width: 62ch; }
   font-weight: var(--w-display); font-size: var(--t-h4); letter-spacing: var(--ls-h4);
   white-space: nowrap; flex: none;
 }
-/* The mark is a billiard ball: a lit sphere in the brand purple carrying the
+/* The mark is a billiard ball: a lit sphere carrying the
    number 8 on a white disc. Built from gradients rather than an image file so
    it stays sharp at any density and needs no extra request. The lighting is
    fixed (top-left key, bottom-right bounce) — it reads as an object, so it must
    not flip with the theme the way a flat icon would. */
+/* Марка монохромная: сплошной круг цветом текста, «8» вырезана в нём фоном
+   секции. Объём, блик и подложка убраны — на чёрном сайте лепной шар был
+   единственным трёхмерным объектом и читался как чужой элемент. Круг
+   переворачивается вместе с темой сам: и заливка, и цифра берут currentColor
+   и цвет подложки. */
 .wordmark__glyph {
   width: 26px; height: 26px; flex: none; border-radius: 50%;
   position: relative; display: grid; place-items: center;
-  background:
-    /* key light */
-    radial-gradient(circle at 32% 26%,
-      color-mix(in srgb, var(--c-accent) 35%, #fff) 0%,
-      transparent 42%),
-    /* bounce light off the surface below */
-    radial-gradient(circle at 72% 84%,
-      color-mix(in srgb, var(--c-accent) 78%, #fff) 0%,
-      transparent 38%),
-    /* body, shading away from the key */
-    radial-gradient(circle at 34% 30%,
-      var(--c-accent) 0%,
-      color-mix(in srgb, var(--c-accent) 72%, #000) 72%,
-      color-mix(in srgb, var(--c-accent) 52%, #000) 100%);
-  box-shadow:
-    inset 0 -1px 2px color-mix(in srgb, var(--c-accent) 30%, #000),
-    inset 0 1px 1px rgba(255, 255, 255, .28);
+  background: currentColor;
 }
-/* The numbered disc. `8` is content rather than a glyph in the markup so the
-   wordmark stays a single readable string for assistive tech. */
+/* Цифра — контент, а не глиф в разметке: так вся марка остаётся одной
+   читаемой строкой для скринридера. */
 .wordmark__glyph::before {
   content: "8";
-  width: 13px; height: 13px;
-  display: grid; place-items: center;
-  border-radius: 50%;
-  background: #FFFFFF;
   font-family: var(--f-display);
-  font-size: 9px; font-weight: 700; line-height: 1;
+  /* Крупнее прежнего: раньше цифра сидела на белом кружке 13px и была
+     всего 9px — без кружка ей нужен собственный вес. */
+  font-size: 15px; font-weight: 700; line-height: 1;
+  /* Трекинг нулевой: отрицательный добавлял хвост после цифры, и грид
+     центрировал бокс вместе с этим хвостом — восьмёрка уезжала вправо. */
   letter-spacing: 0;
-  color: color-mix(in srgb, var(--c-accent) 55%, #000);
-  /* nudged up-left with the sphere's curvature, not centred flat on it */
-  transform: translate(-.5px, -.5px);
+  color: var(--c-paper);
+  /* Сдвиг снят с метрик Geist на кегле 15: чернила цифры лежат на 0.51px
+     правее центра адванса и на 0.18px ниже центра строки. */
+  transform: translate(-.51px, -.18px);
 }
-/* Specular highlight, offset from the key light so the ball reads as glossy. */
-.wordmark__glyph::after {
-  content: ""; position: absolute;
-  top: 3px; left: 5px;
-  width: 7px; height: 5px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, .62);
-  filter: blur(1.2px);
-}
+
 .wordmark__sub { color: var(--c-ink-faint); font-weight: var(--w-text); }
 
 .nav { display: flex; align-items: center; gap: 2px; }
@@ -437,7 +507,11 @@ p { margin: 0; max-width: 62ch; }
 /* Centred hero over a physics field of coin marks: oversized headline with one
    highlighted phrase, a two-line sub, and a pair of rectangular buttons. */
 .hero {
-  position: relative;
+  /* Первый экран прилипает к верху окна, второй наезжает на него сверху —
+     как на awequatic.com. Слой ниже всех остальных секций, поэтому после
+     перекрытия его просто не видно. */
+  position: sticky; top: 0;
+  z-index: 0;
   overflow: hidden;
   /* Tied to the viewport, so the pit always rests on the bottom edge of the
      first screen whatever the monitor. `svh` keeps mobile browser chrome from
@@ -452,6 +526,10 @@ p { margin: 0; max-width: 62ch; }
    lower left over a near-black violet ground, with a sparse dot field above it.
    Built from gradients rather than their WebGL shader — same look, no shader
    of theirs, and it costs nothing to render. */
+/* Фон первого экрана. Свечение и точечное поле убраны: они были построены
+   на фиолетовом, а в монохромной палитре любой цветной ореол сразу становится
+   единственным пятном на странице и перетягивает внимание с заголовка.
+   Остался чистый чёрный — как на kerber.agency. */
 .hero__bg {
   position: absolute;
   top: 0; bottom: 0;
@@ -460,18 +538,82 @@ p { margin: 0; max-width: 62ch; }
   z-index: 0;
   pointer-events: none;
   background-color: var(--c-paper);
-  background-image:
-    /* dot field — matches their rgb(170,100,250) specks at low alpha */
-    radial-gradient(rgba(170, 100, 250, .16) 1px, transparent 1px),
-    /* the bloom, brightest low and left, dying out towards the top right */
-    radial-gradient(60% 55% at 8% 96%,  rgba(168, 85, 247, .40) 0%, transparent 72%),
-    radial-gradient(48% 46% at 28% 88%, rgba(139, 92, 246, .30) 0%, transparent 70%),
-    radial-gradient(80% 60% at 50% 108%, rgba(88, 40, 160, .34) 0%, transparent 78%),
-    radial-gradient(70% 70% at 88% 4%,  rgba(120, 70, 200, .10) 0%, transparent 70%);
-  background-size: 26px 26px, auto, auto, auto, auto;
-  background-position: 0 0, center, center, center, center;
-  background-repeat: repeat, no-repeat, no-repeat, no-repeat, no-repeat;
 }
+/* Сетка. Шаг и толщина сняты с присланного макета (139px, тонкая линия),
+   цвет переведён в монохром: там сетка сиреневая, здесь любой цветной слой
+   стал бы вторым акцентом рядом с искрой в заголовке.
+
+   Линии рисует псевдоэлемент, а не сам фон: маска гасит слой к центру, и,
+   будь она на .hero__bg, вместе с линиями исчезла бы и чёрная подложка.
+   Провал в середине не украшение — он держит чистое поле под словом.
+
+   Значения вынесены в переменные: ту же сетку носят тёмные секции ниже
+   по странице, и держать её в двух местах — верный способ развести их
+   по шагу при первой же правке. */
+:root {
+  --grid-lines:
+    repeating-linear-gradient(to right,  rgba(255, 255, 255, .11) 0 1px, transparent 1px 139px),
+    repeating-linear-gradient(to bottom, rgba(255, 255, 255, .11) 0 1px, transparent 1px 139px);
+  --grid-fade: radial-gradient(125% 95% at 50% 50%, transparent 0%, rgba(0, 0, 0, .55) 48%, #000 78%);
+  /* Второй слой маски — растворение к верхнему и нижнему краю секции.
+     Без него линии упирались в границу блока и обрывались ровной чертой,
+     из-за чего сетка читалась как картинка с краями, а не как фон. */
+  --grid-edges: linear-gradient(to bottom, transparent 0%, #000 16%, #000 84%, transparent 100%);
+  /* Вариант для блока, где сетка нужна только внизу: сверху её нет вовсе,
+     к низу она набирает силу и гаснет у самой границы, чтобы не упереться
+     в следующую секцию ровной чертой. */
+  --grid-down: linear-gradient(to bottom, transparent 24%, rgba(0, 0, 0, .5) 58%, #000 88%, transparent 100%);
+}
+.hero__bg::after {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: var(--grid-lines);
+  background-position: center center;
+  /* Две маски пересечением: радиальная держит чистое поле в середине,
+     линейная гасит линии у краёв блока. */
+  -webkit-mask-image: var(--grid-fade), var(--grid-edges);
+          mask-image: var(--grid-fade), var(--grid-edges);
+  -webkit-mask-composite: source-in;
+          mask-composite: intersect;
+}
+
+/* Та же сетка на тёмной секции в глубине страницы. Слой лежит между фоном
+   секции и её содержимым, поэтому контейнер приходится поднимать явно. */
+.section--grid::before {
+  content: "";
+  position: absolute; inset: 0; z-index: 0;
+  pointer-events: none;
+  /* Собственный слой композитора. Маска внутри прилипшей секции без него
+     перерисовывалась вместе с прокруткой и мигала полосой. */
+  transform: translateZ(0);
+  background-image: var(--grid-lines);
+  background-position: center center;
+  /* Две маски пересечением: радиальная держит чистое поле в середине,
+     линейная гасит линии у краёв блока. */
+  -webkit-mask-image: var(--grid-fade), var(--grid-edges);
+          mask-image: var(--grid-fade), var(--grid-edges);
+  -webkit-mask-composite: source-in;
+          mask-composite: intersect;
+}
+.section--grid > .container { position: relative; z-index: 1; }
+
+/* Сетка только в нижней части блока. Отдельный класс, а не переопределение
+   маски у .section--grid: у них разный смысл, и общее правило пришлось бы
+   читать в двух режимах сразу. */
+.section--grid-down::before {
+  content: "";
+  position: absolute; inset: 0; z-index: 0;
+  pointer-events: none;
+  /* Собственный слой композитора. Маска внутри прилипшей секции без него
+     перерисовывалась вместе с прокруткой и мигала полосой. */
+  transform: translateZ(0);
+  background-image: var(--grid-lines);
+  background-position: center center;
+  -webkit-mask-image: var(--grid-down);
+          mask-image: var(--grid-down);
+}
+.section--grid-down > .container { position: relative; z-index: 1; }
+
 
 .hero__pit {
   position: absolute;
@@ -509,43 +651,23 @@ p { margin: 0; max-width: 62ch; }
   letter-spacing: var(--ls-h1);
 }
 /* One phrase carries the accent, with a soft bar sitting under it. */
-.hl { color: var(--c-accent); position: relative; white-space: nowrap; }
+/* Выделение в заголовке — единственное место, где на сайте появляется цвет.
+   На чёрном фоне слово набирается искрой; на белой полосе искра остаётся
+   только полосой под чёрными буквами: #C1FF0F как текст на белом даёт
+   контраст 1.3:1 и не читается. */
+.hl { color: var(--c-spark-ink); position: relative; white-space: nowrap; }
 /* Запрет переноса на .hl нужен ради подчёркивания: разорванная строка дала бы
    две отдельные полосы. У плоского акцента полосы нет, а запрет остаётся и
    выталкивает длинную фразу за пределы колонки — поэтому снимаем его. */
-/* Мера заголовка задаётся в em, поэтому она едет вместе с кеглем и держит
-   одинаковое число строк на любой ширине — в отличие от жёсткой ширины. */
-.h2--narrow { max-width: 15em; }
-
 .hl--flat { white-space: normal; }
 .hl--flat::after { display: none; }
 .hl::after {
   content: ""; position: absolute; left: -.04em; right: -.04em; bottom: .04em;
   height: .13em; border-radius: 2px;
-  background: color-mix(in srgb, var(--c-accent) 34%, transparent);
+  background: color-mix(in srgb, var(--c-spark) 45%, transparent);
   z-index: -1;
-}
+}.hero .cta-row { margin-top: 48px; justify-content: center; gap: 16px; }
 
-.hero__sub {
-  /* Шире общей меры .lead: строка идёт по центру под трёхстрочным заголовком,
-     и на 60ch она ломалась на четыре. 72ch схлопнули бы её до двух и оторвали
-     от ритма заголовка. */
-  max-width: 66ch;
-  margin-top: 32px;
-  font-size: var(--t-h4);
-  line-height: 1.6;
-}
-.hero .cta-row { margin-top: 48px; justify-content: center; gap: 16px; }
-
-/* Дата старта: служебная подпись под кнопкой, не претендующая на внимание
-   заголовка. Сама дата ярче подписи — глаз цепляется за неё, а не за слово
-   «старт». */
-.hero__start {
-  margin-top: 20px;
-  text-align: center;
-  max-width: none;
-}
-.hero__start time { color: var(--c-ink); }
 /* Над полем монет полупрозрачная заливка вторичной кнопки исчезает: на пёстром
    фоне 7% белого не читаются, и остаётся текст, висящий поверх монет.
    Здесь ей нужен собственный непрозрачный корпус. */
@@ -608,90 +730,165 @@ p { margin: 0; max-width: 62ch; }
   display: flex; flex-direction: column; justify-content: center; gap: 7px;
   overflow: hidden;
 }
-.scen__art--a { background: #C4B5FD; color: #1E1633; }
+.scen__art--a { background: #E4E4E7; color: #0A0A0A; }
 .scen__art--b { background: #14111C; color: #FFFFFF; }
-.scen__art--c { background: #E8E6F2; color: #1E1633; }
-.scen__art--d { background: #7C3AED; color: #FFFFFF; }
+.scen__art--c { background: #F4F4F5; color: #0A0A0A; }
+.scen__art--d { background: #0A0A0A; color: #FFFFFF; }
 
-/* --- shared art pieces, sized to read at a glance ----------------------- */
-.art-pill {
-  display: block; text-align: left;
-  font-family: var(--f-mono); font-size: .8125rem; font-weight: 500;
-  padding: 11px 14px; border-radius: var(--r-md);
-  background: rgba(255, 255, 255, .82); color: #1E1633;
-}
-.art-pill--hot {
-  background: #4C1D95; color: #FFFFFF;
-  font-size: 1.0625rem; letter-spacing: -.02em; padding: 13px 14px;
-}
-.art-pill--hot i { font-style: normal; opacity: .75; font-size: .78em; margin-left: .35em; }
-.art-arrow { font-family: var(--f-mono); font-size: .875rem; opacity: .5; padding-left: 14px; line-height: 1; }
+/* --------------------------------------------------------------------------
+   ГРАФИКА КАРТОЧЕК
 
-.art-bal {
+   Четыре разных интерфейса, а не четыре набора абстрактных плашек: телефон
+   с экраном перевода, кошелёк с балансом, лист транзакции и облако терминов.
+   Общее у них одно — моношрифт и та же сетка скруглений, что на всём сайте.
+   -------------------------------------------------------------------------- */
+
+/* --- 01 · телефон ------------------------------------------------------- */
+/* Телефон помещается в карточку целиком. Обрезанный снизу он выглядел бы
+   эффектнее, но кнопка «Отправить» попадала ровно на срез — половина кнопки
+   на краю читается как баг вёрстки, а не как приём. */
+.scen__art--a { padding: 0; align-items: center; justify-content: center; }
+.phone {
+  width: min(148px, 78%);
+  flex: 0 0 auto;
+  border-radius: 26px;
+  background: #0A0A0A;
+  padding: 5px;
+  box-shadow: 0 18px 40px -20px rgba(10, 10, 10, .55);
+  position: relative;
+}
+.phone__island {
+  position: absolute; top: 11px; left: 50%; transform: translateX(-50%);
+  width: 38px; height: 9px; border-radius: 5px;
+  background: #0A0A0A; z-index: 2;
+}
+.phone__scr {
+  border-radius: 22px;
+  background: #141416;
+  /* В em, а не в пикселях: макет телефона переиспользуется в списке умений
+     на вчетверо меньшем кегле, и абсолютная высота экрана распирала там
+     квадрат картинки. */
+  padding: 1.5em .7em .75em;
+  min-height: 13.25em;
+  display: flex; flex-direction: column; gap: 7px;
+  color: #FFFFFF;
+}
+.phone__h {
+  font-family: var(--f-mono); font-size: .625em;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: rgba(255, 255, 255, .45);
+}
+.phone__amt {
+  display: flex; align-items: center; gap: 7px;
+  margin: 2px 0 6px;
   font-family: var(--f-display); font-weight: 600;
-  font-size: clamp(1.75rem, 2.4vw, 2.25rem); letter-spacing: -.04em; line-height: 1;
+  /* Кегль подобран так, чтобы «100 000 USDT» с иконкой умещались в строку:
+     на 18px хвост USDT срезался краем экрана. */
+  font-size: .9375em; letter-spacing: -.03em;
+  white-space: nowrap;
 }
-.art-bal i { font-style: normal; font-size: .44em; opacity: .55; margin-left: .4em; letter-spacing: 0; }
-.art-nets { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
-.art-nets span {
-  font-family: var(--f-mono); font-size: .75rem;
-  padding: 6px 10px; border-radius: var(--r-md);
-  background: rgba(255, 255, 255, .1); color: rgba(255, 255, 255, .75);
+.phone__amt img { width: 1.125em; height: 1.125em; flex: none; }
+.phone__amt i { font-style: normal; font-size: .62em; opacity: .5; letter-spacing: 0; }
+.phone__f {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  white-space: nowrap;
+  font-family: var(--f-mono); font-size: .625em;
+  padding: 8px 10px; border-radius: 10px;
+  background: rgba(255, 255, 255, .06);
 }
-/* Deeper than the page accent: white on #A855F7 measures 3.96, under the 4.5
-   this 12px label needs. */
-.art-nets .is-on { background: #7C3AED; color: #FFFFFF; }
-.art-note { font-size: .75rem; opacity: .55; margin-top: 12px; }
-
-.art-row {
-  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
-  font-family: var(--f-mono); font-size: .8125rem;
-  padding: 13px 14px; border-radius: var(--r-md);
-  background: rgba(255, 255, 255, .9); color: #1E1633;
-}
-.art-row b { font-weight: 600; }
-.art-row--hot {
-  background: #4C1D95; color: #FFFFFF;
-  font-size: .9375rem; padding: 15px 14px;
-}
-.art-row--hot b { font-size: 1.0625rem; letter-spacing: -.02em; }
-
-.art-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; }
-.art-grid span {
-  font-family: var(--f-mono); font-size: .8125rem; font-weight: 500;
-  padding: 18px 10px; border-radius: var(--r-md); text-align: center;
-  /* Тёмная подложка, а не светлая: белый на осветлённом фиолетовом даёт 4.28,
-     ниже порога для мелкого текста. */
-  background: rgba(0, 0, 0, .20);
+.phone__f span { color: rgba(255, 255, 255, .45); }
+.phone__f b { font-weight: 500; }
+.phone__go {
+  margin-top: auto;
+  text-align: center;
+  font-family: var(--f-display); font-weight: 600; font-size: .75em;
+  padding: 10px; border-radius: 12px;
+  background: var(--c-spark); color: #0A0A0A;
 }
 
-/* ==========================================================================
-   STORY — editorial narrative
-   ========================================================================== */
+/* --- 02 · кошелёк ------------------------------------------------------- */
+.scen__art--b { justify-content: center; }
+.wal { font-size: 16px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0; }
+.wal__top {
+  display: flex; align-items: center; gap: 8px;
+  white-space: nowrap;
+  font-family: var(--f-mono); font-size: .6875em;
+  color: rgba(255, 255, 255, .45);
+  margin-bottom: 18px;
+}
+.wal__addr {
+  padding: 4px 8px; border-radius: 999px;
+  background: rgba(255, 255, 255, .08); color: rgba(255, 255, 255, .7);
+}
+.wal__coin { width: 40px; height: 40px; margin-bottom: 14px; }
+.wal__bal {
+  font-family: var(--f-display); font-weight: 600;
+  font-size: clamp(1.5rem, 2.1vw, 2rem); letter-spacing: -.04em; line-height: 1;
+}
+.wal__bal i { font-style: normal; font-size: .42em; opacity: .5; margin-left: .4em; letter-spacing: 0; }
+.wal__sub {
+  margin-top: 8px;
+  font-family: var(--f-mono); font-size: .6875em;
+  color: rgba(255, 255, 255, .4);
+}
 
-.story__line {
-  font-family: var(--f-display);
-  font-weight: var(--w-display);
-  font-size: var(--t-h3);
-  line-height: 1.16;
-  letter-spacing: -.006em;
-  max-width: 20ch;
-  color: var(--c-ink-muted);
-  transition: color var(--d-slow) var(--e-out);
+/* --- 03 · транзакция ---------------------------------------------------- */
+.scen__art--c { justify-content: center; gap: 0; }
+.tx { font-size: 16px; display: flex; flex-direction: column; gap: 5px; width: 100%; }
+.tx__head {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  font-family: var(--f-mono); font-size: .625em;
+  letter-spacing: .06em; text-transform: uppercase;
+  color: rgba(10, 10, 10, .45);
+  padding-bottom: 9px; margin-bottom: 4px;
+  border-bottom: 1px solid rgba(10, 10, 10, .1);
 }
-.story__line.is-lit { color: var(--c-ink); }
-.story__lines { display: flex; flex-direction: column; gap: clamp(1.25rem, 2.4vw, 2.5rem); }
-.story__quote {
-  border-left: 2px solid var(--c-accent);
-  padding-left: clamp(16px, 2vw, 28px);
-  color: var(--c-ink-muted);
+.tx__head b { font-weight: 500; color: rgba(10, 10, 10, .7); }
+/* Ключ слева, значение справа, цифры табличные — строки выстраиваются
+   по одной вертикали, и лист читается как выписка, а не как набор плашек. */
+.tx__row {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  white-space: nowrap;
+  font-family: var(--f-mono); font-size: .6875em;
+  font-variant-numeric: tabular-nums;
+  padding: 9px 11px; border-radius: 10px;
+  background: rgba(10, 10, 10, .05);
+  color: rgba(10, 10, 10, .5);
 }
-.story__turn {
-  font-family: var(--f-display); font-weight: var(--w-display);
-  font-size: var(--t-h3);
-  letter-spacing: -.006em; line-height: 1.14; max-width: 18ch;
+.tx__row b { font-weight: 500; color: #0A0A0A; }
+.tx__row--main {
+  background: #0A0A0A; color: rgba(255, 255, 255, .5);
+  padding: 11px;
 }
+.tx__row--main b { color: var(--c-spark); }
 
+/* --- 04 · облако терминов ----------------------------------------------- */
+.scen__art--d { justify-content: center; padding: clamp(14px, 1.4vw, 18px); }
+.cloud {
+  font-size: 16px;
+  display: flex; flex-wrap: wrap; align-content: center; justify-content: center;
+  /* Без этого пилюли в ряду со знаком вопроса растягивались до его высоты,
+     а текст в них оставался прижатым к верху: flex по умолчанию тянет
+     элементы по поперечной оси. */
+  align-items: center;
+  gap: 5px;
+}
+.cloud span {
+  font-family: var(--f-mono); font-size: .625em;
+  padding: 5px 8px; border-radius: 999px;
+  background: rgba(255, 255, 255, .07);
+  color: rgba(255, 255, 255, .55);
+}
+/* Вопрос стоит в середине перечня, а не поверх него: наложенный знак
+   перекрывал бы слова, а вставленный в поток раздвигает их сам. */
+.cloud__q {
+  width: 2.12em; height: 2.12em; flex: none;
+  display: grid; place-items: center;
+  border-radius: 999px;
+  background: var(--c-spark); color: #0A0A0A;
+  font-family: var(--f-display); font-weight: 700; font-size: 1.125em;
+  line-height: 1;
+}
 /* ==========================================================================
    COMPARE — banking vs crypto
    ========================================================================== */
@@ -747,61 +944,38 @@ p { margin: 0; max-width: 62ch; }
    RISK FIELD
    ========================================================================== */
 
-.riskfield {
-  position: relative; margin-top: var(--sp-tight);
-  min-height: 460px; display: grid; place-items: center;
-}
+/* --------------------------------------------------------------------------
+   БЕЗОПАСНОСТЬ
 
-/* The hairline layer sits out of flow. Left static it becomes a grid item and,
-   being a 1:1 viewBox at full width, stretches the field to its own width. */
-.riskfield__svg {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  pointer-events: none;
+   Слева заголовок и абзац, справа облако плашек. Прежняя радиальная схема
+   с центральным узлом и лучами требовала JS, отдельной раскладки для
+   телефона и полутора экранов высоты — при том что говорила ровно то же:
+   рисков много и они разные.
+   -------------------------------------------------------------------------- */
+.risks {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(28px, 4vw, 72px);
+  align-items: start;
 }
-.riskfield__svg line {
-  stroke: var(--c-line-strong); stroke-width: 1;
-  vector-effect: non-scaling-stroke;
-}
+.risks__copy .lead { margin-top: var(--sp-stack); max-width: 34ch; }
 
-.riskfield__core {
-  position: relative; z-index: 2;
-  background: var(--c-plate); border: 1px solid var(--c-line-strong);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .06),
-              0 14px 34px -18px rgba(0, 0, 0, .85);
-  border-radius: var(--r-lg); padding: 20px 26px; text-align: center;
-}
-/* Outline mark with a soft bloom, in the manner of the reference: the node is
-   the one hero element on this map, so it reads differently from the filled
-   glyphs on the surrounding plates. */
-.riskfield__icon {
-  width: 32px; height: 32px;
-  margin: 0 auto 12px;
-  color: var(--c-accent);
-  filter: drop-shadow(0 0 10px color-mix(in srgb, var(--c-accent) 45%, transparent));
-}
-
-.riskfield__core .mono { font-family: var(--f-display); font-size: 1.0625rem; letter-spacing: -.015em; }
-.riskfield__core span {
-  display: block; font-size: var(--t-subtext);
-  color: var(--c-ink-faint); margin-top: 4px;
+.risks__cloud {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-wrap: wrap; gap: 10px;
+  /* Строки прижаты к верху колонки, но сама лента чуть опущена: заголовок
+     слева набран крупнее, и без этого плашки вставали выше его первой строки. */
+  padding-top: 6px;
 }
 .risk {
-  /* Placed on the field by --x/--y; the JS draws the hairlines to these points. */
-  position: absolute;
-  left: var(--x); top: var(--y);
-  transform: translate(-50%, -50%);
-  z-index: 1;
   display: inline-flex; align-items: center; gap: 8px;
-  /* One size and one weight for every item — the map should read as a set of
-     equals, not a ranking. Set in the display face: the mono one spaced the
-     Cyrillic so widely that words looked double-spaced. */
+  /* Один кегль и одно начертание на все пункты — набор равных, а не рейтинг.
+     Набрано текстовой гарнитурой: моноширинная так разгоняла кириллицу, что
+     слова выглядели набранными через пробел. */
   font-family: var(--f-display);
   font-size: .875rem; font-weight: 500; letter-spacing: 0;
   white-space: nowrap;
   padding: 9px 13px; border-radius: var(--r-md);
-  /* Opaque, not a tint: the hairlines run underneath and must not show through.
-     The inset highlight and drop shadow give the plate its matte lift. */
   background: var(--c-plate); border: 1px solid var(--c-line);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .05),
               0 8px 20px -14px rgba(0, 0, 0, .8);
@@ -812,24 +986,23 @@ p { margin: 0; max-width: 62ch; }
 .risk svg { width: 15px; height: 15px; flex: none; fill: currentColor; opacity: .7; }
 .risk:hover { border-color: var(--c-accent-line); color: var(--c-accent); }
 
-.risk__note { display: block; font-family: var(--f-text); font-size: var(--t-subtext); color: var(--c-ink-faint); letter-spacing: 0; margin-top: 2px; }
-
 /* ==========================================================================
    SOLUTION
    ========================================================================== */
 
 .solution {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: clamp(32px, 5vw, 80px);
-  margin-top: var(--sp-tight);
+  /* Отбивки сверху нет: секция сама центрирует содержимое по высоте экрана,
+     и внешний отступ сдвигал бы центр. */
   align-items: start;
 }
 .solution__parts { display: flex; flex-direction: column; }
 
 .part {
   display: grid;
-  grid-template-columns: 132px 1fr;
+  grid-template-columns: 168px 1fr;
   column-gap: 28px;
   align-items: start;
   padding: clamp(24px, 2.4vw, 34px) 0;
@@ -851,18 +1024,36 @@ p { margin: 0; max-width: 62ch; }
   overflow: hidden;
   font-family: var(--f-mono); font-size: .625rem; letter-spacing: .02em;
 }
-.mock--theory   { background: #C4B5FD; color: #1E1633; }
+/* Карточки этого блока — та же стилистика, что у макетов в списке умений:
+   тёмная подложка, волосяная рамка, квадрат. Раньше три карточки шли тремя
+   разными заливками, из которых одна светлая, и ряд читался как три чужие
+   друг другу картинки. Все внутренности набраны в em, поэтому кегль карточки
+   работает единственной ручкой размера. */
+.part__art {
+  height: auto;
+  aspect-ratio: 1;
+  min-width: 0;
+  font-size: 13px;
+  padding: .85em;
+  gap: .3em;
+  background: #101012;
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, .09);
+}
+
+.mock--theory   { background: #E4E4E7; color: #0A0A0A; }
 .mock--practice { background: #14111C; color: #FFFFFF; }
-.mock--support  { background: #7C3AED; color: #FFFFFF; }
+.mock--support  { background: #0A0A0A; color: #FFFFFF; }
 
 .mock__row {
   display: flex; align-items: baseline; justify-content: space-between; gap: 8px;
   padding: 7px 9px; border-radius: var(--r-sm);
-  background: rgba(255, 255, 255, .86); color: #1E1633;
+  background: rgba(255, 255, 255, .86); color: #0A0A0A;
 }
 .mock__row b { font-weight: 600; }
 .mock__row--dim { background: rgba(255, 255, 255, .12); color: rgba(255, 255, 255, .78); }
-.mock__row--hot { background: #7C3AED; color: #FFFFFF; }
+/* Единственная искра в иллюстрациях: строка, ради которой картинка и нарисована. */
+.mock__row--hot { background: var(--c-spark); color: #0A0A0A; }
 .mock__arrow { padding-left: 9px; opacity: .5; line-height: 1; font-size: .6875rem; }
 
 .mock__bub {
@@ -875,7 +1066,7 @@ p { margin: 0; max-width: 62ch; }
 .mock__bub--me {
   align-self: flex-end;
   border-radius: var(--r-sm) var(--r-sm) 2px var(--r-sm);
-  background: #FFFFFF; color: #2E1065; font-weight: 500;
+  background: #FFFFFF; color: #0A0A0A; font-weight: 500;
 }
 
 /* Quieter than a heading — a note above the line, not a shout. */
@@ -923,33 +1114,258 @@ p { margin: 0; max-width: 62ch; }
    OUTCOME
    ========================================================================== */
 
-.outcome { display: grid; grid-template-columns: 1fr 1fr; gap: var(--grid-gap); }
-.outcome__list { list-style: none; margin: 0; padding: 0; }
-.outcome__list li {
-  display: flex; gap: 14px; align-items: baseline;
-  padding: clamp(10px, 1vw, 15px) 0;
+/* --------------------------------------------------------------------------
+   ЧЕМУ ВЫ НАУЧИТЕСЬ
+
+   Список сверху вниз: картинка слева, заголовок и пояснение справа. Сначала
+   это была лента с горизонтальной прокруткой, но она прятала половину
+   пунктов за краем экрана — а это единственное место на странице, где
+   сказано, что человек в итоге будет уметь.
+   -------------------------------------------------------------------------- */
+.skills {
+  list-style: none; margin: var(--sp-tight) 0 0; padding: 0;
+  border-top: 1px solid var(--c-line);
+}
+
+.skill {
+  display: grid;
+  grid-template-columns: clamp(148px, 15vw, 196px) minmax(0, 1fr);
+  gap: clamp(20px, 3vw, 48px);
+  align-items: center;
+  padding: clamp(14px, 1.6vw, 20px) 0;
   border-bottom: 1px solid var(--c-line);
-  break-inside: avoid;
-  font-size: var(--t-text);
-  letter-spacing: -.006em;
 }
-.outcome__check {
-  flex: none; width: 14px; height: 14px; border-radius: 50%;
-  border: 1px solid var(--c-line-strong); position: relative; top: .22em;
-  transition: background var(--d-base) var(--e-out), border-color var(--d-base) var(--e-out);
+
+/* Колода: каждое умение замирает под шапкой, следующее наезжает на него
+   сверху и занимает его место.
+
+   Механика целиком на sticky, без скрипта: строки остаются в потоке, поэтому
+   высота секции не меняется и прокрутка идёт с обычной скоростью. Пока
+   верхняя строка стоит, следующая поднимается к ней снизу и накрывает —
+   ровно по границе, потому что смещение у всех одно и высоты равны.
+
+   Непрозрачный фон обязателен: без него сквозь верхнюю строку просвечивала бы
+   предыдущая. Нижняя линейка при этом остаётся видна до последнего момента и
+   работает как край карты в колоде.
+
+   Только десктоп: ниже 1041 строка перестраивается в две колонки другой
+   высоты, и замирающая карточка на телефоне съедала бы пол-экрана. */
+@media (min-width: 1041px) {
+  .skill {
+    position: sticky;
+    /* Шапка фиксированная и перекрывает верх окна; 24px — воздух под ней. */
+    top: calc(73px + 24px);
+    background-color: var(--c-paper);
+  }
 }
-.outcome__check::after {
-  content: ""; position: absolute; left: 4px; top: 2px;
-  width: 3.5px; height: 6.5px; border: solid var(--c-paper);
-  border-width: 0 1.5px 1.5px 0; transform: rotate(45deg) scale(0);
-  transition: transform var(--d-base) var(--e-out);
+/* Картинка квадратная и живёт по тем же правилам, что макеты в карточках
+   сценариев: настоящий кусок интерфейса, а не абстрактная плашка. Всё
+   внутри задано в em от одной ручки — на узкой колонке достаточно
+   уменьшить её, и содержимое ужимается пропорционально. */
+.skill__art {
+  height: auto;
+  aspect-ratio: 1;
+  /* Грид-элемент по умолчанию не может стать уже своего содержимого,
+     а строки внутри макета не переносятся — картинка вылезала из колонки
+     и наезжала на заголовок. */
+  min-width: 0;
+  font-size: 16px;
+  padding: .85em;
+  gap: .3em;
+  justify-content: center;
 }
-/* Neutral, not accent: twelve purple ticks in a row pulled more attention than
-   the list deserves. */
-.outcome__list li.is-on .outcome__check {
-  background: var(--c-pos); border-color: var(--c-pos);
+
+/* --- общие детали макетов ----------------------------------------------- */
+.sk-t {
+  font-family: var(--f-mono); font-size: .5em;
+  letter-spacing: .08em; text-transform: uppercase;
+  opacity: .45; margin-bottom: .4em;
 }
-.outcome__list li.is-on .outcome__check::after { transform: rotate(45deg) scale(1); }
+.sk-r {
+  display: flex; align-items: center; justify-content: space-between; gap: .5em;
+  font-family: var(--f-mono); font-size: .56em;
+  font-variant-numeric: tabular-nums; white-space: nowrap;
+  padding: .5em .62em; border-radius: .7em;
+  background: rgba(255, 255, 255, .07);
+}
+.scen__art--a .sk-r, .scen__art--c .sk-r,
+/* Все двенадцать макетов на одной тёмной подложке.
+
+   Раньше они наследовали три разные заливки от .mock--theory / --practice /
+   --support, и светлые квадраты чередовались с тёмными без всякой системы:
+   набор читался как двенадцать разных картинок, а не как один ряд.
+   Подложка чуть светлее фона секции, плюс волосяная рамка — иначе на чёрном
+   квадрат не имеет краёв и содержимое висит в пустоте. */
+.skill__art {
+  background: #101012;
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, .09);
+}
+.sk-r b { font-weight: 500; }
+.sk-r--dim { opacity: .55; }
+.sk-r--hot { background: var(--c-spark); color: #0A0A0A; }
+.sk-r--hot b { font-weight: 600; }
+.sk-r--ok { background: rgba(193, 255, 15, .14); color: var(--c-spark); }
+.sk-coin { width: 1.1em; height: 1.1em; flex: none; }
+.sk-arrow { font-family: var(--f-mono); font-size: .55em; opacity: .4; padding-left: .8em; line-height: 1; }
+.sk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .3em; }
+.sk-chip {
+  font-family: var(--f-mono); font-size: .5em;
+  padding: .38em .5em; border-radius: .6em;
+  background: rgba(255, 255, 255, .07);
+  display: flex; align-items: center; gap: .4em;
+  white-space: nowrap;
+}
+.sk-chip i { font-style: normal; opacity: .4; }
+/* Замазанные слова: точками подменяется само слово, номер остаётся видимым.
+   Размытие фильтром на таком кегле превращается в серое пятно без ритма,
+   а спрятать вместе со словом и номер значило бы потерять счёт до двенадцати. */
+.sk-hide { color: transparent; position: relative; font-weight: 400; }
+.sk-hide::after {
+  content: "••••••";
+  position: absolute; left: 0; top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, .32); letter-spacing: .04em;
+}
+.sk-net { display: flex; align-items: center; gap: .45em; }
+.sk-mark { display: flex; gap: .25em; }
+.sk-mark img { width: 1.25em; height: 1.25em; }
+
+/* Совпадающие части адреса подсвечены — глаз сравнивает начало и конец,
+   а не всю строку. */
+.sk-r em { font-style: normal; color: var(--c-spark); }
+.sk-r--ok em { color: inherit; }
+.sk-note { font-family: var(--f-mono); font-size: .46em; opacity: .4; margin-top: .3em; }
+
+/* --- переписка ----------------------------------------------------------- */
+.sk-chat {
+  flex: 1; min-height: 0;
+  display: flex; flex-direction: column; justify-content: center;
+  gap: .35em;
+}
+.sk-msg {
+  font-family: var(--f-mono); font-size: .58em; line-height: 1.35;
+  padding: .5em .7em; border-radius: .9em;
+  background: rgba(255, 255, 255, .08);
+  max-width: 86%; align-self: flex-start;
+}
+/* Ответ — искрой: в чате она означает то же, что и на кнопках, — сторону,
+   которая отвечает. */
+.sk-msg--me { align-self: flex-end; background: var(--c-spark); color: #0A0A0A; }
+
+/* Монеты медленно дышат вокруг своих узлов. Ход маленький и период у каждой
+   свой, поэтому граф выглядит живым, а не мигающим: связи нарисованы по
+   исходным точкам и за монетами не тянутся. */
+@media (prefers-reduced-motion: no-preference) {
+  .part__art .sk-node { animation: sk-float 7s var(--fl, 0s) ease-in-out infinite; }
+}
+@keyframes sk-float {
+  0%, 100% { transform: translate(-50%, -50%); }
+  50%      { transform: translate(-50%, calc(-50% - .42em)); }
+}
+
+/* --- окно браузера ------------------------------------------------------ */
+.sk-bar {
+  display: flex; align-items: center; gap: .5em;
+  padding: .42em .55em; border-radius: .7em;
+  background: rgba(255, 255, 255, .07);
+  margin-bottom: .35em;
+}
+/* Тёмная полоска адреса нужна только на светлой подложке. В ряду умений
+   подложка тёмная у всех, поэтому :not() выводит его оттуда. */
+.scen__art--a .sk-bar,
+.mock--theory:not(.skill__art) .sk-bar { background: rgba(10, 10, 10, .06); }
+.sk-dots {
+  width: 1.6em; height: .34em; flex: none; border-radius: 999px;
+  background: currentColor; opacity: .25;
+}
+.sk-url { font-family: var(--f-mono); font-size: .5em; opacity: .6; }
+
+/* --- пуш о доступе ------------------------------------------------------ */
+.sk-push {
+  border-radius: .8em; padding: .7em;
+  background: rgba(255, 255, 255, .07);
+}
+.sk-push__h {
+  font-family: var(--f-mono); font-size: .5em;
+  letter-spacing: .06em; text-transform: uppercase; opacity: .5;
+}
+.sk-push__b { font-size: .58em; line-height: 1.4; margin-top: .5em; }
+.sk-push__b b { font-family: var(--f-mono); font-weight: 500; }
+.sk-push__row { display: flex; gap: .4em; margin-top: .7em; }
+.sk-push__no, .sk-push__yes {
+  flex: 1; text-align: center;
+  font-size: .52em; padding: .5em; border-radius: .6em;
+}
+.sk-push__no  { background: rgba(255, 255, 255, .09); }
+.sk-push__yes { background: var(--c-spark); color: #0A0A0A; font-weight: 600; }
+
+/* --- сеть токенов ------------------------------------------------------- */
+.sk-web { position: relative; flex: 1; min-height: 0; }
+.sk-web__l {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  fill: none; stroke: currentColor; stroke-width: .4;
+  opacity: .22; vector-effect: non-scaling-stroke;
+}
+.sk-node {
+  position: absolute; left: var(--x); top: var(--y);
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  display: grid; place-items: center;
+}
+.sk-node img { width: 1.5em; height: 1.5em; }
+
+/* --- сейф --------------------------------------------------------------- */
+.sk-safe { position: relative; flex: 1; min-height: 0; display: grid; place-items: center; }
+/* Лучи от сейфа к местам, куда уходят средства: без них три подписи по углам
+   читались как случайные плашки, а не как маршруты из одной точки. */
+.sk-safe__l {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  fill: none; stroke: currentColor; stroke-width: .5;
+  opacity: .2; vector-effect: non-scaling-stroke;
+}
+.sk-safe__box {
+  width: 2.6em; height: 2.6em; display: grid; place-items: center;
+  border-radius: .7em;
+  background: var(--c-spark); color: #0A0A0A;
+  z-index: 1;
+}
+.sk-safe__box svg { width: 1.5em; height: 1.5em; fill: currentColor; }
+.sk-safe__a, .sk-safe__b, .sk-safe__c {
+  position: absolute;
+  font-family: var(--f-mono); font-size: .48em;
+  padding: .35em .5em; border-radius: .6em;
+  background: rgba(255, 255, 255, .07);
+  white-space: nowrap;
+}
+.sk-safe__a { left: 0; top: 4%; }
+.sk-safe__b { right: 0; top: 40%; }
+.sk-safe__c { left: 6%; bottom: 4%; }
+
+/* --- телефон внутри строки списка --------------------------------------- */
+.skill__art .phone { font-size: 7.4px; width: 74%; margin-inline: auto; }
+.phone__pair { display: flex; gap: .4em; margin: .2em 0 .4em; }
+.phone__btn {
+  flex: 1; text-align: center;
+  font-family: var(--f-display); font-weight: 600; font-size: .6em;
+  padding: .55em; border-radius: .8em;
+  background: rgba(255, 255, 255, .1);
+}
+.phone__btn:first-child { background: var(--c-spark); color: #0A0A0A; }
+.skill__t {
+  font-size: var(--t-h3);
+  line-height: var(--lh-h3);
+  letter-spacing: var(--ls-h3);
+  font-weight: 500;
+  color: var(--c-ink);
+}
+.skill__d {
+  margin-top: 6px;
+  font-size: var(--t-subtext);
+  line-height: var(--lh-subtext);
+  color: var(--c-ink-muted);
+  max-width: 60ch;
+}
 
 /* ==========================================================================
    ECOSYSTEM MAP
@@ -1025,7 +1441,14 @@ p { margin: 0; max-width: 62ch; }
   outline-offset: -3px;
   border-radius: 0;
 }
-.week__n { font-family: var(--f-mono); font-size: var(--t-subtext); letter-spacing: .1em; color: var(--c-ink-faint); }
+/* Своя ступень, а не служебный токен: колонка 92px, и на выросшем до 16
+   кегле «Неделя 05» переносилась на вторую строку. nowrap — чтобы перенос
+   не вернулся вместе со следующим изменением шкалы. */
+.week__n {
+  font-family: var(--f-mono); font-size: .8125rem;
+  letter-spacing: .1em; white-space: nowrap;
+  color: var(--c-ink-faint);
+}
 .week__t {
   font-family: var(--f-display); font-weight: var(--w-display);
   /* A step up the scale: at h4 these eight rows read as captions rather than
@@ -1055,11 +1478,14 @@ p { margin: 0; max-width: 62ch; }
 .week__content {
   display: grid; grid-template-columns: 92px minmax(0, 1fr);
   column-gap: var(--grid-gap); row-gap: 20px;
-  padding-bottom: clamp(22px, 2.4vw, 34px);
+  /* Раскрытая неделя должна заканчиваться раньше, чем начинается следующая
+     строка списка. На прежних 34px практика почти упиралась в линейку, и
+     нижняя граница блока читалась как разделитель внутри него. */
+  padding-bottom: clamp(40px, 4.4vw, 64px);
 }
 .week__content > * { grid-column: 2; }
 .week__topics { display: flex; flex-wrap: wrap; gap: 6px; align-content: flex-start; }
-.week__practice { color: var(--c-ink-muted); font-size: var(--t-subtext); border-left: 2px solid var(--c-accent); padding-left: 16px; }
+.week__practice { color: var(--c-ink-muted); font-size: var(--t-text); line-height: var(--lh-text); border-left: 2px solid var(--c-spark); padding-left: 16px; }
 .week__practice b { color: var(--c-ink); font-weight: var(--w-medium); }
 
 .tag {
@@ -1078,10 +1504,15 @@ p { margin: 0; max-width: 62ch; }
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: var(--sp-tight); border-top: 1px solid var(--c-line); }
 .stat { padding: clamp(22px, 2.4vw, 36px) clamp(16px, 2vw, 28px) clamp(22px, 2.4vw, 36px) 0; }
 .stat + .stat { border-left: 1px solid var(--c-line); padding-left: clamp(16px, 2vw, 28px); }
+/* Цифры набраны искрой: на чёрном она держит 16:1, на белой полосе токен
+   переключается в чёрный — зелёный текст на белом нечитаем. */
+/* Чтобы искра не пропадала на светлых полосах совсем, там она ложится
+   полосой под цифрой — тем же приёмом, что выделение в заголовке. */
 .stat__n {
   font-family: var(--f-display); font-weight: var(--w-display);
   font-size: var(--t-h2);
   letter-spacing: -.025em; line-height: .95; font-variant-numeric: tabular-nums;
+  color: var(--c-spark-ink);
 }
 /* «до» и «недель» при 0.3em превращались в нечитаемые 12px самым бледным
    цветом палитры. Это часть смысла числа, а не сноска: без «до» шестнадцать
@@ -1092,88 +1523,10 @@ p { margin: 0; max-width: 62ch; }
   margin-inline: .18em; font-family: var(--f-text);
 }
 .stat__t { font-family: var(--f-display); font-weight: var(--w-medium); font-size: var(--t-text); margin-top: 12px; letter-spacing: var(--ls-h4); }
-.stat__d { font-size: var(--t-subtext); color: var(--c-ink-muted); margin-top: 6px; line-height: var(--lh-subtext); }
-
-/* ==========================================================================
-   LIVE SUPPORT (screen-share abstraction)
-   ========================================================================== */
-
-.share {
-  border: 1px solid var(--c-line); border-radius: var(--r-lg);
-  background: var(--c-surface); overflow: hidden; box-shadow: var(--sh-md);
-}
-.share__bar {
-  display: flex; align-items: center; gap: 10px;
-  padding: 12px 16px; border-bottom: 1px solid var(--c-line);
-  font-family: var(--f-mono); font-size: var(--t-subtext); color: var(--c-ink-faint);
-  min-width: 0;
-}
-.share__bar > span:not(.share__dots):not(.share__live) {
-  min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-.share__dots { display: flex; gap: 5px; flex: none; }
-.share__dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--c-line-strong); display: block; }
-.share__live { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; color: var(--c-accent); flex: none; }
-.share__live i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; animation: pulse 2s var(--e-inout) infinite; }
-@keyframes pulse { 0%, 100% { opacity: 1 } 50% { opacity: .25 } }
-
-.share__body { padding: clamp(18px, 2.4vw, 32px); display: flex; flex-direction: column; gap: 12px; position: relative; }
-.share__field {
-  display: flex; align-items: center; justify-content: space-between; gap: 14px;
-  padding: 13px 15px; border: 1px solid var(--c-line); border-radius: var(--r-md);
-  font-family: var(--f-mono); font-size: var(--t-subtext); background: var(--c-paper);
-}
-.share__field-k { color: var(--c-ink-faint); font-size: var(--t-subtext); letter-spacing: .08em; text-transform: uppercase; }
-.share__field.is-marked { border-color: var(--c-accent); background: var(--c-accent-tint); }
-.share__callout {
-  display: inline-flex; align-items: center; gap: 8px; align-self: flex-start;
-  font-family: var(--f-text); font-size: var(--t-subtext); color: var(--c-accent);
-  background: var(--c-accent-tint); border-radius: var(--r-pill); padding: 7px 13px;
-}
-.share__cursor { width: 13px; height: 13px; flex: none; }
-.share__foot { border-top: 1px solid var(--c-line); padding: 14px 16px; font-size: var(--t-subtext); color: var(--c-ink-muted); }
-
-/* ==========================================================================
-   CASE SEQUENCE
-   ========================================================================== */
-
-.sequence { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0; margin-top: var(--sp-tight); border-top: 1px solid var(--c-line); }
-.sequence__step { padding: clamp(20px, 2.2vw, 32px) clamp(14px, 1.6vw, 24px) clamp(20px, 2.2vw, 32px) 0; position: relative; }
-.sequence__step + .sequence__step { border-left: 1px solid var(--c-line); padding-left: clamp(14px, 1.6vw, 24px); }
-.sequence__i { font-family: var(--f-mono); font-size: var(--t-subtext); letter-spacing: .12em; color: var(--c-accent); }
-.sequence__t { font-family: var(--f-display); font-weight: var(--w-medium); font-size: var(--t-h4); letter-spacing: var(--ls-h4); margin-top: 12px; }
-.sequence__d { font-size: var(--t-subtext); color: var(--c-ink-muted); margin-top: 7px; line-height: var(--lh-subtext); }
-
-/* Sits to the right of the sequence it closes, marked rather than enlarged. */
-.closing-note {
-  display: flex; align-items: center; gap: 12px;
-  margin-top: var(--sp-tight);
-  margin-left: auto;
-  width: fit-content; max-width: 46ch;
-  font-family: var(--f-display); font-weight: 500;
-  font-size: var(--t-text); line-height: var(--lh-h4); letter-spacing: var(--ls-h4);
-  color: var(--c-accent);
-  text-align: left;
-}
-.closing-note svg { width: 20px; height: 20px; flex: none; fill: currentColor; }
-
+.stat__d { font-size: var(--t-subtext); color: var(--c-ink-muted); margin-top: 6px; line-height: var(--lh-subtext); }@keyframes pulse { 0%, 100% { opacity: 1 } 50% { opacity: .25 } }
 /* ==========================================================================
    BOUNDARIES
    ========================================================================== */
-
-/* Subgrid keeps the two intros in one row and the two lists in another, so the
-   items line up across the columns even when the intros differ in length. */
-.bounds {
-  display: grid; grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto auto;
-  column-gap: clamp(28px, 5vw, 96px); row-gap: 24px;
-  margin-top: var(--sp-tight);
-}
-.bounds > * {
-  grid-row: span 2;
-  display: grid; grid-template-rows: subgrid; row-gap: 24px;
-  align-content: start;
-}
 /* A plate: white surface, hairline that starts neon at the top-left and fades
    out before it gets round the box. Two stacked backgrounds — one clipped to the
    padding box, one to the border box — draw the 1px edge, so the gradient can go
@@ -1195,61 +1548,99 @@ p { margin: 0; max-width: 62ch; }
   box-shadow: 0 1px 2px rgba(0, 0, 0, .06),
               0 18px 40px -24px rgba(0, 0, 0, .38);
 }
-/* Inside a plate the closing rule would sit on the padding edge. */
-.plate .bounds__list li:last-child,
-/* Последний пункт не подчёркиваем: линия упиралась бы в нижний край плашки.
-   Раньше правило смотрело на .plate как на предка, но класс висит на самом
-   списке — и до объединения плашек на мобильном это просто не срабатывало. */
-.outcome__list li:last-child { border-bottom: 0; }
-
-/* When the two columns are plates they carry their own padding, so the gap
-   between them is a plain 40px rather than the wide editorial gutter. */
-.bounds:has(.plate) { column-gap: 20px; }
-
-/* The line each plate opens with is its heading — it should read as one. */
-.plate > .lead {
-  font-size: var(--t-h3);
-  line-height: var(--lh-h3);
-  letter-spacing: var(--ls-h3);
-  font-weight: 500;
-  color: var(--c-ink);
-  max-width: 30ch;
-}
-
-.bounds__h { font-family: var(--f-mono); font-size: var(--t-subtext); letter-spacing: .12em; text-transform: uppercase; color: var(--c-ink-faint); padding-bottom: 14px; border-bottom: 1px solid var(--c-line); }
-.bounds__list { list-style: none; margin: 0; padding: 0; align-self: start; }
-.bounds__list li {
-  display: flex; gap: 13px; align-items: baseline;
-  padding: clamp(9px, 1vw, 13px) 0; border-bottom: 1px solid var(--c-line);
-  font-size: var(--t-text); color: var(--c-ink-muted);
-}
-/* Masked glyphs rather than inline SVG: the mark takes its colour from a token,
-   so it reads correctly on a light section and on a dark one alike. */
-.bounds__list li::before {
-  content: ""; flex: none;
-  width: 16px; height: 16px; position: relative; top: .18em;
-  -webkit-mask: var(--mark) center / contain no-repeat;
-          mask: var(--mark) center / contain no-repeat;
-}
-.bounds__list--no li::before {
-  --mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M4.2 4.2l7.6 7.6M11.8 4.2l-7.6 7.6'/%3E%3C/svg%3E");
-  background-color: var(--c-neg);
-}
-.bounds__list--yes li::before {
-  --mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 8.6l3.4 3.4L13 4.6'/%3E%3C/svg%3E");
-  background-color: var(--c-pos);
-}
-
+/* Последний пункт не подчёркиваем: линия упиралась бы в нижний край плашки. */
 /* ==========================================================================
    FOUNDER
    ========================================================================== */
 
-.founder__facts { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border-top: 1px solid var(--c-line); }
-.founder__fact { padding: clamp(20px, 2.2vw, 32px) clamp(16px, 2vw, 28px) clamp(20px, 2.2vw, 32px) 0; }
-.founder__fact:not(:nth-child(3n+1)) { border-left: 1px solid var(--c-line); padding-left: clamp(16px, 2vw, 28px); }
-.founder__fact:nth-child(n+4) { border-top: 1px solid var(--c-line); }
-.founder__k { font-family: var(--f-display); font-weight: var(--w-display); font-size: var(--t-h4); letter-spacing: -.006em; }
-.founder__v { font-size: var(--t-subtext); color: var(--c-ink-muted); margin-top: 8px; line-height: 1.45; }
+/* --------------------------------------------------------------------------
+   ОБО МНЕ
+
+   Порядок доказательств: лицо → имя → тезис → четыре факта → профили →
+   агентство → клиенты. Раньше здесь была сетка из шести равнозначных
+   карточек: шесть одинаковых по весу утверждений читаются как резюме,
+   а не как основание доверять человеку на восемь недель.
+   -------------------------------------------------------------------------- */
+.founder {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(28px, 4vw, 64px);
+  align-items: start;
+}
+.founder__shot {
+  margin: 0;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: var(--c-surface);
+  aspect-ratio: 4 / 5;
+}
+.founder__shot img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  /* Портрет в кадре смещён вверх: кроп 4:5 из квадрата не должен срезать
+     макушку. */
+  object-position: 50% 22%;
+}
+.founder__name { margin-top: 10px; }
+.founder__thesis { margin-top: 20px; max-width: 34ch; }
+
+.proof {
+  list-style: none; margin: clamp(28px, 3vw, 40px) 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-top: 1px solid var(--c-line);
+}
+.proof__i {
+  padding: 20px 24px 20px 0;
+  border-bottom: 1px solid var(--c-line);
+}
+.proof__i:nth-child(even) { border-left: 1px solid var(--c-line); padding-left: 24px; }
+.proof__k {
+  display: block;
+  font-family: var(--f-display); font-weight: var(--w-display);
+  font-size: var(--t-h4); letter-spacing: -.006em;
+}
+.proof__v {
+  display: block; margin-top: 6px;
+  font-size: var(--t-subtext); line-height: 1.45; color: var(--c-ink-muted);
+}
+
+/* Профили: текстовая строка, а не иконки. Названия площадок читаются
+   быстрее логотипов и не требуют объяснения, куда ведёт ссылка. */
+.social { list-style: none; margin: 24px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 20px; }
+.social a {
+  font-family: var(--f-mono); font-size: var(--t-subtext);
+  letter-spacing: var(--ls-label);
+  color: var(--c-ink-muted); text-decoration: underline;
+  text-decoration-color: var(--c-line-strong);
+  text-underline-offset: 4px;
+  transition: color var(--d-fast) var(--e-out), text-decoration-color var(--d-fast) var(--e-out);
+}
+.social a:hover { color: var(--c-accent); text-decoration-color: currentColor; }
+
+/* Агентство. Логотип набран шрифтом: реальный SVG вставляется на место
+   .agency__logo одной заменой, когда он появится. */
+.agency {
+  margin-top: clamp(40px, 5vw, 72px);
+  padding-top: clamp(24px, 3vw, 36px);
+  border-top: 1px solid var(--c-line);
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(20px, 4vw, 64px);
+  align-items: start;
+}
+.agency__logo {
+  font-family: var(--f-display); font-weight: 700;
+  font-size: clamp(1.75rem, 1.2rem + 1.8vw, 2.75rem);
+  letter-spacing: .02em; line-height: 1;
+}
+.agency__logo sup { font-size: .32em; vertical-align: super; letter-spacing: 0; }
+.agency__role {
+  margin-top: 10px;
+  font-family: var(--f-mono); font-size: var(--t-subtext);
+  letter-spacing: var(--ls-label); text-transform: uppercase;
+  color: var(--c-ink-faint);
+}
+.agency__line { font-size: var(--t-text); line-height: var(--lh-text); color: var(--c-ink-muted); max-width: 52ch; }
 
 .logostrip { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: clamp(24px, 3vw, 40px); }
 .logostrip__slot {
@@ -1273,17 +1664,56 @@ p { margin: 0; max-width: 62ch; }
 
 .tiers {
   display: grid;
-  grid-template-columns: 1fr 1.08fr;   /* the supported tier is given more room */
+  grid-template-columns: 1fr 1.32fr;   /* основной формат заметно шире соседнего */
   gap: clamp(20px, 2.4vw, 32px);
   align-items: stretch;
 }
 
+/* --------------------------------------------------------------------------
+   ОДИН ФОРМАТ ВМЕСТО ДВУХ
+
+   Карточка занимает всю ширину сетки, а её содержимое внутри разложено
+   в две колонки: слева описание и призыв, справа состав. Одна колонка
+   на всю ширину дала бы строки списка, где текст уезжает от маркера
+   на пол-экрана.
+   -------------------------------------------------------------------------- */
+.tiers--single { grid-template-columns: minmax(0, 1fr); }
+.tiers--single .tier {
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  grid-template-rows: auto auto auto auto auto 1fr;
+  column-gap: clamp(32px, 5vw, 88px);
+  padding: clamp(28px, 3vw, 48px);
+}
+.tiers--single .tier > .label { grid-area: 1 / 1; }
+.tiers--single .tier__sum     { grid-area: 2 / 1; }
+.tiers--single .tier__vol     { grid-area: 3 / 1; }
+.tiers--single .tier__key     { grid-area: 4 / 1; }
+.tiers--single .tier__note    { grid-area: 5 / 1; }
+/* Кнопка прижата к низу левой колонки: правая длиннее, и без этого призыв
+   повисал в середине карточки. */
+.tiers--single .tier__cta     { grid-area: 6 / 1; align-self: end; }
+.tiers--single .tier__more { grid-area: 1 / 2 / -1 / 3; margin-top: 0; }
+/* Список тянется во всю высоту карточки и распределяет строки по ней:
+   прижатый к верху, он оставлял под собой пустую половину, и правая
+   колонка выглядела оборванной. */
+/* Список не растягиваем: содержимое <details> в Chrome попадает в теневой
+   слот, и настоящим флекс-элементом становится он, а не список — ни flex,
+   ни height: 100% до списка не доходят. Высоту набираем воздухом в строках,
+   что и требовалось: колонка перестала выглядеть обрезанной сверху. */
+.tiers--single .tier__list { margin-top: 0; }
+.tiers--single .tier__list li { padding: 22px 0; }
+/* Сноска про ценность формата больше не выравнивает две карточки по высоте —
+   выравнивать больше нечего, а запас высоты оставлял дыру над кнопкой. */
+.tiers--single .tier__key,
+.tiers--single .tier__note { min-height: 0; }
+
 .tier {
   display: grid;
-  /* label · price · summary · volume · list · key line · note · button — the
-     list is the only track allowed to stretch, so the key line and the button
-     stay level across both cards however long the lists are. */
-  grid-template-rows: auto auto auto auto 1fr auto auto auto;
+  /* label · summary · volume · list · key line · note · button — the list is
+     the only track allowed to stretch. Раньше карточек было две и одинаковые
+     дорожки держали их кнопки на одной линии; карточка осталась одна, но
+     раскладка та же: она задаёт порядок, а не выравнивание. */
+  grid-template-rows: auto auto auto 1fr auto auto auto;
   padding: clamp(24px, 2.4vw, 34px);
   border: 1px solid var(--c-line);
   border-radius: var(--r-lg);
@@ -1306,15 +1736,6 @@ p { margin: 0; max-width: 62ch; }
   background-origin: border-box;
   background-clip: padding-box, border-box;
 }
-
-.tier__price {
-  font-family: var(--f-display); font-weight: var(--w-display);
-  font-size: var(--t-h1);
-  letter-spacing: -.03em; line-height: .9;
-  font-variant-numeric: tabular-nums;
-  margin-top: 14px;
-}
-.tier--lead .tier__price { color: var(--c-accent); }
 
 .tier__sum {
   margin-top: var(--sp-stack);
@@ -1342,13 +1763,15 @@ p { margin: 0; max-width: 62ch; }
   font-size: var(--t-h3);
   font-weight: 600;
   letter-spacing: var(--ls-h3);
-  color: var(--c-ink);
+  color: var(--c-spark-ink);
   /* sits on the same optical line as the mono text beside it */
   vertical-align: -.06em;
   margin-right: 2px;
 }
 .tier__vol-x { color: var(--c-ink-faint); margin: 0 4px; }
-.tier__vol--lead b { color: var(--c-accent); }
+/* Раньше цифры в основном тарифе красились акцентом — теперь акцент это
+   белый, и правило гасило искру, заданную в .tier__vol b. */
+.tier__vol--lead b { color: var(--c-spark-ink); }
 
 /* Список входящего сворачивается на телефоне: карточка иначе уезжает на
    полтора экрана. На широком экране раскрыт всегда — там места хватает,
@@ -1357,13 +1780,14 @@ p { margin: 0; max-width: 62ch; }
    автоматическое размещение перестало держать ключевые строки на одном
    уровне — а именно на них строится сравнение тарифов. */
 .tier > .label      { grid-row: 1; }
-.tier__price        { grid-row: 2; }
-.tier__sum          { grid-row: 3; }
-.tier__vol          { grid-row: 4; }
-.tier__more         { grid-row: 5; }
-.tier__key          { grid-row: 6; }
-.tier__note         { grid-row: 7; }
-.tier__cta          { grid-row: 8; }
+.tier__sum          { grid-row: 2; }
+.tier__vol          { grid-row: 3; }
+.tier__more         { grid-row: 4; }
+.tier__key          { grid-row: 5; }
+.tier__note         { grid-row: 6; }
+.tier__cta          { grid-row: 7; }
+
+.label--lead { color: var(--c-accent); }
 .tier__more-sum {
   display: none;
   cursor: pointer;
@@ -1394,19 +1818,15 @@ p { margin: 0; max-width: 62ch; }
   align-self: start;
 }
 .tier__list li {
-  display: flex; gap: 12px; align-items: baseline;
+  display: flex; gap: 12px; align-items: center;
   padding: 10px 0; border-bottom: 1px solid var(--c-line);
   font-size: var(--t-text); color: var(--c-ink-muted);
 }
-.tier__list li::before {
-  content: ""; flex: none;
-  width: 13px; height: 13px; position: relative; top: .18em;
-  border-radius: 50%;
-  background: var(--c-line-strong);
-}
-.tier__list--yes li::before {
-  background: var(--c-pos);
-  -webkit-mask: none; mask: none;
+/* Иконка вместо точки: шесть одинаковых кружков ничего не говорили о том,
+   что именно входит в формат, и список читался как перечисление галочек. */
+.tier__list li svg {
+  width: 17px; height: 17px; flex: none;
+  fill: var(--c-spark);
 }
 
 /* The one line that decides the choice. */
@@ -1429,13 +1849,7 @@ p { margin: 0; max-width: 62ch; }
   width: 16px; height: 16px; position: relative; top: .16em;
   -webkit-mask: var(--mark) center / contain no-repeat;
           mask: var(--mark) center / contain no-repeat;
-}
-.tier__key--no {
-  color: var(--c-neg);
-  --mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M4.2 4.2l7.6 7.6M11.8 4.2l-7.6 7.6'/%3E%3C/svg%3E");
-}
-.tier__key--no::before { background-color: var(--c-neg); }
-.tier__key--yes {
+}.tier__key--yes {
   color: var(--c-pos);
   --mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 8.6l3.4 3.4L13 4.6'/%3E%3C/svg%3E");
 }
@@ -1466,7 +1880,26 @@ p { margin: 0; max-width: 62ch; }
 
 .finalcta__grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: clamp(32px, 5vw, 96px); align-items: start; }
 
-.footer { background: var(--c-dark); color: var(--c-dark-ink); padding-block: clamp(48px, 5vw, 80px); }
+/* Полоса под кучу монет: нижнее поле подвала считает высоту самой кучи
+   плюс отбивку от последней строки. */
+.footer {
+  position: relative; z-index: 1;
+  background: var(--c-dark); color: var(--c-dark-ink);
+  padding-top: clamp(48px, 5vw, 80px);
+  /* Высота кучи плюс отбивка от текста плюс сто пикселей воздуха под ней. */
+  padding-bottom: clamp(250px, 15vw + 100px, 310px);
+  position: relative; overflow: hidden;
+}
+.footer > .container { position: relative; z-index: 2; }
+/* Куча лежит на самом низу страницы — монеты докатываются до края экрана.
+   Добавленный воздух ушёл наверх, между последней строкой и кучей.
+   Селектор с двумя классами намеренно: .pit объявлен ниже по файлу и своей
+   height: 100% растягивал кучу на весь подвал. */
+.footer .footer__pit {
+  top: auto; bottom: 0;
+  height: clamp(110px, 11vw, 150px);
+  z-index: 1;
+}
 .footer__top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 32px; padding-bottom: 36px; border-bottom: 1px solid var(--c-dark-line); }
 .footer__links { display: flex; flex-wrap: wrap; gap: 8px 26px; }
 .footer__links a {
@@ -1493,27 +1926,9 @@ p { margin: 0; max-width: 62ch; }
 .footer .wordmark { color: var(--c-dark-ink); }
 .footer .wordmark__sub { color: var(--c-dark-muted); }
 
-
 /* ==========================================================================
    HERO A/B VARIANTS
    ========================================================================== */
-
-[data-cover] { display: none; }
-[data-cover].is-on { display: inline; }
-
-.abswitch {
-  position: fixed; left: 12px; bottom: 12px; z-index: 120;
-  display: flex; gap: 3px; padding: 4px;
-  background: var(--c-surface); border: 1px solid var(--c-line);
-  border-radius: var(--r-pill); box-shadow: var(--sh-md);
-}
-.abswitch button {
-  appearance: none; border: 0; cursor: pointer;
-  background: transparent; color: var(--c-ink-muted);
-  font-family: var(--f-mono); font-size: var(--t-subtext);
-  padding: 7px 12px; border-radius: var(--r-pill);
-}
-.abswitch button[aria-pressed="true"] { background: var(--c-accent); color: var(--c-on-accent); }
 
 /* ==========================================================================
    MOTION
@@ -1535,7 +1950,6 @@ p { margin: 0; max-width: 62ch; }
   }
   [data-reveal] { opacity: 1; transform: none; }
 }
-
 
 /* --------------------------------------------------------------------------
    CLIENTS — real agency cases as a text list. No logos: a client mark is the
@@ -1609,62 +2023,6 @@ p { margin: 0; max-width: 62ch; }
   .clients { grid-template-columns: 1fr; }
   .client { border-left: 0 !important; padding-left: 0 !important; }
 }
-
-/* The turn line sits in the right column, where it has a full column to run
-   across — the 18ch measure is for when it stands alone under the grid. */
-.story__turn--wide { max-width: 34ch; }
-
-/* ==========================================================================
-   AUTHOR — the face behind the programme
-   The whole offer rests on one person being present, so the portrait sits with
-   the promise rather than in a separate "about" strip.
-   ========================================================================== */
-
-.author {
-  display: flex; align-items: center; gap: 16px;
-  padding-top: var(--sp-stack);
-  border-top: 1px solid var(--c-line);
-}
-/* The frame is what holds the layout: if the portrait is missing or fails to
-   load the circle stays, labelled, instead of the row collapsing sideways. */
-.author__frame {
-  flex: none; position: relative;
-  width: 88px; height: 88px;
-  border-radius: 50%;
-  background: var(--c-neutral-tint);
-  border: 1px solid var(--c-line);
-  overflow: hidden;
-  display: grid; place-items: center;
-}
-.author__frame::before {
-  content: "фото";
-  font-family: var(--f-mono); font-size: .625rem;
-  letter-spacing: var(--ls-label); text-transform: uppercase;
-  color: var(--c-ink-faint);
-}
-.author__photo {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  /* Slightly above centre: a portrait cropped to a circle reads better when the
-     eyes sit on the upper third rather than dead centre. */
-  object-position: 50% 38%;
-}
-.author__name {
-  font-size: var(--t-h3);
-  line-height: var(--lh-h3);
-  letter-spacing: var(--ls-h3);
-  font-weight: 500;
-  color: var(--c-ink);
-}
-.author__role {
-  margin-top: 4px;
-  font-size: var(--t-subtext);
-  line-height: var(--lh-subtext);
-  color: var(--c-ink-muted);
-  max-width: 42ch;
-}
-
 /* ==========================================================================
    VIDEO — a 16:9 well that holds a poster now and a player later
    ========================================================================== */
@@ -1713,33 +2071,11 @@ p { margin: 0; max-width: 62ch; }
   border-color: transparent transparent transparent #FFFFFF;
 }
 
-
 /* ==========================================================================
    RELOCATION — the same pit as the hero, already at rest
    The canvas is full-bleed like the hero's, so the pile sits on the section
    edge rather than on the content grid.
    ========================================================================== */
-.relocation { position: relative; isolation: isolate; overflow: hidden; }
-.relocation > .container { position: relative; z-index: 2; }
-
-/* The hero's dot field and bloom, dialled down. The hero is the headline
-   moment and keeps the brighter version; here the same ground reads as a
-   continuation rather than a second climax. The bloom sits low, where the
-   coins come to rest. */
-.relocation::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background-image:
-    radial-gradient(rgba(170, 100, 250, .11) 1px, transparent 1px),
-    radial-gradient(58% 50% at 12% 98%, rgba(168, 85, 247, .22) 0%, transparent 72%),
-    radial-gradient(74% 55% at 62% 106%, rgba(88, 40, 160, .22) 0%, transparent 78%);
-  background-size: 26px 26px, auto, auto;
-  background-position: 0 0, center, center;
-  background-repeat: repeat, no-repeat, no-repeat;
-}
 
 .pit {
   position: absolute;
@@ -1752,7 +2088,6 @@ p { margin: 0; max-width: 62ch; }
   z-index: 1;
 }
 
-
 /* --------------------------------------------------------------------------
    Expanded week: the chips say what the topics are, this says what actually
    happens in the two hours. Two columns so a nine-item list does not push the
@@ -1764,11 +2099,14 @@ p { margin: 0; max-width: 62ch; }
   color: var(--c-ink-muted);
   max-width: 68ch;
 }
+/* Темы занимают всю ширину и делятся на две колонки, итог недели идёт под
+   ними абзацем. Раньше итог стоял справа отдельной колонкой и забирал
+   треть ширины под три строки текста, а список тем ужимался до колонок
+   в шесть слов. */
 .week__cols {
   display: grid;
-  grid-template-columns: 1.25fr 1fr;
-  gap: clamp(24px, 3vw, 56px);
-  align-items: start;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(22px, 2.4vw, 34px);
 }
 .week__h {
   font-family: var(--f-mono);
@@ -1789,9 +2127,11 @@ p { margin: 0; max-width: 62ch; }
 .week__list li {
   break-inside: avoid;
   display: flex; gap: 9px;
-  padding: 5px 0;
-  font-size: var(--t-subtext);
-  line-height: var(--lh-subtext);
+  padding: 6px 0;
+  /* Полный текстовый кегль, а не подписной: это основное содержание недели,
+     и на тринадцати пунктах список читался как сноска. */
+  font-size: var(--t-text);
+  line-height: var(--lh-text);
   color: var(--c-ink-muted);
 }
 .week__list li::before {
@@ -1803,11 +2143,11 @@ p { margin: 0; max-width: 62ch; }
   position: relative; top: .62em;
 }
 .week__res {
-  font-size: var(--t-subtext);
-  line-height: var(--lh-subtext);
+  font-size: var(--t-text);
+  line-height: var(--lh-text);
   color: var(--c-ink);
+  max-width: 80ch;
 }
-
 
 /* --------------------------------------------------------------------------
    PERKS — три строки под цифрами сопровождения
@@ -1837,3 +2177,122 @@ p { margin: 0; max-width: 62ch; }
   .perk__art { display: flex; min-height: 74px; height: auto; margin-bottom: 0; padding: 10px; }
   .perk { grid-template-columns: 104px minmax(0, 1fr); align-items: center; }
 }
+
+/* Доказательство рядом с кнопкой: одна строка, тише подписи о длительности —
+   она подтверждает, а не продаёт. */
+.meta--proof { color: var(--c-ink-faint); }
+
+/* --------------------------------------------------------------------------
+   ЮРИДИЧЕСКИЙ НИЗ
+   -------------------------------------------------------------------------- */
+.footer__law { padding-top: 24px; border-top: 1px solid var(--c-dark-line); margin-top: 24px; }
+/* На юридических страницах юрблок идёт сразу за навигацией, у которой уже
+   есть нижняя граница: две линии подряд читаются как пустая полоса. */
+.footer__top + .footer__law { border-top: 0; margin-top: 0; }
+.footer__docs { display: flex; flex-wrap: wrap; gap: 6px 0; }
+.footer__docs a {
+  font-size: var(--t-subtext); color: var(--c-dark-muted);
+  text-decoration: underline; text-decoration-color: rgba(255, 255, 255, .22);
+  text-underline-offset: 4px;
+  transition: color var(--d-fast) var(--e-out), text-decoration-color var(--d-fast) var(--e-out);
+}
+.footer__docs a:hover { color: var(--c-dark-ink); text-decoration-color: currentColor; }
+/* Разделитель рисуем псевдоэлементом, а не символом в разметке: иначе точка
+   попадает в область ссылки и подчёркивается вместе с ней. */
+.footer__docs a + a::before { content: "·"; margin: 0 10px; color: rgba(255, 255, 255, .3); text-decoration: none; display: inline-block; }
+
+/* Незаполненное поле. Видно сразу и на светлых, и на тёмных подложках —
+   чтобы страницу нельзя было выложить с рыбой в реквизитах. */
+.fill {
+  color: #FFB4A2;
+  border-bottom: 1px dashed currentColor;
+  padding-bottom: 1px;
+}
+
+/* --------------------------------------------------------------------------
+   ИСКРА НА СВЕТЛОЙ ПОЛОСЕ
+   #C1FF0F на белом даёт контраст 1.3:1 — как текст он нечитаем даже
+   в крупном кегле. Поэтому на светлых секциях цифра остаётся чёрной,
+   а цвет уходит в полосу под ней.
+   -------------------------------------------------------------------------- */
+.section--light .stat__n,
+.section--light .tier__vol b {
+  display: inline-block;
+  padding-inline: .08em;
+  background-image: linear-gradient(var(--c-spark), var(--c-spark));
+  background-size: 100% .16em;
+  background-position: 0 94%;
+  background-repeat: no-repeat;
+}
+
+/* --------------------------------------------------------------------------
+   ЗАГОЛОВОК ПЕРВОГО ЭКРАНА
+
+   Одно слово от края до края сетки. Обычный текст такого не умеет: кегль
+   пришлось бы подбирать под каждую ширину экрана и всё равно промахиваться
+   на пару пикселей.
+
+   viewBox снят с настоящих чернил Geist 600 (measureText на кегле 254:
+   ink 10.9…976.1 по горизонтали, 184.4 над базовой линией и 4.1 под ней),
+   поэтому буквы упираются в оба края без растяжения. Если шрифт не
+   загрузится, запасной просто впишется меньшим кеглем — свалиться за край
+   ему не даёт preserveAspectRatio по умолчанию.
+   -------------------------------------------------------------------------- */
+.hero__word { width: 100%; margin: 0; line-height: 0; position: relative; }
+
+/* Искажение под курсором. Канвас ложится ровно на слово и включается только
+   на время наведения; всё остальное время на экране исходный SVG, который
+   не зависит ни от WebGL, ни от JS. */
+/* Отрицательный инсет — то самое поле вокруг слова, в которое уходит
+   искажение. Без него смещение упиралось в край канваса и срезало букву
+   прямой линией. Размер поля продублирован константой PAD в warptext.js. */
+.hero__warp {
+  position: absolute;
+  /* Размер задан явно, а не через inset: канвас — замещаемый элемент,
+     и с width: auto он берёт собственный размер в пикселях, а не растяжку
+     по отступам. Без этого поле превращало слово в гигантское. */
+  left: -8%; top: -8%;
+  width: 116%; height: 116%;
+  pointer-events: none;
+}
+.hero__word:not(.is-warping) .hero__warp { display: none; }
+.hero__word.is-warping .hero__word-svg { visibility: hidden; }
+.hero__word-svg { display: block; width: 100%; height: auto; }
+.hero__word text {
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: 254px;
+  /* Трекинг ровно нулевой: любое значение сдвигает чернила относительно
+     измеренных метрик, и слово перестаёт совпадать с краями сетки. */
+  letter-spacing: 0;
+  fill: currentColor;
+}
+
+/* Слово начинается сразу под шапкой, поэтому верхний отступ секции задан
+   явно: при центрировании по высоте одного padding не хватает, и «P»
+   налезала на пункты меню. */
+/* Нижнее поле меньше верхнего: сверху его съедает шапка, а внизу секции
+   и так стоит поле монет. Ради того, чтобы первый экран оставался одним
+   экраном, а не почти одним. */
+.hero { padding-top: clamp(104px, 12vh, 148px); padding-bottom: clamp(56px, 7vh, 96px); }
+
+/* Строка под словом — ровно вполовину кегля заголовка. */
+.hero__claim {
+  margin-top: clamp(16px, 2vw, 28px);
+  /* Две строки: с перечислением на 27ch получалось три, и строка начинала
+     конкурировать с заголовком по высоте. 32ch и шире дают две, 40ch взято
+     с запасом на любой кегль из clamp. */
+  max-width: 40ch;
+  font-family: var(--f-display);
+  /* Средний вес: на светлом начертании строка проваливалась под сплошным
+     CRYPTO и читалась как подпись к картинке, а не как продолжение фразы.
+     Geist подключён с осью 300..700, так что вес настоящий. */
+  font-weight: 500;
+  font-size: clamp(0.9375rem, 0.52rem + 1.02vw, 1.5rem);
+  line-height: 1.25;
+  letter-spacing: -.005em;
+  text-wrap: balance;
+  color: #FFFFFF;
+}
+/* Кнопка идёт сразу за строкой под заголовком — между ними больше ничего нет. */
+.hero .cta-row { margin-top: clamp(28px, 3vw, 40px); }

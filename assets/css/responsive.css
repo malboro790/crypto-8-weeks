@@ -16,7 +16,9 @@
    -------------------------------------------------------------------------- */
 @media (max-width: 1180px) {
   .wordmark__sub { display: none; }
-  .nav__link { padding: 9px 11px; font-size: var(--t-subtext); }
+  /* Литерал, а не токен: смысл правила — ужать шапку, когда ей не хватает
+     места, а на десктопе токен как раз вырос до 16. */
+  .nav__link { padding: 9px 11px; font-size: .8125rem; }
   .btn__long { display: none; }
 }
 
@@ -44,27 +46,31 @@
     padding-left: 0;
     max-width: none;
     margin-top: var(--sp-stack);
-  }
-
-  .sequence { grid-template-columns: repeat(3, 1fr); }
-  .sequence__step:nth-child(3n+1) { border-left: 0; padding-left: 0; }
-  .sequence__step:nth-child(n+4) { border-top: 1px solid var(--c-line); }
-
-  .stats { grid-template-columns: repeat(2, 1fr); }
+  }  .stats { grid-template-columns: repeat(2, 1fr); }
   .stat:nth-child(odd) { border-left: 0; padding-left: 0; }
   .stat:nth-child(n+3) { border-top: 1px solid var(--c-line); }
 
-  .founder__facts { grid-template-columns: repeat(2, 1fr); }
-  .founder__fact:not(:nth-child(3n+1)) { border-left: 1px solid var(--c-line); }
-  .founder__fact:nth-child(odd) { border-left: 0; padding-left: 0; }
-  .founder__fact:nth-child(n+3) { border-top: 1px solid var(--c-line); }
+  /* Портрет и текст в столбик: рядом на планшете фото ужимается до размера,
+     в котором лицо перестаёт читаться. */
+  .founder, .agency { grid-template-columns: minmax(0, 1fr); }
+  .founder__shot { max-width: 420px; }
 
   .eco__node { font-size: var(--t-subtext); padding: 7px 10px; min-height: 32px; }
 
-  .riskfield { min-height: 400px; }
+  .risks { grid-template-columns: minmax(0, 1fr); }
+
 
   /* Four scenarios go two-up before they go single-file. */
   .scens { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+  /* Карточка вдвое у́же — макеты внутри уменьшаются одной ручкой. На кегле
+     десктопа «100 000 USDT» и адрес не помещались в строку и ломались. */
+  .phone { font-size: 11px; width: min(148px, 88%); }
+  .wal { font-size: 13px; }
+  /* Строка «Основная 100 000 USDT» — самая длинная в макете, на 13px
+     она выходила за плашку на два пикселя. */
+  .tx { font-size: 12px; }
+  .cloud { font-size: 13px; }
 }
 
 /* The spatial map only has a fixed height while it IS spatial (≥901px). */
@@ -83,43 +89,10 @@
   /* Схема остаётся схемой: ядро сверху, риски двумя колонками под ним, лучи
      веером вниз. Круговая раскладка с десктопа на 400px не помещается —
      плашки налезали бы на ядро, — поэтому кольцо разворачивается в веер. */
-  .riskfield { min-height: 760px; display: block; }
-  .riskfield__core {
-    position: absolute; left: 50%; top: 0; transform: translateX(-50%);
-    padding: 16px 20px; width: min(230px, 62%);
-  }
-  .risk {
-    /* Одинаковая ширина вместо «по содержимому»: разброс 92–153px превращал
-       две колонки в россыпь коробок разного калибра. */
-    width: 45%;
-    max-width: 45%;
-    box-sizing: border-box;
-    padding: 8px 10px;
-    font-size: .8125rem;
-    /* Плашка в две строки: наследованный интерлиньяж 1.6 разводил их слишком
-       далеко — подпись переставала читаться как одно название. */
-    line-height: 1.25;
-    white-space: normal;
-    text-align: left;
-  }
-  .risk__note { display: none; }
-
-  /* Левая и правая колонки чередуются: нечётные слева, чётные справа.
-     nth-of-type, а не nth-child: в поле лежат ещё <svg> и ядро, и обычный
-     счётчик сдвигал нумерацию плашек на две позиции — две из них попадали
-     в один ряд и наезжали друг на друга.
-     !important здесь не украшение: координаты десктопа заданы инлайново,
-     а инлайн выигрывает у любого правила таблицы стилей. */
-  .risk:nth-of-type(odd)  { --x: 27% !important; }
-  .risk:nth-of-type(even) { --x: 73% !important; }
-  /* Шаг между рядами задан с запасом на плашку в две строки: раньше они
-     наезжали друг на друга там, где подпись не помещалась в одну. */
-  .risk:nth-of-type(1),  .risk:nth-of-type(2)  { --y: 25% !important; }
-  .risk:nth-of-type(3),  .risk:nth-of-type(4)  { --y: 39% !important; }
-  .risk:nth-of-type(5),  .risk:nth-of-type(6)  { --y: 53% !important; }
-  .risk:nth-of-type(7),  .risk:nth-of-type(8)  { --y: 67% !important; }
-  .risk:nth-of-type(9),  .risk:nth-of-type(10) { --y: 81% !important; }
-  .risk:nth-of-type(11), .risk:nth-of-type(12) { --y: 95% !important; }
+  /* Облако плашек на телефоне остаётся облаком, только кегль мельче
+     и сдвиг по вертикали снят: на узкой колонке он ломал ряды. */
+  .risk { font-size: .8125rem; padding: 8px 11px; }
+  .risks__cloud { gap: 8px; padding-top: 0; }
 
   .pillar { grid-template-columns: 64px 1fr; }
   .pillar__d { grid-column: 2; padding-top: 4px; }
@@ -154,6 +127,19 @@
     flex: 0 0 88%;
     scroll-snap-align: center;
   }
+  /* Одна карточка — не лента: горизонтальная прокрутка с единственным
+     элементом только мешает. Возвращаем обычный блок и один столбец внутри. */
+  .tiers--single { display: block; margin-inline: 0; padding-inline: 0; padding-block: 0; }
+  .tiers--single .tier { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; }
+  .tiers--single .tier > .label,
+  .tiers--single .tier__sum, .tiers--single .tier__vol, .tiers--single .tier__key,
+  .tiers--single .tier__note, .tiers--single .tier__cta, .tiers--single .tier__more { grid-area: auto; }
+  .tiers--single .tier__more { margin-top: var(--sp-block); }
+  .tiers--single .tier__list { margin-top: 0; }
+  /* Воздух в строках нужен, только когда список стоит колонкой во всю высоту
+     карточки. В столбик он просто растягивает блок на лишний экран. */
+  .tiers--single .tier__list li { padding: 10px 0; }
+
   .tier__more-sum { display: flex; }
   .tier__more[open] .tier__list { margin-top: var(--sp-stack); }
 
@@ -162,7 +148,7 @@
   .tier--lead {
     order: -1;
     flex-basis: 92%;
-    box-shadow: 0 14px 32px -18px rgba(39, 39, 53, .30);
+    box-shadow: 0 14px 32px -18px rgba(10, 10, 10, .30);
   }
 
   /* The editorial 12-column grid collapses to a single column. Column spans are
@@ -175,18 +161,17 @@
 /* --------------------------------------------------------------------------
    ≤ 768 — tablet portrait. Two-column editorial pairs go single.
    -------------------------------------------------------------------------- */
-@media (max-width: 768px) {
-  /* Single column: drop the shared row track, let each block stack on its own. */
-  .bounds { grid-template-columns: 1fr; grid-template-rows: none; gap: 10px; }
-
-  /* Кромка плашки уходит вниз. На широком экране плашки стоят рядом и светятся
+@media (max-width: 768px) {  /* Кромка плашки уходит вниз. На широком экране плашки стоят рядом и светятся
      с верхнего угла; в столбик тот же угол оказывается прижат к предыдущей
      плашке, и подсветка читается как щель между ними. */
   /* Токен здесь тот же, что в .plate: --c-decor остался от отката лаймовой
      палитры и больше не существует, а ссылка на несуществующую переменную
      делает всё свойство недействительным — фон схлопывался в none, и обводка
      пропадала целиком. */
-  .outcome .plate, .tier--lead {
+  /* Кромка плашки уходит вниз. На широком экране плашки стоят рядом и светятся
+     с верхнего угла; в столбик тот же угол оказывается прижат к предыдущей
+     плашке, и подсветка читается как щель между ними. */
+  .tier--lead {
     background-image:
       linear-gradient(var(--c-plate), var(--c-plate)),
       linear-gradient(45deg,
@@ -195,100 +180,19 @@
         transparent 58%);
   }
 
-  /* Плашки в блоке «здесь не будут учить» возвращаются, но с едва заметной
-     кромкой: акцент взят на трети силы и гаснет уже к четверти длины —
-     на белом фоне полноценная кромка спорила бы с содержимым списка. */
-  .bounds .plate {
-    padding: clamp(18px, 4vw, 24px);
-    box-shadow: 0 1px 2px rgba(39, 39, 53, .04);
-    background-image:
-      linear-gradient(var(--c-plate), var(--c-plate)),
-      linear-gradient(45deg,
-        color-mix(in srgb, var(--c-accent) 34%, transparent) 0%,
-        color-mix(in srgb, var(--c-accent) 12%, transparent) 22%,
-        transparent 46%);
-  }
-  .bounds { gap: 12px; }
-  .bounds > * { grid-row: auto; display: flex; flex-direction: column; gap: 20px; }
-
-  /* Stacked, the column gap is far too tight: one card's copy would sit right
-     on the next card's art panel. */
-  .scens { grid-template-columns: 1fr; row-gap: var(--sp-tight); }
-  .scen { min-height: 0; }
-
-  /* Две плашки итогов держались в два столбца до самого узкого экрана:
-     каждый пункт ломался на три-четыре строки и переставал читаться. */
-  /* Две плашки сливаются в одну: в столбик они читались как два разных
-     списка, хотя это один перечень умений. Оболочку берёт на себя .outcome,
-     а сами списки теряют вид плашки — иначе получилась бы рамка в рамке. */
-  .outcome {
-    grid-template-columns: 1fr;
-    gap: 0;
-    padding: clamp(20px, 4vw, 28px);
-    border: 1px solid transparent;
-    border-radius: var(--r-lg);
-    background-image:
-      linear-gradient(var(--c-plate), var(--c-plate)),
-      linear-gradient(45deg,
-        var(--c-accent) 0%,
-        color-mix(in srgb, var(--c-accent) 55%, transparent) 26%,
-        transparent 58%);
-    background-origin: border-box;
-    background-clip: padding-box, border-box;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, .06), 0 18px 40px -24px rgba(0, 0, 0, .38);
-  }
-  .outcome .plate {
-    background: none;
-    border: 0;
-    border-radius: 0;
-    box-shadow: none;
-    padding: 0;
-  }
-  /* Стык двух списков не должен выдавать себя двойной линией. */
-  .outcome .plate:first-child li:last-child { border-bottom: 0; }
-
-  /* Сужаем только текст: padding-right упирает строку раньше правого края,
-     а разделительная линия рисуется по padding-box и остаётся во всю ширину. */
-  .outcome__list li { padding-right: 16%; }
-
-  .sequence { grid-template-columns: repeat(2, 1fr); }
-  .sequence__step { padding-right: 16px; }
-  .sequence__step:nth-child(n) { border-left: 0; padding-left: 0; border-top: 1px solid var(--c-line); }
-  .sequence__step:nth-child(-n+2) { border-top: 0; }
-  .sequence__step:nth-child(even) { border-left: 1px solid var(--c-line); padding-left: 16px; }
-
-  /* Шесть фактов в столбик — это экран сплошного текста, который пролистывают
-     не читая. Горизонтальная лента с прилипанием: одна карточка за раз, у
-     каждой своя картинка в языке карточек сценариев. */
-  .founder__facts {
-    display: flex;
-    grid-template-columns: none;
-    border-top: 0;
-    gap: 12px;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    padding-bottom: 4px;
-
-    /* Лента идёт до краёв экрана. Вынос ровно на величину поля контейнера,
-       поэтому ширина ленты совпадает с шириной экрана и ничего не торчит.
-       Раньше это ломало вёрстку не само по себе: колонка секции была `auto`
-       и растягивалась под ленту. Теперь колонка minmax(0, 1fr), и вынос
-       безопасен. */
-    margin-inline: calc(var(--gutter) * -1);
-    padding-inline: var(--gutter);
-  }
-  .founder__facts::-webkit-scrollbar { display: none; }
-
-  .founder__fact {
-    flex: 0 0 76%;
-    scroll-snap-align: start;
-    border: 1px solid var(--c-line) !important;
-    border-radius: var(--r-lg);
-    padding: 14px 14px 18px !important;
-    background: var(--c-surface);
-  }
+  /* Картинка в строке ужимается, но остаётся: без неё список умений
+     превращается в двенадцать одинаковых абзацев. */
+  .skill { grid-template-columns: 128px minmax(0, 1fr); gap: 14px; align-items: start; }
+  /* Та же ручка, что и в карточках сценариев: макет ужимается целиком,
+     а не ломает строки. Кегль подобран так, чтобы самая длинная строка
+     макета помещалась в колонку без обрезки. */
+  .skill__art { font-size: 10px; padding: .7em; }
+  .skill__art .phone { font-size: 6.4px; width: 82%; }
+     колонки .proof дают строки по три слова. */
+  .founder__shot { max-width: none; aspect-ratio: 4 / 4.4; }
+  .proof { grid-template-columns: minmax(0, 1fr); }
+  .proof__i { padding-right: 0; }
+  .proof__i:nth-child(even) { border-left: 0; padding-left: 0; }
 
   /* Картинка у каждой карточки говорит, о чём она: не абстрактные полосы,
      а те самые слова, набранные тем же моношрифтом, что и чипы на странице. */
@@ -313,16 +217,16 @@
     padding: 5px 8px;
     border-radius: 5px;
   }
-  .fact__art--a { background: #C4B5FD; }
-  .fact__art--a i { background: rgba(255, 255, 255, .82); color: #1E1633; }
+  .fact__art--a { background: #E4E4E7; }
+  .fact__art--a i { background: rgba(255, 255, 255, .82); color: #0A0A0A; }
   .fact__art--b { background: #14111C; }
   .fact__art--b i { background: rgba(255, 255, 255, .12); color: rgba(255, 255, 255, .82); }
-  .fact__art--b i:first-child { background: #7C3AED; color: #FFFFFF; }
-  .fact__art--c { background: #7C3AED; }
+  .fact__art--b i:first-child { background: #0A0A0A; color: #FFFFFF; }
+  .fact__art--c { background: #0A0A0A; }
   /* Затемняем, а не осветляем: белая подложка на фиолетовом делает фон светлее
      и белый текст на нём падает до 3.97. Тёмная подложка работает наоборот. */
   .fact__art--c i { background: rgba(0, 0, 0, .26); color: #FFFFFF; }
-  .fact__art--c i:first-child { background: #FFFFFF; color: #2E1065; }
+  .fact__art--c i:first-child { background: #FFFFFF; color: #0A0A0A; }
 
 }
 
@@ -332,7 +236,6 @@
 @media (max-width: 600px) {
   html { scroll-padding-top: 76px; }
 
-
   .compare { grid-template-columns: 1fr 1fr; }
   .compare__col:first-child { padding-right: 14px; }
   .compare__col + .compare__col { padding-left: 14px; }
@@ -341,25 +244,7 @@
 
   .stats { grid-template-columns: 1fr; }
   .stat { border-left: 0 !important; padding-left: 0 !important; border-top: 1px solid var(--c-line); }
-  .stat:first-child { border-top: 0; }
-
-  /* Шесть шагов в столбик занимали целый экран прокрутки. Плиткой 2×3 они
-     читаются как последовательность, а не как длинный список: номер сверху,
-     под ним короткое название и одна строка пояснения. */
-  .sequence { grid-template-columns: 1fr 1fr; column-gap: 14px; row-gap: 0; }
-  .sequence__step {
-    border-left: 0 !important;
-    padding: 14px 0;
-    border-top: 1px solid var(--c-line);
-  }
-  .sequence__step:nth-child(even) {
-    border-left: 1px solid var(--c-line) !important;
-    padding-left: 14px !important;
-  }
-  .sequence__step:nth-child(-n+2) { border-top: 0; }
-  .sequence__d { font-size: .8125rem; }
-
-  .pillar { grid-template-columns: 1fr; gap: 10px; }
+  .stat:first-child { border-top: 0; }  .pillar { grid-template-columns: 1fr; gap: 10px; }
   .pillar__d { grid-column: 1; }
 
   /* Номер недели встаёт над названием: в колонке шириной 48px он всё равно
@@ -426,14 +311,9 @@
 /* The mini mocks need their own column; below the tablet break the parts stack
    so the panel sits above its text instead of squeezing it. */
 @media (max-width: 900px) {
-  .part { grid-template-columns: 116px 1fr; column-gap: 20px; }
+  .part { grid-template-columns: 132px 1fr; column-gap: 20px; }
 }
-@media (max-width: 600px) {
-  /* Мера в em: на телефоне 15em — это почти вся ширина, и заголовок
-     схлопывается в две строки. */
-  .h2--narrow { max-width: 10.5em; }
-
-  /* Строка подписи под опорой на всю ширину экрана читается тяжело:
+@media (max-width: 600px) {  /* Строка подписи под опорой на всю ширину экрана читается тяжело:
      глаз теряет начало следующей. */
   .pillar__d { max-width: 27ch; }
 
@@ -441,6 +321,9 @@
      в узкий столбец слева — рядом с ней всё равно ничего нет. */
   .part { grid-template-columns: 1fr; row-gap: 18px; }
   .mock { height: 132px; max-width: none; padding: 16px; }
+  /* В одну колонку квадрат во всю ширину — это пол-экрана под картинку.
+     Ограничиваем ширину, пропорция держится сама. */
+  .part__art { height: auto; max-width: 200px; padding: .85em; }
   .mock__row { padding: 10px 12px; font-size: .6875rem; }
   .mock__bub { padding: 9px 12px; font-size: .6875rem; }
 }
@@ -458,33 +341,7 @@
    Мобильные правки по записям с реального устройства
    -------------------------------------------------------------------------- */
 @media (max-width: 900px) {
-  /* Монеты остаются и на телефоне. Чтобы они не лезли на текст, секции даётся
-     высота экрана, содержимое прижимается к верху, а внизу резервируется полоса
-     под кучу — ровно та высота, на которой монеты успокаиваются. */
-  .section--screen.relocation {
-    min-height: 100svh;
-    align-content: start;
-    padding-bottom: 180px;
-  }
-  .relocation > .container { align-self: start; }
-
-  /* Строка во всю ширину телефона читается тяжело: глаз теряет начало
-     следующей. Ограничиваем меру там, где абзацы длинные. */
-  .section--sunk.relocation .body,
-  .section--sunk.relocation .story__turn,
-  .section--sunk.relocation .bounds__list li { max-width: 88%; }
-
-  /* Разделители убираем: текст ограничен по ширине, а линия шла на всю
-     колонку и торчала правее строк, к которым относится. Пункты и без неё
-     разделены отступом и крестиком в начале. */
-  .section--sunk.relocation .bounds__list li { border-bottom: 0; padding: 9px 0; }
-
-  /* Мера в блоке про крупную сумму: 46ch из разметки на телефоне шире
-     колонки и не работает. !important — иначе инлайновый стиль не перебить.
-     :has здесь уже используется в проекте, отдельной поддержки не требует. */
-  .section:has(.share) .body { max-width: 85% !important; }
-
-  /* ------------------------------------------------------------------
+/* ------------------------------------------------------------------
      Шкала на телефоне сведена к двум текстовым размерам: 15 и 13.
      Аудит показал 44 сочетания «размер + вес + интерлиньяж» при шести
      объявленных ролях; больше всего мусора давали 17 и 12 — оба почти
@@ -501,18 +358,15 @@
   .part__i,
   .scen__i,
   .eco__group-h,
-  .art-note,
   .compare__num,
   .week__n,
-  .art-nets span,
   .label { font-size: var(--t-subtext); }                  /* было 12 */
 
-  /* Остатки семнадцатого: заголовки внутри карточек и подписи в макете
-     экрана. Ниже — к пятнадцати, как весь остальной текст. */
-  .part__t,
-  .riskfield__core .mono,
-  .art-pill--hot,
-  .art-row--hot b { font-size: var(--t-text); }
+  /* Остатки семнадцатого: заголовки внутри карточек. Ниже — к пятнадцати,
+     как весь остальной текст. Графика карточек в эту шкалу не входит:
+     там свой мелкий кегль интерфейса, и подтягивать его к тексту страницы
+     значит сломать пропорции макетов. */
+  .part__t { font-size: var(--t-text); }
 
   /* Подписи внутри мини-визуализаций — единственный слой мельче тринадцати.
      Держим их на одиннадцати, а не на десяти: десятый появился случайно. */
@@ -528,17 +382,7 @@
     font-size: var(--t-h4);
     line-height: 1.6;
     max-width: 88%;
-  }
-
-  /* В светлом блоке линии остаются, а текст поджимаем отступом справа:
-     padding не трогает границу, она рисуется по padding-box.
-     align-self: stretch — потому что в колонке-флексе список получал ширину
-     по содержимому, и разделители обрывались раньше края плашки. */
-  .bounds__list { align-self: stretch; }
-  .section--light .bounds__list li { padding-right: 14%; }
-  .section--light .bounds .lead { max-width: 88%; }
-
-  /* Отступы, выставленные под широкий экран, на телефоне превращаются
+  }  /* Отступы, выставленные под широкий экран, на телефоне превращаются
      в пустые полосы высотой в треть экрана. */
   .section[style*="200px"] { padding-top: var(--sp-section) !important; padding-bottom: var(--sp-section) !important; }
   .section[style*="* 1.5"], .section[style*="* 2"] { padding-top: var(--sp-cinematic) !important; padding-bottom: var(--sp-cinematic) !important; }
@@ -546,4 +390,14 @@
   /* Секции высотой в экран на телефоне только добавляют пустоты:
      содержимое всё равно выше экрана либо намного ниже его. */
   .section--screen { min-height: 0; }
+}
+
+/* --------------------------------------------------------------------------
+   ЮРИДИЧЕСКИЙ НИЗ НА УЗКИХ ЭКРАНАХ
+   -------------------------------------------------------------------------- */
+@media (max-width: 560px) {
+  /* Четыре документа в строку через точку на 375px дают рваный перенос:
+     столбиком каждая ссылка остаётся целой строкой и её проще нажать. */
+  .footer__docs { flex-direction: column; gap: 10px; align-items: flex-start; }
+  .footer__docs a + a::before { content: none; }
 }

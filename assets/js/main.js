@@ -42,42 +42,6 @@
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
   /* ---------------------------------------------------------------------- */
-  /* A/B hero variants: ?v=a | b | c   (add ?ab=1 for a visible switcher)    */
-  /* ---------------------------------------------------------------------- */
-  (function heroVariants() {
-    var params = new URLSearchParams(location.search);
-    var v = (params.get('v') || 'b').toLowerCase();
-    if (['a', 'b', 'c'].indexOf(v) < 0) v = 'b';
-
-    function apply(which) {
-      $$('[data-cover]').forEach(function (el) {
-        el.classList.toggle('is-on', el.getAttribute('data-cover') === which);
-      });
-      $$('[data-ab]').forEach(function (b) {
-        b.setAttribute('aria-pressed', String(b.getAttribute('data-ab') === which));
-      });
-    }
-    apply(v);
-
-    if (params.get('ab') === '1') {
-      var box = document.createElement('div');
-      box.className = 'abswitch';
-      box.setAttribute('role', 'group');
-      box.setAttribute('aria-label', 'Варианты первого экрана');
-      ['a', 'b', 'c'].forEach(function (k) {
-        var b = document.createElement('button');
-        b.type = 'button';
-        b.setAttribute('data-ab', k);
-        b.textContent = k.toUpperCase();
-        b.addEventListener('click', function () { apply(k); });
-        box.appendChild(b);
-      });
-      document.body.appendChild(box);
-      apply(v);
-    }
-  })();
-
-  /* ---------------------------------------------------------------------- */
   /* Reveal on scroll                                                       */
   /* ---------------------------------------------------------------------- */
   var io = null;
@@ -194,45 +158,6 @@
   })();
 
   /* ---------------------------------------------------------------------- */
-  /* Risk field: hairlines from the centre out to each failure mode         */
-  /* ---------------------------------------------------------------------- */
-  (function riskField() {
-    var field = $('#riskfield');
-    if (!field) return;
-    var svg = $('.riskfield__svg', field);
-    var risks = $$('.risk', field);
-
-    var core = $('.riskfield__core', field);
-
-    /* Раньше координаты брались из инлайновых --x/--y, поэтому на мобильной
-       раскладке, где положение задаётся из CSS, лучи было нечем построить —
-       и схема там вырождалась в список. Теперь позиции измеряются по факту:
-       одна логика на все ширины. */
-    function draw() {
-      svg.innerHTML = '';
-      var fr = field.getBoundingClientRect();
-      if (!fr.width || !fr.height) return;
-      var cr = core.getBoundingClientRect();
-      var cx = (cr.left + cr.width / 2 - fr.left) / fr.width * 100;
-      var cy = (cr.top + cr.height / 2 - fr.top) / fr.height * 100;
-
-      risks.forEach(function (r) {
-        var rr = r.getBoundingClientRect();
-        if (!rr.width) return;
-        var x = (rr.left + rr.width / 2 - fr.left) / fr.width * 100;
-        var y = (rr.top + rr.height / 2 - fr.top) / fr.height * 100;
-        var ln = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        ln.setAttribute('x1', cx.toFixed(2)); ln.setAttribute('y1', cy.toFixed(2));
-        ln.setAttribute('x2', x.toFixed(2));  ln.setAttribute('y2', y.toFixed(2));
-        svg.appendChild(ln);
-      });
-    }
-    draw();
-    window.addEventListener('resize', draw);
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
-  })();
-
-  /* ---------------------------------------------------------------------- */
   /* Ecosystem map                                                          */
   /* ---------------------------------------------------------------------- */
   (function ecosystem() {
@@ -297,38 +222,122 @@
   /* Program accordion                                                      */
   /* ---------------------------------------------------------------------- */
   (function program() {
-    $$('.week__head').forEach(function (head) {
-      var body = document.getElementById(head.getAttribute('aria-controls'));
-      if (!body) return;
-      head.addEventListener('click', function () {
-        var open = head.getAttribute('aria-expanded') === 'true';
-        head.setAttribute('aria-expanded', String(!open));
-        body.classList.toggle('is-open', !open);
+    var heads = $$('.week__head');
+    if (!heads.length) return;
+
+    var pairs = heads.map(function (head) {
+      return { head: head, body: document.getElementById(head.getAttribute('aria-controls')) };
+    }).filter(function (p) { return p.body; });
+
+    function setOpen(p, open) {
+      p.head.setAttribute('aria-expanded', String(open));
+      p.body.classList.toggle('is-open', open);
+    }
+
+    /* Раскрыта всегда ровно одна неделя. Восемь одновременно открытых недель
+       давали экран сплошного текста, в котором нельзя было сравнить два
+       соседних пункта — приходилось листать. */
+    pairs.forEach(function (p, i) {
+      setOpen(p, i === 0);
+      p.head.addEventListener('click', function () {
+        var open = p.head.getAttribute('aria-expanded') === 'true';
+        /* Повторный клик по раскрытой неделе на десктопе ничего не делает:
+           пустой аккордеон оставлял дыру там, где только что был текст.
+           На телефоне закрыть можно — там открытая неделя занимает экран. */
+        if (open && !window.matchMedia('(max-width: 900px)').matches) return;
+        pairs.forEach(function (q) { setOpen(q, q === p && !open); });
       });
     });
   })();
 
   /* ---------------------------------------------------------------------- */
-  /* Outcome: capabilities check in sequence                                */
+  /* Секции прилипают к верху, следующая наезжает сверху                    */
   /* ---------------------------------------------------------------------- */
-  (function outcome() {
-    var list = $('#outcome');
-    if (!list) return;
-    var items = $$('li', list);
-    if (!('IntersectionObserver' in window) || reduceMotion) {
-      items.forEach(function (li) { li.classList.add('is-on'); });
-      return;
-    }
-    var oo = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        if (!en.isIntersecting) return;
-        oo.disconnect();
-        items.forEach(function (li, i) {
-          setTimeout(function () { li.classList.add('is-on'); }, 90 * i);
-        });
+  (function pinSections() {
+    var secs = $$('#main > section');
+    if (!secs.length) return;
+
+    function bg(el) { return el ? getComputedStyle(el).backgroundColor : ''; }
+
+    /* Прилипает только то, что меняет цвет: приём читается как передача
+       цвета, белое наезжает на чёрное. Между двумя одинаково чёрными
+       секциями видно лишь то, что текст ни с того ни с сего замер, —
+       обычная прокрутка там честнее.
+
+       Дальше два случая.
+
+       Секция размером с окно прилипает верхним краем к нулю. Короткую
+       (меньше 92% высоты) не трогаем: под ней осталась бы полоса следующей
+       секции, и наезд одной на другую перестал бы читаться.
+
+       Секция выше окна прилипает отрицательным смещением: top равен vh − h,
+       поэтому она замирает ровно тогда, когда её нижний край доходит до низа
+       окна. Дальше на месте стоит последний экран секции — то же самое, что
+       и в первом случае, только для длинного блока. Нулевой top здесь сломал
+       бы страницу: секция замерла бы верхним краем, и всё, что ниже сгиба,
+       стало бы недостижимым.
+
+       Высота окна решает всё, поэтому пересчёт идёт на каждый ресайз. */
+    function apply() {
+      var vh = window.innerHeight;
+      /* Отрицательное смещение считается от высоты окна, а на телефоне она
+         меняется на ходу вместе с адресной строкой: посчитанный top мгновенно
+         устаревает, и секция замирает не там, где нужно. Длинные блоки
+         прилипают только на широких экранах. */
+      var long = window.matchMedia('(min-width: 1025px)').matches;
+      secs.forEach(function (s, i) {
+        var next = secs[i + 1] || document.querySelector('.footer');
+        /* Дробная высота, а не offsetHeight: тот округляет до целого, и при
+           смещении на пару десятых пикселя нижний край прилипшей секции
+           вставал выше низа окна — по низу экрана проскакивала полоска
+           того, что лежит под ней.
+
+           Округление строго вверх плюс запасной пиксель: смещение
+           отрицательное, поэтому вверх — это в сторону нуля, и нижний край
+           гарантированно уходит за низ окна, а не не доходит до него.
+           Переполнение прячется под сгибом и попадает на собственное поле
+           секции, так что ничего не срезается. */
+        var h = s.getBoundingClientRect().height;
+        var tall = h > vh;
+        var pin = bg(s) !== bg(next) && (tall ? long : h >= vh * 0.92);
+        s.classList.toggle('is-pinned', pin);
+        s.style.top = (pin && tall) ? (Math.ceil(vh - h) + 1) + 'px' : '';
       });
-    }, { threshold: 0.2 });
-    oo.observe(list);
+    }
+    /* Пересчёт коалесцируется в один кадр: и ResizeObserver, и ресайз окна
+       могут выстрелить несколько раз подряд, а apply() трогает раскладку. */
+    var frame = 0;
+    function schedule() {
+      if (frame) return;
+      frame = requestAnimationFrame(function () { frame = 0; apply(); });
+    }
+
+    apply();
+
+    var t = null;
+    window.addEventListener('resize', function () {
+      clearTimeout(t);
+      t = setTimeout(apply, 120);
+    });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(apply);
+
+    /* Высота секции меняется не только на ресайзе.
+
+       Отрицательный top у длинной секции посчитан от её высоты, и стоит
+       высоте измениться — смещение устаревает, а секция замирает не там, где
+       нужно. Самый заметный случай — аккордеон недель: между самой короткой
+       и самой длинной неделей 184 пикселя, и при устаревшем смещении нижний
+       край чёрной секции не доходил до низа окна. В прореху было видно белую
+       секцию под ней — при быстрой прокрутке это читалось как белый глитч по
+       низу экрана.
+
+       Тот же механизм срабатывал бы на любом изменении высоты: раскрытии
+       подробностей в карточке формата, поздней загрузке портрета, подстановке
+       шрифта. Поэтому наблюдаем за высотой напрямую, а не перечисляем поводы. */
+    if (window.ResizeObserver) {
+      var ro = new ResizeObserver(schedule);
+      secs.forEach(function (s) { ro.observe(s); });
+    }
   })();
 
   /* ---------------------------------------------------------------------- */

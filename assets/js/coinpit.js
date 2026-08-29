@@ -311,7 +311,7 @@
       // Hairline rim so dark marks stay separated on a dark ground.
       ctx.beginPath();
       ctx.arc(a.x, a.y, a.r - 0.5, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(255,255,255,.14)';
+      ctx.strokeStyle = 'rgba(255,255,255,.18)';
       ctx.lineWidth = 1;
       ctx.stroke();
     }

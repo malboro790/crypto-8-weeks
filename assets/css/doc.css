@@ -1,0 +1,71 @@
+/* ==========================================================================
+   ЮРИДИЧЕСКИЕ СТРАНИЦЫ
+
+   Отдельный слой поверх токенов сайта. Задача обратная главной странице:
+   не удерживать внимание, а дать быстро найти нужный пункт. Отсюда узкая
+   мера, крупные интервалы между разделами и нумерация на полях.
+   ========================================================================== */
+
+.doc { padding-block: clamp(96px, 9vw, 140px) clamp(64px, 7vw, 104px); }
+.doc__wrap { max-width: 760px; margin-inline: auto; }
+
+.doc__back {
+  display: inline-block;
+  font-family: var(--f-mono); font-size: var(--t-subtext);
+  letter-spacing: var(--ls-label); text-transform: uppercase;
+  color: var(--c-ink-faint);
+  text-decoration: none;
+}
+.doc__back:hover { color: var(--c-accent); }
+
+.doc__title { margin-top: 20px; }
+.doc__meta {
+  margin-top: 14px;
+  font-family: var(--f-mono); font-size: var(--t-subtext);
+  color: var(--c-ink-faint);
+}
+.doc__intro { margin-top: 28px; max-width: none; }
+
+.doc h2 {
+  margin-top: clamp(40px, 4.5vw, 64px);
+  font-size: var(--t-h3); line-height: var(--lh-h3); letter-spacing: var(--ls-h3);
+  font-weight: var(--w-h3);
+  padding-top: 22px; border-top: 1px solid var(--c-line);
+}
+.doc h3 {
+  margin-top: 26px;
+  font-size: var(--t-h4); line-height: var(--lh-h4);
+  font-weight: var(--w-h4);
+}
+.doc p, .doc li { font-size: var(--t-text); line-height: var(--lh-text); color: var(--c-ink-muted); max-width: none; }
+.doc h2 + p, .doc h3 + p { margin-top: 14px; }
+.doc p + p { margin-top: 14px; }
+
+.doc ul, .doc ol { margin: 14px 0 0; padding-left: 22px; }
+.doc li + li { margin-top: 8px; }
+.doc ol { list-style: decimal; }
+.doc ul { list-style: disc; }
+
+.doc a { color: var(--c-accent); text-decoration: underline; text-underline-offset: 3px; }
+.doc strong { color: var(--c-ink); font-weight: 600; }
+
+/* Врезка для того, что человек должен прочитать, даже если пролистывает
+   документ по заголовкам. */
+.doc__note {
+  margin-top: 24px;
+  padding: 18px 20px;
+  border: 1px solid var(--c-accent-line);
+  border-radius: var(--r-lg);
+  background: var(--c-accent-tint);
+}
+.doc__note p { color: var(--c-ink); }
+
+.doc__toc { margin-top: 32px; padding: 0; list-style: none; }
+.doc__toc li + li { margin-top: 6px; }
+.doc__toc a { color: var(--c-ink-muted); text-decoration-color: var(--c-line-strong); }
+.doc__toc a:hover { color: var(--c-accent); }
+
+@media (max-width: 700px) {
+  .doc { padding-block: 88px 56px; }
+  .doc ul, .doc ol { padding-left: 18px; }
+}
