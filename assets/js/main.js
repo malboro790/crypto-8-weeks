@@ -39,20 +39,40 @@
      целым и кнопки нет вовсе — поисковику и читалке видно всё, и ничего
      не прячется за неработающим элементом. */
   (function collapseIncludes() {
-    $$('.tier__more').forEach(function (box) {
+    var narrow = window.matchMedia('(max-width: 768px)');
+    var boxes = $$('.tier__more').filter(function (box) {
+      return box.querySelector('.tier__more-btn') && box.querySelector('.tier__extra');
+    });
+    if (!boxes.length) return;
+
+    boxes.forEach(function (box) {
       var btn = box.querySelector('.tier__more-btn');
-      var list = box.querySelector('.tier__list');
-      if (!btn || !list || !box.querySelector('.tier__extra')) return;
-
-      box.classList.add('is-collapsible');
-      btn.hidden = false;
-
       btn.addEventListener('click', function () {
         var open = box.classList.toggle('is-open');
         btn.setAttribute('aria-expanded', open ? 'true' : 'false');
         btn.childNodes[0].nodeValue = open ? 'Свернуть ' : 'Показать все ';
       });
     });
+
+    /* Сворачивание только на узком экране. В широкой карточке шесть строк
+       помещаются свободно, и прятать половину состава за кнопку значит
+       прятать половину того, за что человек платит. */
+    function apply() {
+      boxes.forEach(function (box) {
+        var btn = box.querySelector('.tier__more-btn');
+        if (narrow.matches) {
+          box.classList.add('is-collapsible');
+          btn.hidden = false;
+        } else {
+          box.classList.remove('is-collapsible', 'is-open');
+          btn.hidden = true;
+          btn.setAttribute('aria-expanded', 'false');
+          btn.childNodes[0].nodeValue = 'Показать все ';
+        }
+      });
+    }
+    apply();
+    narrow.addEventListener('change', apply);
   })();
 
   var yearEl = $('#year');
