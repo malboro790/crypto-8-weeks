@@ -28,6 +28,12 @@
 @media (max-width: 1040px) {
   html { scroll-padding-top: 84px; }
 
+  /* Паузы вокруг блока о рисках. На десктопе это четыреста пикселей тишины
+     до и после — там они читаются как пауза перед сменой темы. На узком
+     экране столько же пустоты читается как поломка вёрстки: содержимого
+     в блоке шестьсот пикселей, а полей вокруг — восемьсот. */
+  #security { padding-top: 220px; padding-bottom: 220px; }
+
   /* svh, а не vh: на телефоне vh считается по экрану без адресной строки,
      и снизу вылезала полоса следующей секции. Потолка в 760px тоже быть не
      должно — на высоком экране он оставлял ту же щель. */
@@ -136,12 +142,7 @@
   .tiers--single .tier__note, .tiers--single .tier__cta, .tiers--single .tier__more { grid-area: auto; }
   .tiers--single .tier__more { margin-top: var(--sp-block); }
   .tiers--single .tier__list { margin-top: 0; }
-  /* Воздух в строках нужен, только когда список стоит колонкой во всю высоту
-     карточки. В столбик он просто растягивает блок на лишний экран. */
-  .tiers--single .tier__list li { padding: 10px 0; }
 
-  .tier__more-sum { display: flex; }
-  .tier__more[open] .tier__list { margin-top: var(--sp-stack); }
 
   /* Дорогой тариф впереди и заметнее: чуть шире и с одной мягкой тенью.
      Одна тень, а не набор — на светлом фоне несколько слоёв дают грязь. */
@@ -182,7 +183,9 @@
 
   /* Картинка в строке ужимается, но остаётся: без неё список умений
      превращается в двенадцать одинаковых абзацев. */
-  .skill { grid-template-columns: 128px minmax(0, 1fr); gap: 14px; align-items: start; }
+  /* Текст по центру картинки, а не от её верха: подпись короче квадрата,
+     и при выравнивании по верху строка висела в верхней трети. */
+  .skill { grid-template-columns: 128px minmax(0, 1fr); gap: 14px; align-items: center; }
   /* Та же ручка, что и в карточках сценариев: макет ужимается целиком,
      а не ломает строки. Кегль подобран так, чтобы самая длинная строка
      макета помещалась в колонку без обрезки. */
@@ -200,6 +203,8 @@
    ≤ 600 — phone. Sticky CTA appears; the compare split stays but tightens.
    -------------------------------------------------------------------------- */
 @media (max-width: 600px) {
+  #security { padding-top: 120px; padding-bottom: 120px; }
+
   html { scroll-padding-top: 76px; }
 
   .compare { grid-template-columns: 1fr 1fr; }
@@ -289,7 +294,10 @@
   .mock { height: 132px; max-width: none; padding: 16px; }
   /* В одну колонку квадрат во всю ширину — это пол-экрана под картинку.
      Ограничиваем ширину, пропорция держится сама. */
-  .part__art { height: auto; max-width: 200px; padding: .85em; }}
+  /* Во всю ширину колонки: в одну колонку квадрат в двести пикселей смотрелся
+     обрезком рядом с текстом на всю ширину. Пропорция держится сама —
+     aspect-ratio: 1 остаётся, кегль внутри растёт вместе с шириной. */
+  .part__art { height: auto; max-width: none; font-size: 16px; padding: .85em; }}
 
 /* The expanded week: two columns of prose need width to stay readable. */
 @media (max-width: 900px) {
