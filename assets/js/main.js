@@ -300,8 +300,42 @@
         var h = s.getBoundingClientRect().height;
         var tall = h > vh;
         var pin = bg(s) !== bg(next) && (tall ? long : h >= vh * 0.92);
-        s.classList.toggle('is-pinned', pin);
-        s.style.top = (pin && tall) ? (Math.ceil(vh - h) + 1) + 'px' : '';
+        /* apply() решает только, ИМЕЕТ ЛИ секция право прилипать, и с каким
+           смещением. Прилипла она прямо сейчас или уже отпущена — решает
+           sync() по положению следующей секции. */
+        s.__pinnable = pin;
+        s.__pinTop = (pin && tall) ? (Math.ceil(vh - h) + 1) + 'px' : '';
+        if (!pin) { s.classList.remove('is-pinned', 'is-released'); s.style.top = ''; }
+      });
+      sync();
+    }
+
+    /* Прилипшая секция отпускается, как только следующая закрыла верх окна.
+
+       Без этого она остаётся прилипшей до конца #main: белый экран, отдавший
+       цвет чёрному, продолжает стоять на top:0 позади всех следующих секций —
+       двенадцать тысяч пикселей прокрутки. Пока чёрные секции перекрывают его
+       без щелей, его не видно. Но при быстрой прокрутке отрисовка не успевает
+       за нижним краем кадра, и в этой полосе видно именно припаркованный белый.
+       Отсюда и белая вспышка снизу примерно на восьмую часть экрана.
+
+       Условие простое: пока верх следующей секции ниже верха окна, передача
+       цвета ещё идёт и прилипание нужно. Как только он ушёл за верх окна,
+       предыдущая секция закрыта целиком — прилипание больше ничего не даёт,
+       и она возвращается в поток. В момент переключения обе раскладки
+       выглядят одинаково (видимая площадь секции равна нулю), поэтому скачка
+       нет ни при прокрутке вниз, ни при возврате вверх.
+
+       Заодно это снимает с композитора два экранных слоя, которые он иначе
+       тащил бы через всю страницу. */
+    function sync() {
+      secs.forEach(function (s, i) {
+        if (!s.__pinnable) return;
+        var next = secs[i + 1] || document.querySelector('.footer');
+        var covered = next ? next.getBoundingClientRect().top <= 0 : false;
+        s.classList.toggle('is-pinned', !covered);
+        s.classList.toggle('is-released', covered);
+        s.style.top = covered ? '' : s.__pinTop;
       });
     }
     /* Пересчёт коалесцируется в один кадр: и ResizeObserver, и ресайз окна
@@ -319,6 +353,15 @@
       clearTimeout(t);
       t = setTimeout(apply, 120);
     });
+
+    /* Проверка на прокрутке — раз в кадр. Внутри только чтения геометрии
+       и переключение класса, layout от этого не пересчитывается. */
+    var pending = false;
+    window.addEventListener('scroll', function () {
+      if (pending) return;
+      pending = true;
+      requestAnimationFrame(function () { pending = false; sync(); });
+    }, { passive: true });
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(apply);
 
     /* Высота секции меняется не только на ресайзе.
