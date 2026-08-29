@@ -194,40 +194,6 @@
   .proof__i { padding-right: 0; }
   .proof__i:nth-child(even) { border-left: 0; padding-left: 0; }
 
-  /* Картинка у каждой карточки говорит, о чём она: не абстрактные полосы,
-     а те самые слова, набранные тем же моношрифтом, что и чипы на странице. */
-  .fact__art {
-    display: flex;
-    flex-wrap: wrap;
-    align-content: center;
-    gap: 6px;
-    /* Высота по содержимому с нижней границей: жёсткие 88px обрезали третий
-       чип в узкой колонке строк сопровождения — там ширина всего 96px. */
-    min-height: 88px;
-    margin-bottom: 14px;
-    padding: 12px;
-    border-radius: var(--r-sm);
-    overflow: hidden;
-  }
-  .fact__art i {
-    font-family: var(--f-mono);
-    font-size: .625rem;
-    font-style: normal;
-    letter-spacing: .02em;
-    padding: 5px 8px;
-    border-radius: 5px;
-  }
-  .fact__art--a { background: #E4E4E7; }
-  .fact__art--a i { background: rgba(255, 255, 255, .82); color: #0A0A0A; }
-  .fact__art--b { background: #14111C; }
-  .fact__art--b i { background: rgba(255, 255, 255, .12); color: rgba(255, 255, 255, .82); }
-  .fact__art--b i:first-child { background: #0A0A0A; color: #FFFFFF; }
-  .fact__art--c { background: #0A0A0A; }
-  /* Затемняем, а не осветляем: белая подложка на фиолетовом делает фон светлее
-     и белый текст на нём падает до 3.97. Тёмная подложка работает наоборот. */
-  .fact__art--c i { background: rgba(0, 0, 0, .26); color: #FFFFFF; }
-  .fact__art--c i:first-child { background: #FFFFFF; color: #0A0A0A; }
-
 }
 
 /* --------------------------------------------------------------------------
@@ -323,10 +289,7 @@
   .mock { height: 132px; max-width: none; padding: 16px; }
   /* В одну колонку квадрат во всю ширину — это пол-экрана под картинку.
      Ограничиваем ширину, пропорция держится сама. */
-  .part__art { height: auto; max-width: 200px; padding: .85em; }
-  .mock__row { padding: 10px 12px; font-size: .6875rem; }
-  .mock__bub { padding: 9px 12px; font-size: .6875rem; }
-}
+  .part__art { height: auto; max-width: 200px; padding: .85em; }}
 
 /* The expanded week: two columns of prose need width to stay readable. */
 @media (max-width: 900px) {
@@ -370,7 +333,6 @@
 
   /* Подписи внутри мини-визуализаций — единственный слой мельче тринадцати.
      Держим их на одиннадцати, а не на десяти: десятый появился случайно. */
-  .fact__art i { font-size: 0.6875rem; }
 
   #how .body,
   #how .stat__d { font-size: var(--t-h4); line-height: 1.6; }

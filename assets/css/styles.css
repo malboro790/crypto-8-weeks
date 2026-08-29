@@ -63,12 +63,6 @@ button { font: inherit; color: inherit; }
   padding: 14px 20px; border-radius: var(--r-sm);
 }
 .skip:focus { left: 12px; top: 12px; }
-
-.visually-hidden {
-  position: absolute; width: 1px; height: 1px; overflow: hidden;
-  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
-}
-
 /* ==========================================================================
    LAYOUT PRIMITIVES
    ========================================================================== */
@@ -88,9 +82,6 @@ main { overflow-x: clip; }
   margin-inline: auto;
   padding-inline: var(--gutter);
 }
-.container--wide { max-width: calc(var(--container-wide) + var(--gutter) * 2); }
-.container--text { max-width: calc(var(--container-text) + var(--gutter) * 2); }
-
 /* From 1320 up the grid is locked to exactly 1280px of content — the same on a
    1440 and a 1920 display, with only the outer margin growing. Below 1320 the
    grid itself starts to compress. 1280 + 20 + 20 = 1320 is the hinge. */
@@ -116,9 +107,7 @@ main { overflow-x: clip; }
 /* A section supplies its own top padding, so whatever leads it must not add a
    margin on top of that. Guards the blocks that used to sit under a label. */
 .section .container > :first-child { margin-top: 0 !important; }
-.section--cinematic { padding-block: var(--sp-cinematic); }
-.section--tight { padding-block: var(--sp-tight); }
-/* Две светлые секции подряд перекрываем на пиксель. Секции одного цвета, но
+.section--cinematic { padding-block: var(--sp-cinematic); }/* Две светлые секции подряд перекрываем на пиксель. Секции одного цвета, но
    при дробной высоте на плотных экранах между ними проступает тёмный фон
    страницы — тонкой полосой во всю ширину. */
 /* Каждая секция заходит на предыдущую на пиксель.
@@ -156,9 +145,6 @@ main { overflow-x: clip; }
   display: grid;
   align-content: center;
 }
-
-.section--hairline { border-top: 1px solid var(--c-line); }
-
 /* Секция прилипает к верху окна, и следующая наезжает на неё сверху — тот же
    переход, что у первого экрана. Слой не задаём: у всех секций он одинаковый,
    и при равном z-index более поздняя в разметке рисуется поверх.
@@ -248,16 +234,8 @@ main { overflow-x: clip; }
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: var(--grid-gap);
-}
-.col-full  { grid-column: 1 / -1; }
-.col-half  { grid-column: span 6; }
-.col-two-thirds { grid-column: span 8; }
-.col-third { grid-column: span 4; }
-
+}.col-half  { grid-column: span 6; }
 .stack { display: flex; flex-direction: column; gap: var(--sp-stack); align-items: flex-start; }
-.stack--tight { gap: clamp(.6rem, .4rem + .5vw, 1rem); }
-.stack--loose { gap: var(--sp-block); }
-
 .hr { border: 0; height: 1px; background: var(--c-line); width: 100%; margin: 0; }
 
 /* ==========================================================================
@@ -273,20 +251,11 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--f-display); font-weight: var(--w-
 .h1 { font-size: var(--t-h1); line-height: var(--lh-h1); letter-spacing: var(--ls-h1); font-weight: var(--w-h1); text-wrap: balance; }
 .h2 { font-size: var(--t-h2); line-height: var(--lh-h2); letter-spacing: var(--ls-h2); font-weight: var(--w-h2); text-wrap: balance; max-width: 22ch; }
 .h3 { font-size: var(--t-h3); line-height: var(--lh-h3); letter-spacing: var(--ls-h3); font-weight: var(--w-h3); text-wrap: balance; }
-.h4 { font-size: var(--t-h4); line-height: var(--lh-h4); letter-spacing: var(--ls-h4); font-weight: var(--w-h4); }
-
 .text {
   font-family: var(--f-text); font-size: var(--t-text);
   line-height: var(--lh-text); letter-spacing: var(--ls-text);
   color: var(--c-ink-muted); max-width: 62ch;
 }
-.subtext {
-  font-family: var(--f-text); font-size: var(--t-subtext);
-  line-height: var(--lh-subtext); letter-spacing: var(--ls-subtext);
-  color: var(--c-ink-faint); max-width: 68ch;
-}
-.text--ink, .subtext--ink { color: var(--c-ink); }
-
 .h2--wide { max-width: 26ch; }
 
 /* Interface labels and figures: the same two sizes, set in the mono face. */
@@ -308,9 +277,7 @@ p { margin: 0; max-width: 62ch; }
 .lead    { font-size: var(--t-lead); line-height: 1.45; letter-spacing: -.01em; color: var(--c-ink-muted); max-width: 52ch; }
 .body    { font-size: var(--t-text); line-height: var(--lh-text); color: var(--c-ink-muted); max-width: 62ch; }
 .small   { font-size: var(--t-subtext); line-height: var(--lh-subtext); color: var(--c-ink-muted); max-width: 68ch; }
-.meta    { font-size: var(--t-subtext); line-height: var(--lh-subtext); color: var(--c-ink-faint); max-width: 72ch; }.accent { color: var(--c-accent); }
-.nowrap { white-space: nowrap; }
-
+.meta    { font-size: var(--t-subtext); line-height: var(--lh-subtext); color: var(--c-ink-faint); max-width: 72ch; }
 /* ==========================================================================
    BUTTONS
    ========================================================================== */
@@ -375,19 +342,8 @@ p { margin: 0; max-width: 62ch; }
 
 /* Their header controls: shorter, 10px radius, 13px label at 600. */
 .btn--sm { height: 40px; padding: 0 20px; border-radius: var(--r-md); font-size: var(--t-subtext); font-weight: 600; }
-.btn--lg { height: 52px; padding: 0 28px; font-size: 1rem; }
-
 .btn__arrow { font-family: var(--f-mono); font-weight: 400; transition: transform var(--d-fast) var(--e-out); }
 .btn:hover .btn__arrow { transform: translateX(3px); }
-
-.link-arrow {
-  display: inline-flex; align-items: center; gap: 8px;
-  color: var(--c-accent); text-decoration: none; font-weight: var(--w-medium);
-  border-bottom: 1px solid var(--c-accent-line); padding-bottom: 2px;
-  transition: border-color var(--d-fast) var(--e-out);
-}
-.link-arrow:hover { border-color: var(--c-accent); }
-
 .cta-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
 
 /* ==========================================================================
@@ -1038,26 +994,8 @@ p { margin: 0; max-width: 62ch; }
 
 .mock--theory   { background: #E4E4E7; color: #0A0A0A; }
 .mock--practice { background: #14111C; color: #FFFFFF; }
-.mock--support  { background: #0A0A0A; color: #FFFFFF; }
-
-.mock__row {
-  display: flex; align-items: baseline; justify-content: space-between; gap: 8px;
-  padding: 7px 9px; border-radius: var(--r-sm);
-  background: rgba(255, 255, 255, .86); color: #0A0A0A;
-}
-.mock__row b { font-weight: 600; }
-.mock__row--dim { background: rgba(255, 255, 255, .12); color: rgba(255, 255, 255, .78); }
-/* Единственная искра в иллюстрациях: строка, ради которой картинка и нарисована. */
-.mock__row--hot { background: var(--c-spark); color: #0A0A0A; }
-.mock__arrow { padding-left: 9px; opacity: .5; line-height: 1; font-size: .6875rem; }
-
-.mock__bub {
-  align-self: flex-start; max-width: 92%;
-  padding: 7px 10px;
-  border-radius: var(--r-sm) var(--r-sm) var(--r-sm) 2px;
-  background: rgba(0, 0, 0, .24);
-}
-/* The reply comes from the other side, so it hangs off the opposite corner. */
+.mock--support  { background: #0A0A0A; color: #FFFFFF; }/* Единственная искра в иллюстрациях: строка, ради которой картинка и нарисована. */
+.mock__row--hot { background: var(--c-spark); color: #0A0A0A; }/* The reply comes from the other side, so it hangs off the opposite corner. */
 .mock__bub--me {
   align-self: flex-end;
   border-radius: var(--r-sm) var(--r-sm) 2px var(--r-sm);
@@ -1223,9 +1161,6 @@ p { margin: 0; max-width: 62ch; }
   color: rgba(255, 255, 255, .32); letter-spacing: .04em;
 }
 .sk-net { display: flex; align-items: center; gap: .45em; }
-.sk-mark { display: flex; gap: .25em; }
-.sk-mark img { width: 1.25em; height: 1.25em; }
-
 /* Совпадающие части адреса подсвечены — глаз сравнивает начало и конец,
    а не всю строку. */
 .sk-r em { font-style: normal; color: var(--c-spark); }
@@ -1490,8 +1425,6 @@ p { margin: 0; max-width: 62ch; }
   background: var(--c-surface); border: 1px solid var(--c-line);
   color: var(--c-ink-muted);
 }
-.tag--accent { background: var(--c-accent-tint); color: var(--c-accent); }
-
 /* ==========================================================================
    STATS (personal support)
    ========================================================================== */
@@ -1601,13 +1534,16 @@ p { margin: 0; max-width: 62ch; }
 
 /* Профили: текстовая строка, а не иконки. Названия площадок читаются
    быстрее логотипов и не требуют объяснения, куда ведёт ссылка. */
-.social { list-style: none; margin: 24px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 20px; }
+.social { list-style: none; margin: 24px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 2px 20px; }
 .social a {
   font-family: var(--f-mono); font-size: var(--t-subtext);
   letter-spacing: var(--ls-label);
   color: var(--c-ink-muted); text-decoration: underline;
   text-decoration-color: var(--c-line-strong);
   text-underline-offset: 4px;
+  /* Цель не ниже 24px — см. .footer__docs. */
+  display: inline-block;
+  padding-block: 5px;
   transition: color var(--d-fast) var(--e-out), text-decoration-color var(--d-fast) var(--e-out);
 }
 .social a:hover { color: var(--c-accent); text-decoration-color: currentColor; }
@@ -1636,15 +1572,6 @@ p { margin: 0; max-width: 62ch; }
   color: var(--c-ink-faint);
 }
 .agency__line { font-size: var(--t-text); line-height: var(--lh-text); color: var(--c-ink-muted); max-width: 52ch; }
-
-.logostrip { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: clamp(24px, 3vw, 40px); }
-.logostrip__slot {
-  height: 46px; min-width: 128px; border: 1px dashed var(--c-line-strong); border-radius: var(--r-sm);
-  display: grid; place-items: center;
-  font-family: var(--f-mono); font-size: var(--t-subtext); letter-spacing: .1em; text-transform: uppercase;
-  color: var(--c-ink-faint);
-}
-
 /* ==========================================================================
    PRICE
    ========================================================================== */
@@ -1899,7 +1826,8 @@ p { margin: 0; max-width: 62ch; }
 .footer__links { display: flex; flex-wrap: wrap; gap: 8px 26px; }
 .footer__links a {
   color: var(--c-dark-muted); text-decoration: none; font-size: var(--t-text);
-  padding: 6px 0;                        /* a comfortable target on touch too */
+  display: inline-block;
+  padding-block: 6px;                    /* цель не ниже 24px на ощупь */
   transition: color var(--d-fast) var(--e-out);
 }
 .footer__links a:hover { color: var(--c-dark-ink); }
@@ -1910,6 +1838,8 @@ p { margin: 0; max-width: 62ch; }
    линии — стандартное перечёркивает выносные элементы в моноширинном. */
 .footer__by {
   color: var(--c-dark-ink);
+  display: inline-block;
+  padding-block: 4px;
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
@@ -2150,28 +2080,13 @@ p { margin: 0; max-width: 62ch; }
    мини-визуализация в языке карточек сценариев, иначе три серые строки
    подряд просто пролистывают.
    -------------------------------------------------------------------------- */
-.perks { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; grid-template-columns: repeat(3, 1fr); }
-.perk { display: grid; gap: 12px; align-content: start; }
-.perk__t { font-size: var(--t-subtext); line-height: var(--lh-subtext); color: var(--c-ink-muted); }
-
 /* Картинки показываем только там, где для них есть место по вертикали.
    На широком экране карточки стоят в ряд и живут подписями, а чипы внутри
    .fact__art без своих стилей вываливались курсивным текстом поверх названия. */
 .perk__art,
 .fact__art { display: none; }
 
-@media (max-width: 768px) {
-  .perks { grid-template-columns: 1fr; gap: 20px; }
-  .perk {
-    grid-template-columns: 96px minmax(0, 1fr);
-    align-items: center;
-    gap: 16px;
-  }
-  .perk__t { font-size: var(--t-h4); color: var(--c-ink); }
-
-  .perk__art { display: flex; min-height: 74px; height: auto; margin-bottom: 0; padding: 10px; }
-  .perk { grid-template-columns: 104px minmax(0, 1fr); align-items: center; }
-}
+@media (max-width: 768px) {}
 
 /* Доказательство рядом с кнопкой: одна строка, тише подписи о длительности —
    она подтверждает, а не продаёт. */
@@ -2184,17 +2099,23 @@ p { margin: 0; max-width: 62ch; }
 /* На юридических страницах юрблок идёт сразу за навигацией, у которой уже
    есть нижняя граница: две линии подряд читаются как пустая полоса. */
 .footer__top + .footer__law { border-top: 0; margin-top: 0; }
-.footer__docs { display: flex; flex-wrap: wrap; gap: 6px 0; }
+.footer__docs { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 10px; }
+/* Высота цели не ниже 24px: WCAG 2.5.8 меряет не кегль, а площадь, по которой
+   можно попасть пальцем. На 13px строка давала 17px — мимо. Отступ сверху и
+   снизу добирает высоту, не трогая рисунок подвала: подчёркивание остаётся на
+   месте, потому что отбито от базовой линии своим offset. */
 .footer__docs a {
   font-size: var(--t-subtext); color: var(--c-dark-muted);
   text-decoration: underline; text-decoration-color: rgba(255, 255, 255, .22);
   text-underline-offset: 4px;
+  display: inline-block;
+  padding-block: 5px;
   transition: color var(--d-fast) var(--e-out), text-decoration-color var(--d-fast) var(--e-out);
 }
 .footer__docs a:hover { color: var(--c-dark-ink); text-decoration-color: currentColor; }
 /* Разделитель рисуем псевдоэлементом, а не символом в разметке: иначе точка
    попадает в область ссылки и подчёркивается вместе с ней. */
-.footer__docs a + a::before { content: "·"; margin: 0 10px; color: rgba(255, 255, 255, .3); text-decoration: none; display: inline-block; }
+.footer__docs a + a::before { content: "·"; margin: 0 10px 0 0; color: rgba(255, 255, 255, .3); text-decoration: none; display: inline-block; }
 
 /* Незаполненное поле. Видно сразу и на светлых, и на тёмных подложках —
    чтобы страницу нельзя было выложить с рыбой в реквизитах. */
