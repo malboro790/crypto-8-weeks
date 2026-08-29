@@ -494,8 +494,8 @@ p { margin: 0; max-width: 62ch; }
    по шагу при первой же правке. */
 :root {
   --grid-lines:
-    repeating-linear-gradient(to right,  rgba(255, 255, 255, .16) 0 1px, transparent 1px 139px),
-    repeating-linear-gradient(to bottom, rgba(255, 255, 255, .16) 0 1px, transparent 1px 139px);
+    repeating-linear-gradient(to right,  rgba(255, 255, 255, .22) 0 1px, transparent 1px 139px),
+    repeating-linear-gradient(to bottom, rgba(255, 255, 255, .22) 0 1px, transparent 1px 139px);
   /* Растворение сетки — краской поверх линий, а не маской.
 
      Маска гасила слой, а слой ради неё поднимался в отдельный слой
@@ -520,7 +520,7 @@ p { margin: 0; max-width: 62ch; }
      только к самому краю блока и на первом экране читалась как грязь на
      стекле, а не как сетка. Чистое поле под словом сохраняется — в центре
      краска по-прежнему полностью непрозрачная. */
-  --grid-cover-fade:  radial-gradient(125% 95% at 50% 50%, #000 0%, rgba(0, 0, 0, .38) 46%, transparent 72%);
+  --grid-cover-fade:  radial-gradient(125% 95% at 50% 50%, #000 0%, rgba(0, 0, 0, .32) 44%, transparent 68%);
   --grid-cover-edges: linear-gradient(to bottom, #000 0%, transparent 16%, transparent 84%, #000 100%);
   --grid-cover-down:  linear-gradient(to bottom, #000 0%, #000 24%, rgba(0, 0, 0, .5) 58%, transparent 88%, #000 100%);
 }

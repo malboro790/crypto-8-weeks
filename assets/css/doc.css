@@ -69,3 +69,15 @@
   .doc { padding-block: 88px 56px; }
   .doc ul, .doc ol { padding-left: 18px; }
 }
+
+/* Домены и технические имена внутри текста политики: моноширинный, чтобы их
+   нельзя было спутать с обычными словами. */
+.doc__code {
+  font-family: var(--f-mono);
+  font-size: .92em;
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-xs);
+  padding: .05em .35em;
+  white-space: nowrap;
+}
