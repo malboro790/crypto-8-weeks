@@ -4,24 +4,138 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Восемь недель с криптой — персональная программа</title>
-<meta name="description" content="8 недель персонального сопровождения: разберёмся, как устроена крипта, научимся самостоятельно хранить и переводить активы и соберём вашу собственную систему работы с ними. Без трейдинга, сигналов и обещаний доходности.">
+<meta name="description" content="8 недель один на один: 16 личных созвонов, чат между ними и помощь в момент вашей первой операции. Без трейдинга и обещаний доходности.">
+
+<!-- Канонический адрес. Одна и та же страница открывается как /crypto-8-weeks/,
+     как /crypto-8-weeks/index.html и с любым рекламным хвостом ?utm_source=…
+     Для поисковика это разные страницы с одинаковым текстом; canonical называет
+     настоящую. ВАЖНО: при переезде на свой домен адрес здесь, в og:url,
+     в sitemap.xml и в robots.txt нужно поменять — иначе они будут указывать
+     на старый сайт. -->
+<link rel="canonical" href="https://malboro790.github.io/crypto-8-weeks/">
+<meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="theme-color" content="#000000">
 
+<!-- Превью ссылки. Весь трафик идёт пересылкой в мессенджерах, и кнопка ведёт
+     в личку в Telegram — то есть ссылку пересылают буквально всегда. Без
+     картинки она приходит серым прямоугольником. -->
 <meta property="og:type" content="website">
+<meta property="og:site_name" content="Восемь недель с криптой">
 <meta property="og:title" content="Восемь недель с криптой">
-<meta property="og:description" content="Персональная программа: понять, как устроена крипта, и научиться самостоятельно хранить и переводить активы.">
+<meta property="og:description" content="8 недель один на один: 16 личных созвонов, чат между ними и помощь в момент вашей первой операции.">
+<meta property="og:url" content="https://malboro790.github.io/crypto-8-weeks/">
+<meta property="og:image" content="https://malboro790.github.io/crypto-8-weeks/assets/img/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Сергей Кербер — автор программы «Восемь недель с криптой»">
 <meta property="og:locale" content="ru_RU">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Восемь недель с криптой">
+<meta name="twitter:description" content="8 недель один на один: 16 личных созвонов, чат между ними и помощь в момент вашей первой операции.">
+<meta name="twitter:image" content="https://malboro790.github.io/crypto-8-weeks/assets/img/og-cover.jpg">
+
+<!-- Разметка данных. Здесь только то, что написано на самой странице: ни цены,
+     ни даты старта на сайте нет, а выдумывать их в разметке нельзя — поисковик
+     сверяет её с видимым текстом. Когда цена и дата появятся, добавьте
+     в hasCourseInstance поля offers и startDate. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://malboro790.github.io/crypto-8-weeks/#author",
+      "name": "Сергей Кербер",
+      "jobTitle": "Основатель дизайн-студии KERBER",
+      "url": "https://kerber.agency",
+      "sameAs": ["https://kerber.agency", "https://t.me/Andrey_KERBERagency"]
+    },
+    {
+      "@type": "Course",
+      "@id": "https://malboro790.github.io/crypto-8-weeks/#course",
+      "name": "Восемь недель с криптой",
+      "description": "Персональная программа: понять, как устроена крипта, и научиться самостоятельно покупать, хранить и переводить активы. Без трейдинга, сигналов и обещаний доходности.",
+      "inLanguage": "ru",
+      "url": "https://malboro790.github.io/crypto-8-weeks/",
+      "image": "https://malboro790.github.io/crypto-8-weeks/assets/img/og-cover.jpg",
+      "provider": { "@id": "https://malboro790.github.io/crypto-8-weeks/#author" },
+      "author": { "@id": "https://malboro790.github.io/crypto-8-weeks/#author" },
+      "teaches": [
+        "Покупка криптовалюты через биржу",
+        "Вывод средств и выбор сети перевода",
+        "Некастодиальный кошелёк и хранение seed phrase",
+        "Проверка адреса и комиссий",
+        "Распознавание мошеннических схем"
+      ],
+      "hasCourseInstance": {
+        "@type": "CourseInstance",
+        "courseMode": "online",
+        "courseWorkload": "PT16H",
+        "instructor": { "@id": "https://malboro790.github.io/crypto-8-weeks/#author" }
+      }
+    }
+  ]
+}
+</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap">
+<!-- Шрифты не держат первую отрисовку. preload запускает загрузку сразу,
+     а media="print" снимает со стилей статус блокирующих: onload возвращает их
+     в дело уже после того, как страница нарисовалась. Подмена начертания
+     проходит под прелоадером, поэтому мигания шрифта посетитель не видит. -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap"></noscript>
 
-<link rel="stylesheet" href="assets/css/tokens.css?v=336">
-<link rel="stylesheet" href="assets/css/styles.css?v=336">
-<link rel="stylesheet" href="assets/css/responsive.css?v=336">
+<!-- Прелоадер. Критический стиль встроен, а не подключён файлом: он должен
+     примениться раньше, чем браузер нарисует первый кадр, иначе вместо шторки
+     мелькнёт полуготовая страница. Начертания системные — свои ещё грузятся,
+     и именно их ожидание шторка и закрывает. -->
+<style>
+  .pl {
+    position: fixed; inset: 0; z-index: 999;
+    background: #000000; color: #FFFFFF;
+    display: grid; place-content: center; justify-items: start;
+    gap: 18px; padding: 24px;
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    transition: opacity .42s cubic-bezier(.22,.68,.28,1);
+  }
+  .pl__t { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: rgba(255,255,255,.42); }
+  .pl__rail { width: min(240px, 60vw); height: 1px; background: rgba(255,255,255,.16); overflow: hidden; }
+  .pl__fill { display: block; height: 100%; width: 0%; background: #C1FF0F; transition: width .18s linear; }
+  .pl__n { font-size: 11px; letter-spacing: .1em; font-variant-numeric: tabular-nums; color: rgba(255,255,255,.42); }
+  .pl.is-done { opacity: 0; pointer-events: none; }
+  html.is-loading, html.is-loading body { overflow: hidden; }
+  /* Без скрипта шторку снимать некому — значит её не должно быть вовсе. */
+  html.no-js .pl, html.pl-seen .pl { display: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .pl, .pl__fill { transition: none; }
+  }
+</style>
+<script>
+  /* Ставим класс до отрисовки: показывать шторку второй раз за сессию незачем,
+     а если скрипты отключены — её не должно быть совсем. */
+  (function () {
+    var h = document.documentElement;
+    h.className += ' is-loading';
+    try { if (sessionStorage.getItem('pl')) h.className += ' pl-seen'; } catch (e) {}
+  })();
+</script>
+<noscript><style>html.is-loading, html.is-loading body { overflow: auto !important; } .pl { display: none !important; }</style></noscript>
+
+<link rel="stylesheet" href="assets/css/tokens.css?v=341">
+<link rel="stylesheet" href="assets/css/styles.css?v=341">
+<link rel="stylesheet" href="assets/css/responsive.css?v=341">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='none' stroke='%23FFFFFF' stroke-width='2'/><circle cx='16' cy='16' r='6' fill='%23C1FF0F'/></svg>">
 </head>
 <body>
+
+<div class="pl" id="pl" role="status" aria-live="polite" aria-label="Загрузка страницы">
+  <span class="pl__t">Восемь недель с криптой</span>
+  <span class="pl__rail"><i class="pl__fill" id="plFill"></i></span>
+  <span class="pl__n" id="plNum">0%</span>
+</div>
 
 <a class="skip" href="#main">К основному содержанию</a>
 
@@ -1140,13 +1254,18 @@
   <div class="container">
 
     <!-- Портрет + имя + тезис + четыре главных доказательства.
-         ВНИМАНИЕ: assets/img/author-source.jpg — 3D-рендер, а не фотография.
-         Для продукта за 159 000 ₽ нужен живой снимок: крупный портрет,
+
+         ВНИМАНИЕ: assets/img/author.jpg — 3D-рендер, а не фотография. Для
+         продукта за 159 000 ₽ нужен живой снимок: крупный портрет,
          естественный свет, без стокового бизнес-кадра. Замените файл
-         (портрет 4:5, минимум 900×1125) — разметка и кроп уже под него. -->
+         (портрет 4:5, минимум 900×1125) — разметка и кроп уже под него.
+
+         Заменив портрет, пересоберите картинку для превью ссылок:
+           sips -s format jpeg -s formatOptions 80 -Z 630 assets/img/author.jpg --out /tmp/og.jpg
+           sips -p 630 1200 --padColor 000000 /tmp/og.jpg --out assets/img/og-cover.jpg -->
     <div class="founder">
       <figure class="founder__shot" data-reveal>
-        <img src="assets/img/author-source.jpg" alt="Сергей Кербер"
+        <img src="assets/img/author.jpg" alt="Сергей Кербер"
              width="963" height="963" loading="lazy" decoding="async">
       </figure>
 
@@ -1350,8 +1469,98 @@
 
 
 
-<script src="assets/js/warptext.js?v=336" defer></script>
-<script src="assets/js/coinpit.js?v=336"></script>
-<script src="assets/js/main.js?v=336"></script>
+<script>
+/* Прелоадер, который действительно ждёт загрузку, а не крутится заданное время.
+
+   Шкала складывается из настоящих событий: каждая таблица стилей, каждый скрипт
+   и каждая неотложенная картинка засчитываются, когда браузер сообщил о их
+   готовности, плюс два общих рубежа — готовность шрифтов и событие load.
+   Полоса не может обогнать реальность: она показывает долю уже случившегося.
+
+   Предохранитель на восемь секунд: если сеть подвисла, шторка уходит всё равно.
+   Держать человека перед чёрным экраном из-за одной недогруженной картинки
+   хуже, чем показать страницу без неё. */
+(function () {
+  var root = document.documentElement;
+  var pl = document.getElementById('pl');
+  if (!pl) return;
+
+  function release() {
+    if (pl.dataset.gone) return;
+    pl.dataset.gone = '1';
+    root.classList.remove('is-loading');
+    try { sessionStorage.setItem('pl', '1'); } catch (e) {}
+    if (root.className.indexOf('pl-seen') > -1) { pl.remove(); return; }
+    pl.classList.add('is-done');
+    var gone = false;
+    function drop() { if (gone) return; gone = true; pl.remove(); }
+    pl.addEventListener('transitionend', drop);
+    setTimeout(drop, 600);
+  }
+
+  if (root.className.indexOf('pl-seen') > -1) { release(); return; }
+
+  var fill = document.getElementById('plFill');
+  var num  = document.getElementById('plNum');
+
+  var sheets  = [].slice.call(document.querySelectorAll('link[rel="stylesheet"]'));
+  var scripts = [].slice.call(document.querySelectorAll('script[src]'));
+  var imgs    = [].slice.call(document.querySelectorAll('img:not([loading="lazy"])'));
+  var total   = sheets.length + scripts.length + imgs.length + 2;   // + шрифты + load
+
+  var fontsDone = false, loadDone = false;
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () { fontsDone = true; });
+  } else { fontsDone = true; }
+  window.addEventListener('load', function () { loadDone = true; });
+
+  function done() {
+    var n = 0, i;
+    /* У применённой таблицы стилей доступен sheet; у чужого домена доступ к
+       правилам закрыт, но само наличие объекта уже означает, что она пришла. */
+    for (i = 0; i < sheets.length; i++) { try { if (sheets[i].sheet) n++; } catch (e) { n++; } }
+    for (i = 0; i < scripts.length; i++) { if (scripts[i].getAttribute('data-ok') || !scripts[i].defer || loadDone) n++; }
+    for (i = 0; i < imgs.length; i++) { if (imgs[i].complete) n++; }
+    if (fontsDone) n++;
+    if (loadDone) n++;
+    return n;
+  }
+
+  var shown = 0;
+  var deadline = Date.now() + 8000;
+  var released = false;
+
+  /* Предохранитель живёт отдельно от цикла и на таймере, а не на кадрах.
+     В фоновой вкладке requestAnimationFrame не вызывается вовсе: страница,
+     открытая по ссылке «в новой вкладке», осталась бы под чёрной шторкой
+     навсегда — до тех пор, пока на неё не переключатся. */
+  setTimeout(function () { if (!released) { released = true; release(); } }, 8000);
+
+  (function tick() {
+    var real = Math.min(1, done() / total);
+    /* Показанное только растёт: перепроверка не должна дёргать полосу назад. */
+    shown = Math.max(shown, real);
+    var pct = Math.round(shown * 100);
+    fill.style.width = pct + '%';
+    num.textContent = pct + '%';
+
+    if (released) return;
+    if (shown >= 1 || Date.now() > deadline) {
+      fill.style.width = '100%';
+      num.textContent = '100%';
+      released = true;
+      setTimeout(release, 160);
+      return;
+    }
+    /* Таймер, а не кадры: шестнадцати обновлений в секунду полосе достаточно,
+       зато цикл доходит до конца и в невидимой вкладке. */
+    setTimeout(tick, 60);
+  })();
+})();
+</script>
+
+<script src="assets/js/warptext.js?v=341" defer></script>
+<script src="assets/js/coinpit.js?v=341"></script>
+<script src="assets/js/main.js?v=341"></script>
 </body>
 </html>

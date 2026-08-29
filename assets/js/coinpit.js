@@ -73,15 +73,32 @@
   var running = false;
   var rafId = null;
 
-  COINS.forEach(function (name, i) {
+  /* Грузим ровно столько знаков, сколько куча собирается показать.
+
+     Раньше запрос уходил сразу за всеми девяноста восемью — почти мегабайт
+     картинок на первом экране, из которых на широком мониторе рисуется
+     полсотни, а на телефоне четверть. Список отсортирован по капитализации,
+     и build() берёт первые n подряд, поэтому «первые n» — это ровно те, что
+     понадобятся, а не случайная выборка.
+
+     Функция идемпотентна: на ресайзе, когда окно расширилось и знаков нужно
+     больше, она догружает недостающие и не трогает уже загруженные. */
+  function ensureImages(n) {
+    for (var i = 0; i < n && i < COINS.length; i++) {
+      if (images[i]) continue;
+      images[i] = loadCoin(COINS[i], i);
+    }
+  }
+
+  function loadCoin(name, i) {
     var img = new Image();
     img.decoding = 'async';
     // The loop parks itself once the pile is asleep, so a mark that finishes
     // loading after that first paint has to ask for its own redraw.
     img.onload = function () { measure(img, i); if (!running) draw(); };
     img.src = 'assets/coins/' + name + '.png';
-    images[i] = img;
-  });
+    return img;
+  }
 
   /* Mean luminance of the opaque pixels, used to decide whether a mark needs
      a light backing to read on the dark ground. */
@@ -122,6 +139,7 @@
           : w < 1040 ? Math.round(COUNT * 0.7)
           : COUNT;
     n = Math.min(n, COINS.length);   // never repeat a mark
+    ensureImages(n);
 
     for (var i = 0; i < n; i++) {
       var rank = i;
