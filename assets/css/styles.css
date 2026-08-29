@@ -1633,17 +1633,18 @@ p { margin: 0; max-width: 62ch; }
   /* Слева весь текст и состав, справа — визуал. Список переехал под заголовок
      влево: он часть описания формата, а не отдельная колонка. */
   grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
-  grid-template-rows: auto auto auto auto 1fr;
+  /* Дорожек четыре, а не пять: метка «личное сопровождение» вошла в заголовок
+     искрой и отдельной строкой больше не стоит. */
+  grid-template-rows: auto auto auto 1fr;
   column-gap: clamp(32px, 5vw, 88px);
   padding: clamp(28px, 3vw, 48px);
 }
-.tiers--single .tier > .label { grid-area: 1 / 1; }
-.tiers--single .tier__sum     { grid-area: 2 / 1; }
-.tiers--single .tier__vol     { grid-area: 3 / 1; }
+.tiers--single .tier__sum     { grid-area: 1 / 1; margin-top: 0; }
+.tiers--single .tier__vol     { grid-area: 2 / 1; }
 /* Кнопка прижата к низу левой колонки: правая длиннее, и без этого призыв
    повисал в середине карточки. */
-.tiers--single .tier__cta     { grid-area: 5 / 1; align-self: end; }
-.tiers--single .tier__more    { grid-area: 4 / 1; margin-top: var(--sp-block); }
+.tiers--single .tier__cta     { grid-area: 4 / 1; align-self: end; }
+.tiers--single .tier__more    { grid-area: 3 / 1; margin-top: var(--sp-block); }
 .tiers--single .tier__art     { grid-area: 1 / 2 / -1 / 3; }
 /* Список тянется во всю высоту карточки и распределяет строки по ней:
    прижатый к верху, он оставлял под собой пустую половину, и правая
@@ -1855,7 +1856,10 @@ p { margin: 0; max-width: 62ch; }
    -------------------------------------------------------------------------- */
 .tier__art {
   position: relative;
-  aspect-ratio: 1;
+  /* Без фиксированной пропорции: панель тянется на всю высоту левой колонки,
+     и поля до краёв карточки со всех сторон равны её внутреннему отступу.
+     Квадрат был ниже колонки и оставлял под собой полосу пустоты.
+     Композиция задана процентами, поэтому от вытягивания не разъезжается. */
   min-height: 320px;
   border-radius: var(--r-lg);
   background:
