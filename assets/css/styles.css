@@ -884,6 +884,20 @@ p { margin: 0; max-width: 62ch; }
   grid-column: 1;
   padding-right: clamp(20px, 3.5vw, 56px);
 }
+/* Абзац встаёт на левый край третьей колонки статистики под ним.
+
+   Колонки статистики — это repeat(4, 1fr) с нулевым зазором, поэтому третья
+   начинается ровно на половине контейнера. Абзац же лежит в двенадцатиколоночной
+   сетке с зазорами, и попасть в ту же точку номером колонки нельзя — зазоры
+   сдвигают. Поэтому берём половину напрямую, а padding повторяет внутренний
+   отступ колонки, чтобы совпали именно текстовые края, а не границы ячеек. */
+.how__note {
+  grid-column: 1 / -1;
+  margin-left: 50%;
+  padding-left: clamp(16px, 2vw, 28px);
+  max-width: none;
+}
+
 .reveal-statement > .body {
   grid-column: 2;
   /* Matches .compare__col + .compare__col, so both share one left edge. */
@@ -1337,7 +1351,10 @@ p { margin: 0; max-width: 62ch; }
 }
 .eco__node:hover { border-color: var(--c-accent); color: var(--c-accent); }
 .eco__node.is-sel { background: var(--c-accent); border-color: var(--c-accent); color: var(--c-on-accent); }
-.eco__node.is-core { font-weight: 600; }
+/* 500, а не 600: Geist Mono подключён в весах 400 и 500, шестисотого в нём
+   нет — браузер подделывал жирность, утолщая контуры четырёхсотого. Рядом
+   с настоящими начертаниями это и читалось как чужая типографика. */
+.eco__node.is-core { font-weight: 500; }
 
 .eco__detail {
   border-top: 1px solid var(--c-line); background: var(--c-paper-sunk);
@@ -1666,7 +1683,9 @@ p { margin: 0; max-width: 62ch; }
 
 .tier__sum {
   margin-top: var(--sp-stack);
-  font-size: var(--t-h3);
+  /* Своя ступень выше H3: это единственная фраза, которой карточка называет
+     себя, и она должна звучать громче строки-акцента под ней. */
+  font-size: clamp(1.25rem, 0.9rem + 1vw, 1.75rem);
   line-height: var(--lh-h3);
   letter-spacing: var(--ls-h3);
   font-weight: 500;
@@ -1788,7 +1807,9 @@ p { margin: 0; max-width: 62ch; }
   margin-top: var(--sp-block);
   display: flex; gap: 10px; align-items: baseline;
   font-family: var(--f-display);
-  font-size: var(--t-h3);
+  /* Ниже основной фразы карточки: акцентная строка поясняет её, а не спорит
+     с ней за первое место. */
+  font-size: clamp(1.0625rem, 0.9rem + 0.5vw, 1.25rem);
   line-height: var(--lh-h3);
   letter-spacing: var(--ls-h3);
   font-weight: 500;
