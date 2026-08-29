@@ -481,7 +481,7 @@ p { margin: 0; max-width: 62ch; }
   pointer-events: none;
   background-color: var(--c-paper);
 }
-/* Сетка. Шаг 88px, тонкая линия (исходно 139px — клетка была крупной,
+/* Сетка. Шаг 44px, тонкая линия (исходно 139px — клетка была крупной,
    цвет переведён в монохром: там сетка сиреневая, здесь любой цветной слой
    стал бы вторым акцентом рядом с искрой в заголовке.
 
@@ -494,8 +494,8 @@ p { margin: 0; max-width: 62ch; }
    по шагу при первой же правке. */
 :root {
   --grid-lines:
-    repeating-linear-gradient(to right,  rgba(255, 255, 255, .154) 0 1px, transparent 1px 88px),
-    repeating-linear-gradient(to bottom, rgba(255, 255, 255, .154) 0 1px, transparent 1px 88px);
+    repeating-linear-gradient(to right,  rgba(255, 255, 255, .077) 0 1px, transparent 1px 44px),
+    repeating-linear-gradient(to bottom, rgba(255, 255, 255, .077) 0 1px, transparent 1px 44px);
   /* Растворение сетки — краской поверх линий, а не маской.
 
      Маска гасила слой, а слой ради неё поднимался в отдельный слой
