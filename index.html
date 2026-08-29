@@ -124,9 +124,9 @@
 </script>
 <noscript><style>html.is-loading, html.is-loading body { overflow: auto !important; } .pl { display: none !important; }</style></noscript>
 
-<link rel="stylesheet" href="assets/css/tokens.css?v=357">
-<link rel="stylesheet" href="assets/css/styles.css?v=357">
-<link rel="stylesheet" href="assets/css/responsive.css?v=357">
+<link rel="stylesheet" href="assets/css/tokens.css?v=358">
+<link rel="stylesheet" href="assets/css/styles.css?v=358">
+<link rel="stylesheet" href="assets/css/responsive.css?v=358">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='none' stroke='%23FFFFFF' stroke-width='2'/><circle cx='16' cy='16' r='6' fill='%23C1FF0F'/></svg>">
 </head>
 <body>
@@ -1354,11 +1354,37 @@
           </button>
         </div>
 
-        <p class="tier__key tier__key--yes">Прямая связь со мной лично</p>
-        <p class="tier__note">
-          Главная ценность этого формата — не больше контента, а прямой доступ ко мне
-          на протяжении восьми недель.
-        </p>
+
+        <!-- Визуал правой колонки. Ядро — сам формат, вокруг него монеты
+             и подписи сетей и понятий, с которыми человек столкнётся.
+             Всё нарисовано разметкой и градиентами: ни одной картинки,
+             кроме знаков монет, которые на странице уже есть. -->
+        <div class="tier__art" aria-hidden="true">
+          <svg class="tier__art-l" viewBox="0 0 200 200" preserveAspectRatio="none">
+            <circle cx="100" cy="100" r="46"/>
+            <circle cx="100" cy="100" r="74"/>
+            <path d="M100 100 100 36M100 100 160 76M100 100 136 152M100 100 64 152M100 100 40 76"/>
+          </svg>
+
+          <span class="tier__core">
+            <b>8</b>
+            <i>недель</i>
+            <em>один на один</em>
+          </span>
+
+          <span class="tier__orb" style="--x:50%; --y:18%; --fl:0s"><img src="assets/coins/usdt.png" alt="" loading="lazy"></span>
+          <span class="tier__orb" style="--x:80%; --y:38%; --fl:-1.6s"><img src="assets/coins/eth.png" alt="" loading="lazy"></span>
+          <span class="tier__orb" style="--x:68%; --y:76%; --fl:-3.1s"><img src="assets/coins/sol.png" alt="" loading="lazy"></span>
+          <span class="tier__orb" style="--x:32%; --y:76%; --fl:-2.2s"><img src="assets/coins/trx.png" alt="" loading="lazy"></span>
+          <span class="tier__orb" style="--x:20%; --y:38%; --fl:-4.1s"><img src="assets/coins/btc.png" alt="" loading="lazy"></span>
+
+          <span class="tier__tag" style="--x:20%; --y:9%;  --fl:-0.7s">TRC20</span>
+          <span class="tier__tag" style="--x:82%; --y:14%; --fl:-2.9s">ERC20</span>
+          <span class="tier__tag" style="--x:88%; --y:58%; --fl:-1.3s">Solana</span>
+          <span class="tier__tag" style="--x:74%; --y:92%; --fl:-3.7s">gas</span>
+          <span class="tier__tag" style="--x:26%; --y:93%; --fl:-2.4s">seed</span>
+          <span class="tier__tag" style="--x:11%; --y:62%; --fl:-4.6s">wallet</span>
+        </div>
 
         <a class="btn btn--primary tier__cta" data-cta href="#call">Узнать подробнее <span class="btn__arrow" aria-hidden="true">→</span></a>
       </article>
@@ -1544,8 +1570,8 @@
 })();
 </script>
 
-<script src="assets/js/warptext.js?v=357" defer></script>
-<script src="assets/js/coinpit.js?v=357"></script>
-<script src="assets/js/main.js?v=357"></script>
+<script src="assets/js/warptext.js?v=358" defer></script>
+<script src="assets/js/coinpit.js?v=358"></script>
+<script src="assets/js/main.js?v=358"></script>
 </body>
 </html>

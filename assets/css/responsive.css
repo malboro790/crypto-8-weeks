@@ -141,6 +141,9 @@
      элементом только мешает. Возвращаем обычный блок и один столбец внутри. */
   .tiers--single { display: block; margin-inline: 0; padding-inline: 0; padding-block: 0; }
   .tiers--single .tier { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; }
+  /* Визуал только на широком экране: в столбик он добавляет к карточке целый
+     квадрат высотой в треть экрана перед кнопкой, ради которой сюда пришли. */
+  .tier__art { display: none; }
   .tiers--single .tier > .label,
   .tiers--single .tier__sum, .tiers--single .tier__vol, .tiers--single .tier__key,
   .tiers--single .tier__note, .tiers--single .tier__cta, .tiers--single .tier__more { grid-area: auto; }

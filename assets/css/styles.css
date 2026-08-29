@@ -1630,20 +1630,21 @@ p { margin: 0; max-width: 62ch; }
    -------------------------------------------------------------------------- */
 .tiers--single { grid-template-columns: minmax(0, 1fr); }
 .tiers--single .tier {
-  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-  grid-template-rows: auto auto auto auto auto 1fr;
+  /* Слева весь текст и состав, справа — визуал. Список переехал под заголовок
+     влево: он часть описания формата, а не отдельная колонка. */
+  grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+  grid-template-rows: auto auto auto auto 1fr;
   column-gap: clamp(32px, 5vw, 88px);
   padding: clamp(28px, 3vw, 48px);
 }
 .tiers--single .tier > .label { grid-area: 1 / 1; }
 .tiers--single .tier__sum     { grid-area: 2 / 1; }
 .tiers--single .tier__vol     { grid-area: 3 / 1; }
-.tiers--single .tier__key     { grid-area: 4 / 1; }
-.tiers--single .tier__note    { grid-area: 5 / 1; }
 /* Кнопка прижата к низу левой колонки: правая длиннее, и без этого призыв
    повисал в середине карточки. */
-.tiers--single .tier__cta     { grid-area: 6 / 1; align-self: end; }
-.tiers--single .tier__more { grid-area: 1 / 2 / -1 / 3; margin-top: 0; }
+.tiers--single .tier__cta     { grid-area: 5 / 1; align-self: end; }
+.tiers--single .tier__more    { grid-area: 4 / 1; margin-top: var(--sp-block); }
+.tiers--single .tier__art     { grid-area: 1 / 2 / -1 / 3; }
 /* Список тянется во всю высоту карточки и распределяет строки по ней:
    прижатый к верху, он оставлял под собой пустую половину, и правая
    колонка выглядела оборванной. */
@@ -1652,11 +1653,9 @@ p { margin: 0; max-width: 62ch; }
    ни height: 100% до списка не доходят. Высоту набираем воздухом в строках,
    что и требовалось: колонка перестала выглядеть обрезанной сверху. */
 .tiers--single .tier__list { margin-top: 0; }
-.tiers--single .tier__list li { padding: 22px 0; }
-/* Сноска про ценность формата больше не выравнивает две карточки по высоте —
-   выравнивать больше нечего, а запас высоты оставлял дыру над кнопкой. */
-.tiers--single .tier__key,
-.tiers--single .tier__note { min-height: 0; }
+/* Плотнее: воздух в 22px набирался, когда список держал высоту всей правой
+   колонки. Теперь он стоит под заголовком и должен читаться перечнем. */
+.tiers--single .tier__list li { padding: 8px 0; }
 
 .tier {
   display: grid;
@@ -1840,6 +1839,98 @@ p { margin: 0; max-width: 62ch; }
   font-size: var(--t-subtext);
   line-height: var(--lh-subtext);
   color: var(--c-ink-faint);
+}
+
+/* --------------------------------------------------------------------------
+   ВИЗУАЛ КАРТОЧКИ ФОРМАТА
+
+   Ядро — сам формат: восемь недель один на один. Вокруг него по кольцу знаки
+   монет, дальше — подписи сетей и понятий, с которыми человек столкнётся
+   в первые же дни. Ничего не нарисовано картинкой: круги и лучи это SVG,
+   плашки — разметка, знаки монет уже лежат в проекте ради кучи на первом
+   экране, так что новых файлов ноль.
+
+   Всё дышит с разным периодом и своей задержкой: одинаковая фаза читалась бы
+   как мигание, а не как жизнь. Под prefers-reduced-motion движения нет.
+   -------------------------------------------------------------------------- */
+.tier__art {
+  position: relative;
+  aspect-ratio: 1;
+  min-height: 320px;
+  border-radius: var(--r-lg);
+  background:
+    radial-gradient(60% 60% at 50% 50%, rgba(193, 255, 15, .07) 0%, transparent 70%),
+    var(--c-paper-sunk);
+  border: 1px solid var(--c-line);
+  overflow: hidden;
+}
+.tier__art-l {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  fill: none; stroke: var(--c-line-strong); stroke-width: 1;
+  vector-effect: non-scaling-stroke; opacity: .5;
+}
+
+/* Ядро */
+.tier__core {
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  display: grid; justify-items: center; gap: 1px;
+  width: 38%; aspect-ratio: 1;
+  align-content: center;
+  border-radius: 50%;
+  background: var(--c-paper);
+  border: 1px solid var(--c-spark);
+  box-shadow: 0 0 0 6px rgba(193, 255, 15, .06);
+}
+.tier__core b {
+  font-family: var(--f-display); font-weight: 600;
+  font-size: clamp(1.75rem, 4vw, 2.75rem); line-height: 1;
+  letter-spacing: -.03em; color: var(--c-spark);
+}
+.tier__core i {
+  font-style: normal;
+  font-family: var(--f-mono); font-size: .6875rem;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--c-ink-muted);
+}
+.tier__core em {
+  font-style: normal;
+  font-family: var(--f-mono); font-size: .625rem;
+  letter-spacing: .04em; color: var(--c-ink-faint);
+  margin-top: 3px;
+}
+
+/* Знаки монет по кольцу */
+.tier__orb {
+  position: absolute; left: var(--x); top: var(--y);
+  transform: translate(-50%, -50%);
+  display: grid; place-items: center;
+  width: 15%; aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--c-paper);
+  border: 1px solid var(--c-line);
+}
+.tier__orb img { width: 62%; height: 62%; }
+
+/* Подписи сетей и понятий */
+.tier__tag {
+  position: absolute; left: var(--x); top: var(--y);
+  transform: translate(-50%, -50%);
+  font-family: var(--f-mono); font-size: .625rem;
+  letter-spacing: .04em; white-space: nowrap;
+  padding: 5px 9px; border-radius: var(--r-pill);
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+  color: var(--c-ink-muted);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .tier__orb { animation: tier-float 8s var(--fl, 0s) ease-in-out infinite; }
+  .tier__tag { animation: tier-float 11s var(--fl, 0s) ease-in-out infinite; }
+}
+@keyframes tier-float {
+  0%, 100% { transform: translate(-50%, -50%); }
+  50%      { transform: translate(-50%, calc(-50% - 7px)); }
 }
 
 .tier__cta { margin-top: var(--sp-block); justify-self: start; }
