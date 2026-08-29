@@ -1447,7 +1447,10 @@ p { margin: 0; max-width: 62ch; }
    STATS (personal support)
    ========================================================================== */
 
-.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; margin-top: var(--sp-tight); border-top: 1px solid var(--c-line); }
+/* Три дорожки под две колонки: колонок стало две, и в прежней четвёрке они
+   занимали бы половину ширины, оставляя пустой правый край. Доля та же, что
+   была у трёх колонок в четырёх дорожках. */
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: var(--sp-tight); border-top: 1px solid var(--c-line); }
 .stat { padding: clamp(22px, 2.4vw, 36px) clamp(16px, 2vw, 28px) clamp(22px, 2.4vw, 36px) 0; }
 .stat + .stat { border-left: 1px solid var(--c-line); padding-left: clamp(16px, 2vw, 28px); }
 /* Цифры набраны искрой: на чёрном она держит 16:1, на белой полосе токен
@@ -1547,7 +1550,8 @@ p { margin: 0; max-width: 62ch; }
 .proof__k {
   display: block;
   font-family: var(--f-display); font-weight: var(--w-display);
-  font-size: var(--t-h4); letter-spacing: -.006em;
+  /* См. .client__n: подзаголовок не мельче своего текста. */
+  font-size: var(--t-subtext); letter-spacing: -.006em;
 }
 .proof__v {
   display: block; margin-top: 6px;
@@ -1593,7 +1597,10 @@ p { margin: 0; max-width: 62ch; }
   letter-spacing: var(--ls-label); text-transform: uppercase;
   color: var(--c-ink-faint);
 }
-.agency__line { font-size: var(--t-text); line-height: var(--lh-text); color: var(--c-ink-muted); max-width: 52ch; }
+/* Тот же кегль, что у остальных пояснений блока: строка про агентство стояла
+   на семнадцати, а описания проектов и опыта рядом — на шестнадцати, и разница
+   в пиксель читалась как случайность, а не как иерархия. */
+.agency__line { font-size: var(--t-subtext); line-height: var(--lh-subtext); color: var(--c-ink-muted); max-width: 52ch; }
 /* ==========================================================================
    PRICE
    ========================================================================== */
@@ -1978,7 +1985,9 @@ p { margin: 0; max-width: 62ch; }
   color: var(--c-ink);
 }
 .client__n {
-  font-size: var(--t-h4);
+  /* Наравне с описанием под ним, а не мельче: подзаголовок на пятнадцати над
+     текстом на шестнадцати выглядел ошибкой. Отличает их вес, а не кегль. */
+  font-size: var(--t-subtext);
   font-weight: var(--w-h4);
   letter-spacing: var(--ls-h4);
   color: var(--c-ink);
