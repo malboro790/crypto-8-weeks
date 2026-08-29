@@ -543,6 +543,17 @@ p { margin: 0; max-width: 62ch; }
 }
 .section--grid > .container { position: relative; z-index: 1; }
 
+/* Большие паузы вокруг блока о рисках. Заданы здесь, а не инлайном в разметке:
+   инлайновый стиль невозможно переопределить медиазапросом без !important, и на
+   телефоне эти четыреста пикселей сверху и снизу превращались в восемьсот
+   пикселей пустоты вокруг шестисот пикселей содержимого. Уменьшение — ниже,
+   в responsive.css. */
+#security {
+  align-content: start;
+  padding-top: 400px;
+  padding-bottom: 400px;
+}
+
 /* Сетка только в нижней части блока. Отдельный класс, а не переопределение
    маски у .section--grid: у них разный смысл, и общее правило пришлось бы
    читать в двух режимах сразу. */
@@ -1660,10 +1671,13 @@ p { margin: 0; max-width: 62ch; }
 
 /* The volume line: the two numbers that decide the comparison, set apart from
    the prose so they can be read without reading anything else. */
+/* Единственная линия в карточке — между строкой с числом встреч и составом.
+   Раньше линий было девять: две здесь, две у заголовка «Что входит» и по
+   одной под каждым из шести пунктов. На узкой карточке это читалось как
+   таблица, а не как перечень. */
 .tier__vol {
   margin-top: var(--sp-block);
-  padding: 12px 0;
-  border-top: 1px solid var(--c-line);
+  padding: 12px 0 14px;
   border-bottom: 1px solid var(--c-line);
   font-family: var(--f-mono);
   font-size: var(--t-subtext);
@@ -1700,20 +1714,35 @@ p { margin: 0; max-width: 62ch; }
 .tier__cta          { grid-row: 7; }
 
 .label--lead { color: var(--c-accent); }
-.tier__more-sum {
-  display: none;
-  cursor: pointer;
-  list-style: none;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 12px 0;
-  border-top: 1px solid var(--c-line);
-  border-bottom: 1px solid var(--c-line);
-  font-size: var(--t-h4);
-  font-weight: var(--w-medium);
-  color: var(--c-ink);
+.tier__more-h {
+  margin: 0;
+  font-family: var(--f-mono);
+  font-size: var(--t-subtext);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--c-ink-faint);
 }
+.tier__more-btn {
+  appearance: none;
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 6px; padding: 8px 0;
+  background: none; border: 0; cursor: pointer;
+  font-family: var(--f-text); font-size: var(--t-subtext);
+  font-weight: var(--w-medium);
+  color: var(--c-ink-muted);
+  transition: color var(--d-fast) var(--e-out);
+}
+.tier__more-btn:hover { color: var(--c-ink); }
+/* Стрелка вниз рисуется двумя гранями квадрата — тот же приём, что был
+   у прежнего раскрывающегося блока, чтобы жест читался так же. */
+.tier__more-btn__i {
+  width: 8px; height: 8px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform var(--d-fast) var(--e-out);
+}
+.tier__more.is-open .tier__more-btn__i { transform: rotate(-135deg) translate(-2px, -2px); }
 .tier__more-sum::-webkit-details-marker { display: none; }
 .tier__more-sum::after {
   content: "";
@@ -1731,9 +1760,13 @@ p { margin: 0; max-width: 62ch; }
 }
 .tier__list li {
   display: flex; gap: 12px; align-items: center;
-  padding: 10px 0; border-bottom: 1px solid var(--c-line);
+  padding: 7px 0;
   font-size: var(--t-text); color: var(--c-ink-muted);
 }
+/* Пункты сверх первых трёх. Спрятаны только когда скрипт включил сворачивание:
+   без него список остаётся целым, и ничего не пропадает. */
+.tier__more.is-collapsible .tier__extra { display: none; }
+.tier__more.is-collapsible.is-open .tier__extra { display: flex; }
 /* Иконка вместо точки: шесть одинаковых кружков ничего не говорили о том,
    что именно входит в формат, и список читался как перечисление галочек. */
 .tier__list li svg {

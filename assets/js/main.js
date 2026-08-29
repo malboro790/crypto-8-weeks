@@ -33,9 +33,26 @@
   /* Списки тарифов приходят раскрытыми — так их видят поисковики и читалки,
      и так они работают без JS. На узком экране схлопываем: раскрытая карточка
      иначе занимает полтора экрана. */
-  (function collapseTiers() {
-    if (!window.matchMedia('(max-width: 768px)').matches) return;
-    $$('.tier__more').forEach(function (d) { d.removeAttribute('open'); });
+  /* Состав формата: три пункта сразу, остальные по кнопке.
+
+     Сворачивание включает скрипт, а не разметка. Без него список приходит
+     целым и кнопки нет вовсе — поисковику и читалке видно всё, и ничего
+     не прячется за неработающим элементом. */
+  (function collapseIncludes() {
+    $$('.tier__more').forEach(function (box) {
+      var btn = box.querySelector('.tier__more-btn');
+      var list = box.querySelector('.tier__list');
+      if (!btn || !list || !box.querySelector('.tier__extra')) return;
+
+      box.classList.add('is-collapsible');
+      btn.hidden = false;
+
+      btn.addEventListener('click', function () {
+        var open = box.classList.toggle('is-open');
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        btn.childNodes[0].nodeValue = open ? 'Свернуть ' : 'Показать все ';
+      });
+    });
   })();
 
   var yearEl = $('#year');
