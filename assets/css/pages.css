@@ -1,0 +1,413 @@
+/* ==========================================================================
+   PAGES — блоки, которых нет на странице курса.
+
+   Всё построено на тех же токенах, что и styles.css: те же кегли, отступы,
+   скругления, линейки и акцент. Новых цветов и новых пропорций здесь нет —
+   четыре страницы должны читаться одним продуктом, а не набором шаблонов.
+
+   Подключается ПОСЛЕ styles.css и ДО responsive.css.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Текущий раздел в навигации
+   -------------------------------------------------------------------------- */
+.nav__link.is-current {
+  color: var(--c-ink);
+}
+.nav__link.is-current::after {
+  content: "";
+  display: block;
+  height: 1px;
+  margin-top: 3px;
+  background: var(--c-spark);
+}
+
+/* --------------------------------------------------------------------------
+   ПЕРВЫЙ ЭКРАН ВНУТРЕННИХ СТРАНИЦ
+
+   Не копия героя с курса: там слово CRYPTO во всю ширину и куча монет, здесь
+   нужен обычный вводный экран. Общее — чёрный фон, кегли и ритм.
+   -------------------------------------------------------------------------- */
+.intro {
+  align-content: center;
+  padding-top: clamp(120px, 14vh, 180px);
+  padding-bottom: clamp(64px, 8vh, 120px);
+}
+.intro__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: clamp(32px, 5vw, 80px);
+  align-items: center;
+}
+/* Страницы без портрета: текст занимает всю сетку, но строка не растягивается
+   на всю ширину — читать такую невозможно. */
+.intro__grid--wide { grid-template-columns: minmax(0, 1fr); }
+.intro__grid--wide .intro__copy { max-width: 24ch; }
+.intro__grid--wide .intro__copy .lead { max-width: 58ch; }
+
+.intro__copy > * + * { margin-top: var(--sp-stack); }
+.intro__copy .h1 { max-width: 16ch; }
+.intro__copy .lead { max-width: 46ch; }
+.intro__copy .cta-row { margin-top: var(--sp-block); }
+
+/* Портрет кругом: форма мягче карточки и не спорит с прямоугольной сеткой
+   остальной страницы. */
+.intro__shot {
+  margin: 0;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--c-surface);
+  border: 1px solid var(--c-line);
+}
+.intro__shot img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: 50% 22%;
+}
+
+/* --------------------------------------------------------------------------
+   РАЗВИЛКА НАПРАВЛЕНИЙ
+
+   Две карточки — единственное решение, которое главная просит принять.
+   Поэтому они крупные, с полным составом и своей кнопкой: человек должен
+   уходить отсюда на нужную страницу, а не листать дальше в поисках.
+   -------------------------------------------------------------------------- */
+.dirs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 24px);
+}
+.dir {
+  display: flex; flex-direction: column;
+  gap: var(--sp-stack);
+  padding: clamp(24px, 2.6vw, 40px);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-lg);
+  background: var(--c-paper);
+}
+.dir__t {
+  margin: 0;
+  font-family: var(--f-display); font-weight: 500;
+  font-size: var(--t-h3); line-height: var(--lh-h3);
+  letter-spacing: var(--ls-h3);
+  color: var(--c-ink);
+}
+.dir__d {
+  margin: 0;
+  font-size: var(--t-subtext); line-height: var(--lh-subtext);
+  color: var(--c-ink-muted);
+  max-width: 42ch;
+}
+.dir__list {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column; gap: 7px;
+  /* Тянется, чтобы кнопки обеих карточек встали на одну линию: карточки
+     сравнивают глазами, и разъехавшиеся кнопки читаются как разный статус. */
+  flex: 1;
+}
+.dir__list li {
+  display: flex; gap: 10px;
+  font-size: var(--t-subtext); line-height: var(--lh-subtext);
+  color: var(--c-ink-muted);
+}
+.dir__list li::before {
+  content: "";
+  flex: none;
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--c-spark);
+  position: relative; top: .62em;
+}
+.dir__cta { align-self: start; margin-top: var(--sp-stack); }
+
+/* --------------------------------------------------------------------------
+   Две колонки текста
+   -------------------------------------------------------------------------- */
+.cols2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(24px, 4vw, 64px);
+  align-items: start;
+}
+
+/* --------------------------------------------------------------------------
+   ВОСЕМЬ КАРТОЧЕК ЗАДАЧ
+
+   Базовый .pillars — колонка широких строк «номер | заголовок | описание».
+   Для восьми пунктов это два экрана прокрутки, и человек перестаёт их
+   сравнивать. Здесь та же разметка перестраивается в плитку: номер над
+   заголовком, карточки в ряд.
+   -------------------------------------------------------------------------- */
+.pillars--four {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  margin-top: var(--sp-tight);
+  background: var(--c-line);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+.pillars--four .pillar {
+  display: flex; flex-direction: column; gap: 6px;
+  padding: clamp(20px, 2.2vw, 30px);
+  border-top: 0;
+  background: var(--c-paper);
+}
+.pillars--four .pillar__i { padding-top: 0; }
+.pillars--four .pillar__t { font-size: var(--t-h4); line-height: 1.3; letter-spacing: -.004em; }
+.pillars--four .pillar__d { padding-top: 0; max-width: none; font-size: var(--t-subtext); line-height: var(--lh-subtext); }
+
+/* --------------------------------------------------------------------------
+   ЭТАПЫ РАБОТЫ
+
+   Нумерация здесь несёт смысл: это последовательность, где каждый шаг
+   опирается на результат предыдущего. Линия слева связывает их в маршрут.
+   -------------------------------------------------------------------------- */
+.steps {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column;
+}
+.step {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: var(--grid-gap);
+  padding: clamp(20px, 2.2vw, 30px) 0;
+  border-top: 1px solid var(--c-line);
+}
+.step:last-child { border-bottom: 1px solid var(--c-line); }
+.step__n {
+  font-family: var(--f-mono); font-size: var(--t-subtext);
+  letter-spacing: .1em; color: var(--c-ink-faint);
+  white-space: nowrap;
+}
+.step__t {
+  margin: 0 0 6px;
+  font-family: var(--f-display); font-weight: 500;
+  font-size: var(--t-h3); line-height: var(--lh-h3);
+  letter-spacing: var(--ls-h3);
+}
+.step__d {
+  margin: 0;
+  font-size: var(--t-text); line-height: var(--lh-text);
+  color: var(--c-ink-muted);
+  max-width: 72ch;
+}
+
+/* --------------------------------------------------------------------------
+   ФОРМАТЫ РАБОТЫ — простой перечень без нумерации: это не последовательность,
+   а варианты на выбор.
+   -------------------------------------------------------------------------- */
+.formats {
+  list-style: none; margin: 0; padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--c-line);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+}
+.format {
+  background: var(--c-paper);
+  padding: clamp(20px, 2.2vw, 30px);
+}
+.format__t {
+  margin: 0 0 6px;
+  font-family: var(--f-display); font-weight: 500;
+  font-size: var(--t-h4); line-height: 1.35;
+  color: var(--c-ink);
+}
+.format__d {
+  margin: 0;
+  font-size: var(--t-subtext); line-height: var(--lh-subtext);
+  color: var(--c-ink-muted);
+}
+
+/* --------------------------------------------------------------------------
+   КЕЙСЫ
+
+   Четыре строки в фиксированном порядке: клиент, задача, работа, результат.
+   Порядок не декоративный — по нему кейсы сравнивают между собой.
+   -------------------------------------------------------------------------- */
+.cases {
+  list-style: none; margin: 0; padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 24px);
+}
+.case {
+  display: flex; flex-direction: column; gap: 8px;
+  padding: clamp(20px, 2.2vw, 30px);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-lg);
+  background: var(--c-paper);
+}
+.case p { margin: 0; font-size: var(--t-subtext); line-height: var(--lh-subtext); color: var(--c-ink-muted); }
+.case__c {
+  font-family: var(--f-mono);
+  letter-spacing: var(--ls-label); text-transform: uppercase;
+  color: var(--c-ink-faint) !important;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--c-line);
+}
+.case__res { color: var(--c-ink) !important; }
+
+/* --------------------------------------------------------------------------
+   ОТЗЫВЫ
+   -------------------------------------------------------------------------- */
+.reviews {
+  list-style: none; margin: 0; padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 24px);
+}
+.review {
+  display: flex; flex-direction: column; gap: var(--sp-stack);
+  padding: clamp(20px, 2.2vw, 30px);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-lg);
+  background: var(--c-paper);
+}
+.review__q {
+  margin: 0; flex: 1;
+  font-size: var(--t-text); line-height: var(--lh-text);
+  color: var(--c-ink);
+}
+.review__a {
+  margin: 0;
+  font-family: var(--f-mono); font-size: var(--t-subtext);
+  color: var(--c-ink-faint);
+}
+
+/* --------------------------------------------------------------------------
+   СЦЕНАРИИ НА СТРАНИЦЕ КОНТАКТОВ
+
+   Каждая карточка — готовое начало разговора: открывает Telegram с уже
+   набранным сообщением. Формы на сайте нет намеренно, см. комментарий
+   в разметке contacts.html.
+   -------------------------------------------------------------------------- */
+.scenarios {
+  list-style: none; margin: 0; padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 24px);
+}
+.scenario {
+  display: flex; flex-direction: column; gap: var(--sp-stack);
+  padding: clamp(24px, 2.6vw, 36px);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-lg);
+  background: var(--c-paper);
+}
+.scenario__t {
+  margin: 0;
+  font-family: var(--f-display); font-weight: 500;
+  font-size: var(--t-h3); line-height: var(--lh-h3);
+  letter-spacing: var(--ls-h3);
+}
+.scenario__d {
+  margin: 0; flex: 1;
+  font-size: var(--t-subtext); line-height: var(--lh-subtext);
+  color: var(--c-ink-muted);
+  max-width: 44ch;
+}
+.scenario__cta { align-self: start; }
+.scenario__more {
+  font-size: var(--t-subtext);
+  color: var(--c-ink-muted);
+  text-decoration: underline;
+  text-decoration-color: var(--c-line-strong);
+  text-underline-offset: 4px;
+  display: inline-block;
+  padding-block: 5px;
+}
+.scenario__more:hover { color: var(--c-ink); }
+
+/* --------------------------------------------------------------------------
+   ДВЕ КОЛОНКИ «ПОДОЙДЁТ / НЕ ПОДОЙДЁТ»
+
+   Второй столбец — не отказ в услуге, а фильтр: он снижает число разговоров,
+   которые обеим сторонам не нужны.
+   -------------------------------------------------------------------------- */
+.fit {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(20px, 3vw, 48px);
+}
+.fit__col { display: flex; flex-direction: column; gap: 10px; }
+.fit__h {
+  margin: 0 0 6px;
+  font-family: var(--f-mono); font-size: var(--t-subtext);
+  letter-spacing: var(--ls-label); text-transform: uppercase;
+  color: var(--c-ink-faint);
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--c-line);
+}
+.fit__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.fit__list li {
+  display: flex; gap: 10px;
+  font-size: var(--t-text); line-height: var(--lh-text);
+  color: var(--c-ink-muted);
+}
+.fit__list li::before {
+  content: "";
+  flex: none; width: 4px; height: 4px; border-radius: 50%;
+  position: relative; top: .62em;
+  background: var(--c-line-strong);
+}
+.fit__col--yes .fit__list li::before { background: var(--c-spark); }
+
+/* --------------------------------------------------------------------------
+   FAQ построен на разметке недель программы: тот же аккордеон, тот же
+   скрипт, тот же вид. Отличается только тем, что колонка номера уже.
+   -------------------------------------------------------------------------- */
+.faq .week__head,
+.faq .week__content { grid-template-columns: 48px minmax(0, 1fr) auto; }
+.faq .week__content { grid-template-columns: 48px minmax(0, 1fr); }
+
+/* ==========================================================================
+   АДАПТАЦИЯ НОВЫХ БЛОКОВ
+
+   Живёт здесь, а не в responsive.css: responsive.css описывает страницу
+   курса, и смешивать в нём две разные раскладки — верный способ сломать
+   одну, правя другую.
+   ========================================================================== */
+
+/* Длинные пометки в квадратных скобках — единая строка без пробелов внутри
+   слов. На узкой колонке она вылезала за край, потому что переносить её
+   браузеру негде. */
+.fill { overflow-wrap: anywhere; }
+
+@media (max-width: 1180px) {
+  /* Четыре карточки задач в ряд помещаются только на широком мониторе. */
+  .pillars--four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cases, .reviews { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 1040px) {
+  /* Портрет над текстом: рядом он ужимается до размера, в котором лицо
+     перестаёт читаться. */
+  .intro__grid { grid-template-columns: minmax(0, 1fr); }
+  .intro__shot { max-width: 320px; order: -1; }
+  .intro__copy .h1,
+  .intro__grid--wide .intro__copy { max-width: none; }
+
+  .step { grid-template-columns: 64px minmax(0, 1fr); }
+}
+
+@media (max-width: 900px) {
+  /* Две карточки направлений рядом дают строки в три слова. */
+  .dirs { grid-template-columns: minmax(0, 1fr); }
+  .cols2 { grid-template-columns: minmax(0, 1fr); }
+  .scenarios { grid-template-columns: minmax(0, 1fr); }
+  .fit { grid-template-columns: minmax(0, 1fr); }
+  .formats { grid-template-columns: minmax(0, 1fr); }
+  .cases, .reviews { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 600px) {
+  .pillars--four { grid-template-columns: minmax(0, 1fr); }
+  .intro { padding-top: clamp(96px, 12vh, 132px); }
+  .step { grid-template-columns: minmax(0, 1fr); row-gap: 6px; }
+}

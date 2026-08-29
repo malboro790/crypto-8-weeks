@@ -1,0 +1,1613 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Личное сопровождение по криптовалютам — «8 недель с криптой»</title>
+<meta name="description" content="8 недель один на один: 16 личных созвонов, чат между ними и помощь в момент вашей первой операции. Без трейдинга и обещаний доходности.">
+
+<!-- Канонический адрес. Одна и та же страница открывается как /crypto-8-weeks/,
+     как /crypto-8-weeks/index.html и с любым рекламным хвостом ?utm_source=…
+     Для поисковика это разные страницы с одинаковым текстом; canonical называет
+     настоящую. ВАЖНО: при переезде на свой домен адрес здесь, в og:url,
+     в sitemap.xml и в robots.txt нужно поменять — иначе они будут указывать
+     на старый сайт. -->
+<link rel="canonical" href="https://8weekscrypto.com/personal">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#000000">
+
+<!-- Превью ссылки. Весь трафик идёт пересылкой в мессенджерах, и кнопка ведёт
+     в личку в Telegram — то есть ссылку пересылают буквально всегда. Без
+     картинки она приходит серым прямоугольником. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Восемь недель с криптой">
+<meta property="og:title" content="Восемь недель с криптой">
+<meta property="og:description" content="8 недель один на один: 16 личных созвонов, чат между ними и помощь в момент вашей первой операции.">
+<meta property="og:url" content="https://8weekscrypto.com/personal">
+<meta property="og:image" content="https://8weekscrypto.com/assets/img/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Сергей Кербер — автор программы «Восемь недель с криптой»">
+<meta property="og:locale" content="ru_RU">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Восемь недель с криптой">
+<meta name="twitter:description" content="8 недель один на один: 16 личных созвонов, чат между ними и помощь в момент вашей первой операции.">
+<meta name="twitter:image" content="https://8weekscrypto.com/assets/img/og-cover.jpg">
+
+<!-- Разметка данных. Здесь только то, что написано на самой странице: ни цены,
+     ни даты старта на сайте нет, а выдумывать их в разметке нельзя — поисковик
+     сверяет её с видимым текстом. Когда цена и дата появятся, добавьте
+     в hasCourseInstance поля offers и startDate. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://8weekscrypto.com/#author",
+      "name": "Сергей Кербер",
+      "jobTitle": "Основатель дизайн-студии KERBER",
+      "url": "https://kerber.agency",
+      "sameAs": ["https://kerber.agency", "https://t.me/Andrey_KERBERagency"]
+    },
+    {
+      "@type": "Course",
+      "@id": "https://8weekscrypto.com/#course",
+      "name": "Восемь недель с криптой",
+      "description": "Персональная программа: понять, как устроена крипта, и научиться самостоятельно покупать, хранить и переводить активы. Без трейдинга, сигналов и обещаний доходности.",
+      "inLanguage": "ru",
+      "url": "https://8weekscrypto.com/",
+      "image": "https://8weekscrypto.com/assets/img/og-cover.jpg",
+      "provider": { "@id": "https://8weekscrypto.com/#author" },
+      "author": { "@id": "https://8weekscrypto.com/#author" },
+      "teaches": [
+        "Покупка криптовалюты через биржу",
+        "Вывод средств и выбор сети перевода",
+        "Некастодиальный кошелёк и хранение seed phrase",
+        "Проверка адреса и комиссий",
+        "Распознавание мошеннических схем"
+      ],
+      "hasCourseInstance": {
+        "@type": "CourseInstance",
+        "courseMode": "online",
+        "courseWorkload": "PT16H",
+        "instructor": { "@id": "https://8weekscrypto.com/#author" }
+      }
+    }
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Шрифты не держат первую отрисовку. preload запускает загрузку сразу,
+     а media="print" снимает со стилей статус блокирующих: onload возвращает их
+     в дело уже после того, как страница нарисовалась. Подмена начертания
+     проходит под прелоадером, поэтому мигания шрифта посетитель не видит. -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap"></noscript>
+
+<!-- Прелоадер. Критический стиль встроен, а не подключён файлом: он должен
+     примениться раньше, чем браузер нарисует первый кадр, иначе вместо шторки
+     мелькнёт полуготовая страница. Начертания системные — свои ещё грузятся,
+     и именно их ожидание шторка и закрывает. -->
+<style>
+  .pl {
+    position: fixed; inset: 0; z-index: 999;
+    background: #000000; color: #FFFFFF;
+    display: grid; place-content: center; justify-items: start;
+    gap: 18px; padding: 24px;
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    transition: opacity .42s cubic-bezier(.22,.68,.28,1);
+  }
+  .pl__t { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: rgba(255,255,255,.42); }
+  .pl__rail { width: min(240px, 60vw); height: 1px; background: rgba(255,255,255,.16); overflow: hidden; }
+  .pl__fill { display: block; height: 100%; width: 0%; background: #C1FF0F; transition: width .18s linear; }
+  .pl__n { font-size: 11px; letter-spacing: .1em; font-variant-numeric: tabular-nums; color: rgba(255,255,255,.42); }
+  .pl.is-done { opacity: 0; pointer-events: none; }
+  html.is-loading, html.is-loading body { overflow: hidden; }
+  /* Без скрипта шторку снимать некому — значит её не должно быть вовсе. */
+  html.no-js .pl, html.pl-seen .pl { display: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .pl, .pl__fill { transition: none; }
+  }
+</style>
+<script>
+  /* Ставим класс до отрисовки: показывать шторку второй раз за сессию незачем,
+     а если скрипты отключены — её не должно быть совсем. */
+  (function () {
+    var h = document.documentElement;
+    h.className += ' is-loading';
+    try { if (sessionStorage.getItem('pl')) h.className += ' pl-seen'; } catch (e) {}
+  })();
+</script>
+<noscript><style>html.is-loading, html.is-loading body { overflow: auto !important; } .pl { display: none !important; }</style></noscript>
+
+<link rel="stylesheet" href="assets/css/tokens.css?v=400">
+<link rel="stylesheet" href="assets/css/styles.css?v=400">
+<link rel="stylesheet" href="assets/css/pages.css?v=400">
+<link rel="stylesheet" href="assets/css/responsive.css?v=400">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='none' stroke='%23FFFFFF' stroke-width='2'/><circle cx='16' cy='16' r='6' fill='%23C1FF0F'/></svg>">
+</head>
+<body>
+
+<div class="pl" id="pl" role="status" aria-live="polite" aria-label="Загрузка страницы">
+  <span class="pl__t">Восемь недель с криптой</span>
+  <span class="pl__rail"><i class="pl__fill" id="plFill"></i></span>
+  <span class="pl__n" id="plNum">0%</span>
+</div>
+
+<a class="skip" href="#main">К основному содержанию</a>
+
+<!-- ======================================================================
+     HEADER
+     ====================================================================== -->
+<header class="header" id="header">
+  <div class="container header__inner">
+    <a class="wordmark" href="./" aria-label="На главную">
+      <span class="wordmark__glyph" aria-hidden="true"></span>
+      <span>Восемь недель <span class="wordmark__sub">с криптой</span></span>
+    </a>
+
+    <nav class="nav" aria-label="Основная навигация">
+      <a class="nav__link" href="./">Главная</a>
+      <a class="nav__link is-current" href="personal" aria-current="page">Личное сопровождение</a>
+      <a class="nav__link" href="business">Консалтинг</a>
+      <a class="nav__link" href="contacts">Контакты</a>
+    </nav>
+
+    <div class="header__actions">
+      <a class="btn btn--primary btn--sm" data-cta href="#call">Записаться<span class="btn__long"> на звонок</span></a>
+      <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="drawer" aria-label="Открыть меню">
+        <span class="burger__lines" aria-hidden="true"><span></span><span></span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="drawer" id="drawer" inert>
+  <nav class="drawer__nav" aria-label="Меню">
+    <a class="drawer__link" href="./">Главная</a>
+    <a class="drawer__link" href="personal">Личное сопровождение</a>
+    <a class="drawer__link" href="business">Консалтинг для бизнеса</a>
+    <a class="drawer__link" href="contacts">Контакты</a>
+  </nav>
+  <div class="drawer__foot">
+    <p class="small">30–60 минут · online · без обязательств</p>
+    <a class="btn btn--primary" data-cta href="#call">Записаться на личный звонок</a>
+  </div>
+</div>
+
+<main id="main">
+<span id="top"></span>
+
+<!-- ======================================================================
+     HERO
+     ====================================================================== -->
+<section class="section hero" id="hero">
+  <div class="hero__bg" aria-hidden="true"></div>
+  <canvas class="hero__pit" id="heroPit" data-coinpit="drop" aria-hidden="true"></canvas>
+
+  <div class="container hero__inner">
+    <!-- Заголовок — одно слово во всю ширину сетки. Набран в SVG, а не текстом:
+         только так строка гарантированно упирается в оба края контейнера на
+         любой ширине экрана. viewBox снят с натуральных метрик Geist, поэтому
+         буквы не растянуты — textLength лишь добирает доли пикселя. -->
+    <h1 class="hero__word" data-warptext data-reveal style="--reveal-delay:60ms">
+      <svg class="hero__word-svg" viewBox="10.92 15.6 980.45 188.47" role="img" aria-label="CRYPTO">
+        <text x="0" y="200">CRYPTO</text>
+      </svg>
+    </h1>
+
+    <p class="hero__claim" data-reveal style="--reveal-delay:120ms">Для тех, кто хочет понимать, что происходит в Web3, и принимать решения осознанно — за восемь недель личной работы</p>
+
+    <div class="cta-row" data-reveal style="--reveal-delay:220ms">
+      <a class="btn btn--primary" data-cta href="#call">Записаться на личный звонок <span class="btn__arrow" aria-hidden="true">→</span></a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ======================================================================
+     SCENARIOS — four ways people arrive at the same question
+     ====================================================================== -->
+<section class="section section--cinematic section--screen section--light">
+  <div class="container">
+    <div class="sec-head">
+      <h2 class="h2 h2--wide" data-reveal>
+        С криптой обычно сталкиваются <span class="hl hl--flat">раньше, чем успевают в ней разобраться</span>
+      </h2>
+      <p class="lead" data-reveal style="--reveal-delay:100ms">
+        Неважно, деньги уже в крипте или вы только планируете ими пользоваться.
+        Вопрос обычно один: что именно сейчас происходит и где здесь можно ошибиться?
+      </p>
+    </div>
+
+    <div class="scens">
+
+      <article class="scen" data-reveal>
+        <!-- Мокап телефона намеренно вылезает за нижний край карточки:
+             целиком он не помещается в 252px, а обрезанный снизу читается
+             как настоящее устройство, а не как иконка телефона. -->
+        <div class="scen__art scen__art--a" aria-hidden="true">
+          <div class="phone">
+            <div class="phone__island"></div>
+            <div class="phone__scr">
+              <p class="phone__h">Отправить</p>
+              <div class="phone__amt">
+                <img src="assets/coins/usdt.png" alt="" width="26" height="26" loading="lazy">
+                <b>100&nbsp;000</b><i>USDT</i>
+              </div>
+              <div class="phone__f"><span>Сеть</span><b>TRON</b></div>
+              <div class="phone__f"><span>Кому</span><b>TR7N…9Qv3</b></div>
+              <div class="phone__go">Отправить</div>
+            </div>
+          </div>
+        </div>
+        <span class="scen__i">01</span>
+        <h3 class="scen__t">Нужно перевести деньги</h3>
+        <p class="scen__d">Часть капитала нужно перевести за границу, между странами
+        или просто вывести из привычной банковской системы.</p>
+      </article>
+
+      <article class="scen" data-reveal style="--reveal-delay:70ms">
+        <div class="scen__art scen__art--b" aria-hidden="true">
+          <div class="wal">
+            <div class="wal__top">
+              <span>Кошелёк</span><span class="wal__addr">0x7a…4F2c</span>
+            </div>
+            <img class="wal__coin" src="assets/coins/usdt.png" alt="" width="40" height="40" loading="lazy">
+            <div class="wal__bal">100&nbsp;000<i>USDT</i></div>
+            <div class="wal__sub">≈ 100 000 $</div>
+          </div>
+        </div>
+        <span class="scen__i">02</span>
+        <h3 class="scen__t">Деньги уже в крипте</h3>
+        <p class="scen__d">USDT или другие активы уже лежат на бирже или кошельке,
+        но пока непонятно, как их безопасно хранить и перемещать.</p>
+      </article>
+
+      <article class="scen" data-reveal style="--reveal-delay:140ms">
+        <div class="scen__art scen__art--c" aria-hidden="true">
+          <div class="tx">
+            <div class="tx__head"><span>Перевод</span><b>TRON · TRC20</b></div>
+            <div class="tx__row"><span>Откуда</span><b>TR7N…9Qv3</b></div>
+            <div class="tx__row"><span>Кому</span><b>TXk4…21aF</b></div>
+            <div class="tx__row tx__row--main"><span>Сумма</span><b>100 000 USDT</b></div>
+          </div>
+        </div>
+        <span class="scen__i">03</span>
+        <h3 class="scen__t">Впереди крупная операция</h3>
+        <p class="scen__d">Покупка недвижимости, автомобиля, перевод накоплений
+        или другой платёж, где цена ошибки уже ощутима.</p>
+      </article>
+
+      <article class="scen" data-reveal style="--reveal-delay:210ms">
+        <div class="scen__art scen__art--d" aria-hidden="true">
+          <div class="cloud">
+            <span>wallet</span><span>gas</span><span>seed</span><span>TRC20</span>
+            <span>network</span><span>swap</span><span>fee</span>
+            <span>address</span><span>approve</span><span>explorer</span>
+            <b class="cloud__q">?</b><span>DEX</span><span>2FA</span>
+            <span>stablecoin</span><span>chain</span><span>KYC</span><span>custody</span>
+          </div>
+        </div>
+        <span class="scen__i">04</span>
+        <h3 class="scen__t">Хочется сначала разобраться</h3>
+        <p class="scen__d">До первой серьёзной операции хочется понять кошельки, сети,
+        seed-фразы, комиссии и почему всё это работает не так, как привычный банк.</p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================================
+     BANKING VS CRYPTO
+     ====================================================================== -->
+<section class="section section--sunk" style="padding-top: calc(var(--sp-vast) * 1.5); padding-bottom: 0">
+  <div class="container">
+    <div class="reveal-statement">
+      <h2 class="h2" data-reveal>Проблема не в том, что крипта <span class="hl hl--flat">слишком сложная</span></h2>
+      <div class="body" data-reveal style="--reveal-delay:120ms">
+        <p>Перевод денег выглядит знакомо. Правила — совсем другие.</p>
+      </div>
+    </div>
+
+    <div class="compare" data-reveal>
+      <div class="compare__col compare__col--known">
+        <div class="compare__head">
+          <span class="compare__num">01</span>
+          <h2 class="h3">Банкинг</h2>
+        </div>
+        <ul class="compare__list">
+          <li>Получатель</li>
+          <li>Счёт</li>
+          <li>Банк</li>
+          <li>Поддержка</li>
+          <li>Операционист, который переспросит</li>
+          <li>Интерфейс, знакомый двадцать лет</li>
+        </ul>
+      </div>
+
+      <div class="compare__col compare__col--new">
+        <div class="compare__head">
+          <span class="compare__num">02</span>
+          <h2 class="h3">Crypto</h2>
+        </div>
+        <ul class="compare__list">
+          <li>Wallet</li>
+          <li>Network</li>
+          <li>Address</li>
+          <li>Private key</li>
+          <li>Gas</li>
+          <li>Blockchain</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ======================================================================
+     RISK LANDSCAPE
+     ====================================================================== -->
+<!-- ======================================================================
+     SECURITY
+
+     Раньше здесь была радиальная схема: центральный узел «одна операция»
+     и лучи к двенадцати рискам. Схема требовала JS для лучей, отдельной
+     раскладки для телефона и полутора экранов высоты — а говорила ровно
+     то же, что говорит облако плашек: рисков много и они разные.
+     ====================================================================== -->
+<!-- Секция во всю высоту окна не ради масштаба, а ради перехода: прилипшая
+     секция ниже экрана оставляет под собой полосу следующей, и наезд одной
+     на другую перестаёт читаться.
+
+     Содержимое прижато к верху, а не по центру: при центрировании половина
+     пустоты уходила наверх и стык со сравнительной таблицей превращался
+     в провал. Внизу та же пустота работает паузой перед наездом белой
+     секции. -->
+<section class="section section--screen section--sunk section--grid-down" id="security">
+  <div class="container risks">
+    <div class="risks__copy">
+      <h2 class="h2" data-reveal>
+        В крипте можно <span class="hl">потерять деньги</span>, даже не инвестируя
+      </h2>
+      <p class="lead" data-reveal style="--reveal-delay:100ms">
+        Иногда достаточно не понимать, что именно происходит на одном
+        из этапов операции — перевода, обмена или подписи.
+      </p>
+    </div>
+
+    <ul class="risks__cloud" data-reveal style="--reveal-delay:160ms">
+      <li class="risk"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2l8.66 5v10L12 22 3.34 17V7z"/></svg>Не та сеть</li>
+      <li class="risk"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M3 4h10l7 8-7 8H3z"/></svg>Не тот адрес</li>
+      <li class="risk"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 3l9.5 17h-19z"/></svg>Фишинговый сайт</li>
+      <li class="risk"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M15.5 2a6.5 6.5 0 00-6.24 8.36L2 17.62V22h4.38l1.5-1.5V19h1.5v-1.5H11l2.14-2.14A6.5 6.5 0 1015.5 2z"/></svg>Seed phrase</li>
+      <li class="risk"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M4 3h16v14H9l-5 4V3z"/></svg>Фейковая поддержка</li>
+      <li class="risk"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z"/></svg>Вредоносный approval</li>
+      <li class="risk"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2a10 10 0 100 20 10 10 0 000-20zm0 6a4 4 0 110 8 4 4 0 010-8z"/></svg>Поддельный токен</li>
+      <li class="risk"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M8 11a4 4 0 100-8 4 4 0 000 8zm8-1a3.5 3.5 0 100-7 3.5 3.5 0 000 7zM2 21a6 6 0 0112 0zm14 0a7.6 7.6 0 00-1.4-4.4A6 6 0 0122 21z"/></svg>Риск контрагента</li>
+      <li class="risk"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M7 10V7a5 5 0 0110 0v3h2v12H5V10zm2 0h6V7a3 3 0 00-6 0z"/></svg>Потеря доступа</li>
+      <li class="risk"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 12a5 5 0 100-10 5 5 0 000 10zm0 2c-5 0-9 2.7-9 6v2h18v-2c0-3.3-4-6-9-6z"/></svg>Социальная инженерия</li>
+      <li class="risk"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M3 21V8l7-5 7 5v13h-5v-6h-4v6z"/></svg>Риск площадки</li>
+      <li class="risk"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M6 2h8l4 4v16H6zm8 1v4h4z"/></svg>Смарт-контракт</li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- ======================================================================
+     SOLUTION — the offer, stated plainly right after the problem
+     ====================================================================== -->
+<!-- Блок занимает экран целиком и центрируется по высоте: инлайновый
+     padding-top тут больше не нужен, иначе содержимое съезжает вниз. -->
+<section class="section section--cinematic section--screen section--light">
+  <div class="container">
+    <div class="solution">
+      <div class="solution__copy" data-reveal>
+        <h2 class="h2 h2--wide">Два месяца рядом с человеком, который <span class="hl hl--flat">уже прошёл этот путь</span></h2>
+        <p class="lead" style="margin-top:24px">
+          Не курс в записи и не консультация на час.
+          Восемь недель работы один на один: ни групп, ни потоков, ни кураторов —
+          вся работа идёт на ваших задачах.
+        </p>
+        <p class="lead" style="margin-top:24px">
+          Шестнадцать личных созвонов, чат между ними и подключение в момент важной
+          операции. Вы делаете всё своими руками и небольшими суммами — но не остаётесь
+          один на один с экраном, когда что-то идёт не так.
+        </p>
+        <div class="cta-row" style="margin-top:32px">
+          <a class="btn btn--primary" data-cta href="#call">Записаться на личный звонок <span class="btn__arrow" aria-hidden="true">→</span></a>
+          <a class="btn btn--ghost" href="#program">Посмотреть программу</a>
+        </div>
+      </div>
+
+      <div class="solution__parts" data-reveal style="--reveal-delay:120ms">
+        <div class="part">
+          <!-- Сети и токены: узлы связаны в граф, монеты медленно дышат.
+               Это не иллюстрация «крипты вообще», а буквально то, о чём
+               идёт разговор на созвонах, — что монета живёт в сети. -->
+          <div class="mock part__art" aria-hidden="true">
+            <p class="sk-t">Сети и токены</p>
+            <div class="sk-web">
+              <span class="sk-node" style="--x:50%; --y:15%; --fl:0s"><img class="sk-coin" src="assets/coins/eth.png" alt="" loading="lazy"></span>
+              <span class="sk-node" style="--x:15%; --y:45%; --fl:-1.4s"><img class="sk-coin" src="assets/coins/trx.png" alt="" loading="lazy"></span>
+              <span class="sk-node" style="--x:85%; --y:45%; --fl:-2.6s"><img class="sk-coin" src="assets/coins/sol.png" alt="" loading="lazy"></span>
+              <span class="sk-node" style="--x:31%; --y:83%; --fl:-3.7s"><img class="sk-coin" src="assets/coins/bnb.png" alt="" loading="lazy"></span>
+              <span class="sk-node" style="--x:73%; --y:83%; --fl:-2s"><img class="sk-coin" src="assets/coins/usdt.png" alt="" loading="lazy"></span>
+              <svg class="sk-web__l" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M50 15 15 45M50 15 85 45M15 45 31 83M85 45 73 83M31 83 73 83M15 45 85 45"/>
+              </svg>
+            </div>
+          </div><div class="part__body">
+            <span class="part__i">Теория</span>
+            <p class="part__t">Как устроены блокчейн, кошельки, сети и комиссии</p>
+            <p class="part__d">Разбираем на созвонах: сложное — нормальным языком
+          и в том порядке, в котором вы столкнётесь с этим на практике.</p>
+          </div>
+        </div>
+        <div class="part">
+          <!-- Тестовый перевод целиком: сумма, сеть, комиссия и то, сколько
+               дошло. Разница между 10 и 9 — весь смысл тренировки на малых
+               суммах, и она видна без подписи. -->
+          <div class="mock part__art" aria-hidden="true">
+            <p class="sk-t">Тестовый перевод</p>
+            <span class="sk-r"><span class="sk-net"><img class="sk-coin" src="assets/coins/usdt.png" alt="" loading="lazy">Сумма</span><b>10.00</b></span>
+            <span class="sk-r sk-r--dim">Сеть<b>TRC20</b></span>
+            <span class="sk-r sk-r--dim">Комиссия<b>1.00</b></span>
+            <span class="sk-arrow">↓</span>
+            <span class="sk-r sk-r--ok">Дошло<b>9.00</b></span>
+          </div><div class="part__body">
+            <span class="part__i">Практика</span>
+            <p class="part__t">Собственные операции на небольших суммах</p>
+            <p class="part__d">Покупка, вывод, кошелёк, тестовый перевод, проверка через explorer —
+          всё делаете вы сами, пока цена ошибки минимальна.</p>
+          </div>
+        </div>
+        <div class="part">
+          <!-- Переписка про выбор сети: короткий разговор вместо абстрактных
+               пузырей. Видно и вопрос, и что ответ приходит по существу. -->
+          <div class="mock part__art" aria-hidden="true">
+            <p class="sk-t">Чат</p>
+            <div class="sk-chat">
+              <span class="sk-msg">Какую сеть выбрать?</span>
+              <span class="sk-msg sk-msg--me">TRC20 — комиссия ниже</span>
+              <span class="sk-msg">А адрес тот&nbsp;же?</span>
+              <span class="sk-msg sk-msg--me">Нет. Проверим вместе</span>
+            </div>
+          </div>
+          <div class="part__body">
+            <span class="part__i">Сопровождение</span>
+            <p class="part__t">Человек рядом, пока вы набираете опыт</p>
+            <p class="part__d">Личные созвоны, чат между ними и возможность подключиться в момент важной
+          операции — чтобы первые серьёзные действия не приходилось делать в одиночку.</p>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ВИДЕОБЛОК ВРЕМЕННО ОТКЛЮЧЁН. Раскомментируйте, когда появится ролик.
+<!- - ======================================================================
+     VIDEO — 16:9, poster only for now
+     Временно скрыт: снимите атрибут hidden, когда появится ролик.
+     ====================================================================== - ->
+<section class="section section--light" hidden>
+  <div class="container">
+    <div class="sec-head" data-reveal>
+      <h2 class="h2">Как это выглядит на практике</h2>
+      <p class="lead">Короткая запись: разбираем реальный перевод шаг за шагом.</p>
+    </div>
+
+    <!- - Swap this <figure> for the real player when the video is ready: keep the
+         same wrapper, put an <iframe> or <video> inside — the 16:9 box, the
+         radius and the clipping already come from .video. - ->
+    <figure class="video" data-reveal style="margin-top: var(--sp-tight)">
+      <img class="video__poster" src="assets/img/video-poster.svg" alt="" width="1600" height="900">
+      <button class="video__play" type="button" aria-label="Видео появится позже" disabled>
+        <span class="video__triangle" aria-hidden="true"></span>
+      </button>
+    </figure>
+  </div>
+</section>
+-->
+
+<!-- ======================================================================
+     THREE PILLARS
+     ====================================================================== -->
+<section class="section" style="padding-top: calc(var(--sp-vast) * 1.6)">
+  <div class="container">
+    <h2 class="h2" data-reveal>
+      Чтобы с криптой не было страшно — нужно <span class="hl hl--flat">три вещи</span>
+    </h2>
+
+    <div class="pillars">
+      <article class="pillar" data-reveal>
+        <span class="pillar__i">01</span>
+        <h3 class="pillar__t">Понять</h3>
+        <p class="pillar__d">Как устроена криптоиндустрия и что означают основные термины.</p>
+      </article>
+      <article class="pillar" data-reveal style="--reveal-delay:80ms">
+        <span class="pillar__i">02</span>
+        <h3 class="pillar__t">Научиться</h3>
+        <p class="pillar__d">Самостоятельно покупать, хранить, переводить и проверять операции.</p>
+      </article>
+      <article class="pillar" data-reveal style="--reveal-delay:160ms">
+        <span class="pillar__i">03</span>
+        <h3 class="pillar__t">Не остаться одному</h3>
+        <p class="pillar__d">Во время программы иметь рядом человека, которому можно задать вопрос и показать ситуацию.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================================
+     OUTCOME
+     ====================================================================== -->
+<section class="section">
+  <div class="container">
+    <h2 class="h2" data-reveal>Через 8 недель вы <span class="hl hl--flat">научитесь</span></h2>
+    <p class="lead" data-reveal style="margin-top: var(--sp-stack)">Нужно уверенно пользоваться тем, что вам действительно необходимо.</p>
+
+    <!-- Список сверху вниз: картинка слева, заголовок и пояснение справа.
+         Лента прокруткой прятала половину пунктов за краем экрана — а это
+         единственное место, где сказано, что человек в итоге будет уметь.
+         Графика собрана из тех же .mock, что и в продуктовом блоке. -->
+    <ul class="skills">
+    <li class="skill">
+      <div class="mock mock--theory skill__art" aria-hidden="true">
+        <p class="sk-t">Покупка</p>
+        <div class="sk-r"><span>Оплата</span><b>8 000 ₽</b></div>
+        <span class="sk-arrow">↓</span>
+        <div class="sk-r sk-r--hot"><img class="sk-coin" src="assets/coins/usdt.png" alt="" loading="lazy"><span>USDT</span><b>100.00</b></div>
+        <div class="sk-r sk-r--dim"><span>Курс</span><b>80.00 ₽</b></div>
+      </div>
+      <div class="skill__copy">
+        <p class="skill__t">Купить USDT</p>
+        <p class="skill__d">Через биржу, с карты или переводом — и понимать, что именно вы купили.</p>
+      </div>
+    </li>
+    <li class="skill">
+      <div class="mock mock--practice skill__art" aria-hidden="true">
+        <p class="sk-t">Вывод</p>
+        <div class="sk-r"><span>Сумма</span><b>100.00</b></div>
+        <div class="sk-r"><span>Сеть</span><b>TRC20</b></div>
+        <div class="sk-r"><span>Комиссия</span><b>1.00</b></div>
+        <div class="sk-r sk-r--hot"><span>К получению</span><b>99.00</b></div>
+      </div>
+      <div class="skill__copy">
+        <p class="skill__t">Вывести средства с биржи</p>
+        <p class="skill__d">Выбрать сеть, проверить адрес и не потерять сумму на комиссии.</p>
+      </div>
+    </li>
+    <li class="skill">
+      <div class="mock mock--support skill__art" aria-hidden="true">
+        <div class="phone">
+          <div class="phone__island"></div>
+          <div class="phone__scr">
+            <p class="phone__h">Баланс</p>
+            <div class="phone__amt"><b>$1 240</b></div>
+            <div class="phone__pair">
+              <span class="phone__btn">Отправить</span><span class="phone__btn">Получить</span>
+            </div>
+            <div class="phone__f"><img class="sk-coin" src="assets/coins/usdt.png" alt="" loading="lazy"><span>USDT</span><b>980</b></div>
+            <div class="phone__f"><img class="sk-coin" src="assets/coins/eth.png" alt="" loading="lazy"><span>ETH</span><b>0.09</b></div>
+          </div>
+        </div>
+      </div>
+      <div class="skill__copy">
+        <p class="skill__t">Создать non-custodial wallet</p>
+        <p class="skill__d">Кошелёк, доступ к которому есть только у вас — и ни у кого больше.</p>
+      </div>
+    </li>
+    <li class="skill">
+      <div class="mock mock--theory skill__art" aria-hidden="true">
+        <p class="sk-t">Seed phrase</p>
+        <div class="sk-grid">
+          <span class="sk-chip"><i>01</i>ocean</span>
+          <span class="sk-chip"><i>02</i>ridge</span>
+          <span class="sk-chip"><i>03</i><b class="sk-hide">hidden</b></span>
+          <span class="sk-chip"><i>04</i>lunar</span>
+          <span class="sk-chip"><i>05</i><b class="sk-hide">hidden</b></span>
+          <span class="sk-chip"><i>06</i>amber</span>
+          <span class="sk-chip"><i>07</i>quiet</span>
+          <span class="sk-chip"><i>08</i><b class="sk-hide">hidden</b></span>
+        </div>
+      </div>
+      <div class="skill__copy">
+        <p class="skill__t">Хранить seed phrase</p>
+        <p class="skill__d">Двенадцать слов, которые нельзя фотографировать, пересылать и держать в облаке.</p>
+      </div>
+    </li>
+    <li class="skill">
+      <div class="mock mock--practice skill__art" aria-hidden="true">
+        <p class="sk-t">Сеть перевода</p>
+        <div class="sk-r sk-r--hot"><span class="sk-net"><img class="sk-coin" src="assets/coins/trx.png" alt="" loading="lazy"> TRC20</span><b>1.0 $</b></div>
+        <div class="sk-r"><span class="sk-net"><img class="sk-coin" src="assets/coins/eth.png" alt="" loading="lazy"> ERC20</span><b>4.2 $</b></div>
+        <div class="sk-r"><span class="sk-net"><img class="sk-coin" src="assets/coins/bnb.png" alt="" loading="lazy"> BEP20</span><b>0.2 $</b></div>
+      </div>
+      <div class="skill__copy">
+        <p class="skill__t">Выбирать сеть перед переводом</p>
+        <p class="skill__d">Один и тот же токен живёт в разных сетях, и между собой они не сообщаются.</p>
+      </div>
+    </li>
+    <li class="skill">
+      <div class="mock mock--support skill__art" aria-hidden="true">
+        <p class="sk-t">Проверка адреса</p>
+        <div class="sk-r"><span>В кошельке</span><b><em>TR7N</em>…<em>9Qv3</em></b></div>
+        <div class="sk-r"><span>В переводе</span><b><em>TR7N</em>…<em>9Qv3</em></b></div>
+        <div class="sk-r sk-r--ok"><span>Совпадает</span><b>✓</b></div>
+      </div>
+      <div class="skill__copy">
+        <p class="skill__t">Проверять адрес получателя</p>
+        <p class="skill__d">Целиком, а не первые четыре символа: подменённый адрес выглядит правдоподобно.</p>
+      </div>
+    </li>
+    <li class="skill">
+      <div class="mock mock--theory skill__art" aria-hidden="true">
+        <div class="sk-bar"><span class="sk-dots"></span><span class="sk-url">tronscan.org</span></div>
+        <div class="sk-r sk-r--dim"><span>Кошелёк</span><b>TR7N…9Qv3</b></div>
+        <div class="sk-r"><span>−100.00</span><b>✓ 19 блоков</b></div>
+        <div class="sk-r"><span>+250.00</span><b>✓ 41 блок</b></div>
+        <div class="sk-r"><span>−12.00</span><b>✓ 88 блоков</b></div>
+      </div>
+      <div class="skill__copy">
+        <p class="skill__t">Читать blockchain explorer</p>
+        <p class="skill__d">Видеть свою операцию в сети и понимать, на каком она этапе.</p>
+      </div>
+    </li>
+    <li class="skill">
+      <div class="mock mock--theory skill__art" aria-hidden="true">
+        <p class="sk-t">Комиссия сети</p>
+        <div class="sk-r"><span>Медленно</span><b>0.4 $</b></div>
+        <div class="sk-r sk-r--hot"><span>Обычно</span><b>1.0 $</b></div>
+        <div class="sk-r"><span>Быстро</span><b>3.6 $</b></div>
+        <p class="sk-note">цена зависит от загрузки сети</p>
+      </div>
+      <div class="skill__copy">
+        <p class="skill__t">Понимать комиссии</p>
+        <p class="skill__d">Из чего складывается цена перевода и почему она меняется в течение дня.</p>
+      </div>
+    </li>
+    <li class="skill">
+      <div class="mock mock--support skill__art" aria-hidden="true">
+        <div class="sk-push">
+          <p class="sk-push__h">Запрос доступа</p>
+          <p class="sk-push__b">Контракт <b>0x9f…21c4</b> просит право распоряжаться вашими USDT</p>
+          <div class="sk-push__row"><span class="sk-push__no">Отклонить</span><span class="sk-push__yes">Разрешить</span></div>
+        </div>
+      </div>
+      <div class="skill__copy">
+        <p class="skill__t">Видеть базовые риски</p>
+        <p class="skill__d">Какие разрешения вы выдаёте кошельком и как их отзывать.</p>
+      </div>
+    </li>
+    <li class="skill">
+      <div class="mock mock--practice skill__art" aria-hidden="true">
+        <p class="sk-t">Топ рынка</p>
+        <div class="sk-web">
+          <span class="sk-node" style="--x:50%; --y:14%"><img class="sk-coin" src="assets/coins/btc.png" alt="" loading="lazy"></span>
+          <span class="sk-node" style="--x:16%; --y:44%"><img class="sk-coin" src="assets/coins/eth.png" alt="" loading="lazy"></span>
+          <span class="sk-node" style="--x:84%; --y:44%"><img class="sk-coin" src="assets/coins/usdt.png" alt="" loading="lazy"></span>
+          <span class="sk-node" style="--x:30%; --y:82%"><img class="sk-coin" src="assets/coins/sol.png" alt="" loading="lazy"></span>
+          <span class="sk-node" style="--x:70%; --y:82%"><img class="sk-coin" src="assets/coins/bnb.png" alt="" loading="lazy"></span>
+          <svg class="sk-web__l" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M50 14 16 44M50 14 84 44M16 44 30 82M84 44 70 82M30 82 70 82M16 44 84 44"/>
+          </svg>
+        </div>
+      </div>
+      <div class="skill__copy">
+        <p class="skill__t">Понимать устройство индустрии</p>
+        <p class="skill__d">Биржи, кошельки, сети, мосты — что за что отвечает и где чьи деньги.</p>
+      </div>
+    </li>
+    <li class="skill">
+      <div class="mock mock--support skill__art" aria-hidden="true">
+        <p class="sk-t">Своя схема</p>
+        <div class="sk-safe">
+          <svg class="sk-safe__l" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M50 50 14 12M50 50 92 44M50 50 20 90"/>
+          </svg>
+          <span class="sk-safe__box">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10V7a5 5 0 0 1 10 0v3h2v12H5V10zm2 0h6V7a3 3 0 0 0-6 0z"/></svg>
+          </span>
+          <span class="sk-safe__a">биржа</span>
+          <span class="sk-safe__b">кошелёк</span>
+          <span class="sk-safe__c">холодный</span>
+        </div>
+      </div>
+      <div class="skill__copy">
+        <p class="skill__t">Иметь собственную схему</p>
+        <p class="skill__d">Где лежат активы, каким маршрутом ходят и что делать, если что-то пошло не так.</p>
+      </div>
+    </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ======================================================================
+     ECOSYSTEM MAP
+     ====================================================================== -->
+<section class="section">
+  <div class="container">
+    <div class="grid" style="row-gap: var(--sp-stack)">
+      <h2 class="h2 col-half" data-reveal>Мы соберём карту <span class="hl hl--flat">всего криптомира</span></h2>
+      <p class="body" data-reveal style="--reveal-delay:100ms; grid-column: 8 / -1">
+        Не для того, чтобы стать экспертом в каждой области. Для того, чтобы понимать,
+        что вообще существует, зачем это нужно и как связано между собой.
+      </p>
+    </div>
+
+    <div class="eco" data-reveal>
+      <div class="eco__map" id="ecoMap">
+        <svg class="eco__svg" id="ecoSvg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"></svg>
+
+        <div class="eco__group">
+          <h3 class="eco__group-h">Основа</h3>
+          <div class="eco__group-items">
+            <button type="button" class="eco__node is-core" style="--x:10%; --y:20%" data-id="btc" data-links="chain,mining" data-def="Первый блокчейн и первая криптовалюта. Максимально простая по назначению сеть: хранение и передача ценности.">Bitcoin</button>
+            <button type="button" class="eco__node is-core" style="--x:26%; --y:8%" data-id="chain" data-links="btc,eth,l2" data-def="Общий публичный реестр операций, который поддерживают множество независимых участников. Основа всего остального.">Блокчейн</button>
+            <button type="button" class="eco__node is-core" style="--x:27%; --y:32%" data-id="eth" data-links="chain,contracts,l2,staking" data-def="Сеть, где кроме переводов работают программы — смарт-контракты. На ней построена большая часть индустрии.">Ethereum</button>
+            <button type="button" class="eco__node" style="--x:42%; --y:44%" data-id="contracts" data-links="eth,defi,nft" data-def="Программы, исполняющиеся в блокчейне по заранее описанным правилам, без посредника.">Смарт-контракты</button>
+            <button type="button" class="eco__node" style="--x:42%; --y:18%" data-id="l2" data-links="chain,eth,bridges" data-def="Базовые сети (L1) и надстройки над ними (L2), которые делают операции дешевле и быстрее.">L1 / L2</button>
+            <button type="button" class="eco__node" style="--x:9%; --y:45%" data-id="mining" data-links="btc" data-def="Обеспечение работы сетей на Proof of Work вычислительными мощностями — так подтверждаются операции Bitcoin.">Майнинг</button>
+          </div>
+        </div>
+
+        <div class="eco__group">
+          <h3 class="eco__group-h">Активы</h3>
+          <div class="eco__group-items">
+            <button type="button" class="eco__node" style="--x:57%; --y:10%" data-id="tokens" data-links="contracts,stables,meme" data-def="Активы, выпущенные внутри сети. Их тысячи, и качество у них очень разное.">Токены</button>
+            <button type="button" class="eco__node is-core" style="--x:57%; --y:30%" data-id="stables" data-links="tokens,cex,bridges" data-def="Токены, привязанные к валюте — обычно к доллару. Именно с них начинается большинство практических историй.">Стейблкоины</button>
+            <button type="button" class="eco__node" style="--x:72%; --y:8%" data-id="nft" data-links="contracts,rwa" data-def="Невзаимозаменяемые токены — способ зафиксировать владение конкретным объектом или правом.">NFT</button>
+            <button type="button" class="eco__node" style="--x:87%; --y:15%" data-id="rwa" data-links="nft,contracts" data-def="Real World Assets: перенос привычных активов — облигаций, недвижимости, фондов — в блокчейн-форму.">RWA</button>
+            <button type="button" class="eco__node" style="--x:39%; --y:88%" data-id="meme" data-links="tokens,dex" data-def="Активы без продуктовой основы, движимые вниманием и сообществом. Отдельная категория риска.">Мемкоины</button>
+          </div>
+        </div>
+
+        <div class="eco__group">
+          <h3 class="eco__group-h">Где обменивают</h3>
+          <div class="eco__group-items">
+            <button type="button" class="eco__node is-core" style="--x:14%; --y:68%" data-id="cex" data-links="stables,dex" data-def="Централизованные биржи. Удобный вход из фиата, но средства при этом хранятся у компании, а не у вас.">CEX</button>
+            <button type="button" class="eco__node" style="--x:31%; --y:61%" data-id="dex" data-links="cex,amm,meme,bridges" data-def="Обмен напрямую из собственного кошелька, без регистрации и без хранения средств посредником.">DEX</button>
+            <button type="button" class="eco__node" style="--x:48%; --y:71%" data-id="amm" data-links="dex,defi" data-def="Механика, по которой работает обмен на DEX: пулы ликвидности вместо классической книги заявок.">AMM / Ликвидность</button>
+            <button type="button" class="eco__node" style="--x:55%; --y:50%" data-id="bridges" data-links="l2,dex,stables" data-def="Перемещение активов между разными сетями. Одно из технически самых чувствительных мест.">Мосты</button>
+          </div>
+        </div>
+
+        <div class="eco__group">
+          <h3 class="eco__group-h">Что с активами делают</h3>
+          <div class="eco__group-items">
+            <button type="button" class="eco__node" style="--x:65%; --y:59%" data-id="defi" data-links="amm,contracts,staking,dao" data-def="Кредитование и заимствование в крипте: одни размещают активы, другие берут их под залог.">Кредитование</button>
+            <button type="button" class="eco__node" style="--x:79%; --y:44%" data-id="staking" data-links="eth,defi,ai" data-def="Участие в обеспечении работы сети на Proof of Stake — с вознаграждением и со своими рисками.">Стейкинг</button>
+          </div>
+        </div>
+
+        <div class="eco__group">
+          <h3 class="eco__group-h">Смежное</h3>
+          <div class="eco__group-items">
+            <button type="button" class="eco__node" style="--x:89%; --y:62%" data-id="dao" data-links="defi,depin" data-def="Управление проектом через голосования держателей токенов вместо классической корпоративной структуры.">DAO</button>
+            <button type="button" class="eco__node" style="--x:74%; --y:79%" data-id="depin" data-links="dao,ai" data-def="Физическая инфраструктура, построенная на распределённых участниках: связь, хранение, вычисления.">DePIN</button>
+            <button type="button" class="eco__node is-core" style="--x:89%; --y:88%" data-id="ai" data-links="depin,staking" data-def="Пересечение двух индустрий: децентрализованные вычисления, GPU-сети, происхождение данных, платежи между машинами и кошельки у AI-агентов.">AI × Crypto</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="eco__detail">
+        <p class="eco__detail-t" id="ecoTitle">Выберите элемент карты</p>
+        <p class="eco__detail-d" id="ecoDesc">Каждый блок мы разбираем на языке «что это, зачем существует и где вы можете с этим столкнуться» — без инвестиционных рекомендаций.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================================
+     PROGRAM
+     ====================================================================== -->
+
+<!-- ======================================================================
+     ДЛЯ КОГО И КОМУ НЕ ПОДОЙДЁТ
+
+     Второй столбец — не кокетство, а фильтр. Он снимает нецелевые заявки
+     до созвона: человек, который ищет сигналы для торговли, увидит это
+     здесь, а не через сорок минут разговора.
+     ====================================================================== -->
+<section class="section section--sunk" id="fit">
+  <div class="container">
+    <div class="sec-head" data-reveal>
+      <h2 class="h2">Кому этот формат подходит</h2>
+      <p class="lead">И&nbsp;кому — нет. Честный фильтр экономит время обеим сторонам.</p>
+    </div>
+
+    <div class="fit" style="margin-top: var(--sp-block)">
+      <div class="fit__col fit__col--yes" data-reveal>
+        <p class="fit__h">Подойдёт</p>
+        <ul class="fit__list">
+          <li>хотите разобраться в&nbsp;криптовалютах, но&nbsp;не&nbsp;знаете, с&nbsp;чего начать</li>
+          <li>уже изучали тему, но&nbsp;знания не&nbsp;складываются в&nbsp;систему</li>
+          <li>хотите использовать криптоинструменты на&nbsp;практике</li>
+          <li>хотите понимать риски, комиссии, хранение активов и&nbsp;базовую инфраструктуру</li>
+          <li>цените персональное внимание и&nbsp;возможность задавать вопросы</li>
+          <li>хотите адаптировать обучение под собственную цель</li>
+        </ul>
+      </div>
+
+      <div class="fit__col" data-reveal style="--reveal-delay:120ms">
+        <p class="fit__h">Не&nbsp;подойдёт</p>
+        <ul class="fit__list">
+          <li>если ищете сигналы для быстрой торговли</li>
+          <li>если ожидаете гарантированный заработок</li>
+          <li>если нужен только пассивный набор лекций без практики</li>
+          <li>если не&nbsp;готовы выделять время на&nbsp;работу между встречами</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Верхнее поле удвоено: вместе с нижним полем карты криптомира это даёт
+     между блоками полтора обычных отступа. -->
+<section class="section" id="program" style="padding-top: calc(var(--sp-section) * 2); padding-bottom: 500px">
+  <div class="container">
+    <div class="grid" style="row-gap: var(--sp-stack)">
+      <h2 class="h2 col-half" data-reveal>Восемь недель, собранных <span class="hl hl--flat">вокруг ваших задач</span></h2>
+      <p class="body" data-reveal style="--reveal-delay:100ms; grid-column: 8 / -1">
+        Каждая неделя — личные созвоны и практика. Идём от ваших задач,
+        но есть и общий список тем: их разберём обязательно —
+        и в теории, и на практике.
+        Нажмите на неделю, чтобы раскрыть содержание.
+      </p>
+    </div>
+
+    <div class="program" id="program-list" data-reveal>
+
+      <article class="week">
+        <h3><button class="week__head" type="button" aria-expanded="true" aria-controls="w1">
+          <span class="week__n">Неделя 01</span>
+          <span class="week__t">Введение в крипту</span>
+          <span class="week__toggle" aria-hidden="true"></span>
+        </button></h3>
+        <div class="week__body is-open" id="w1">
+          <div class="week__body-inner"><div class="week__content">
+            <div class="week__topics"><span class="tag">Crypto</span><span class="tag">Blockchain</span><span class="tag">Stablecoins</span><span class="tag">Networks</span><span class="tag">Wallet</span><span class="tag">CEX</span><span class="tag">DEX</span><span class="tag">P2P</span><span class="tag">KYC</span></div>
+
+            <p class="week__lead">Базовый словарь и общая картина: как обычные деньги превращаются в USDT и как перемещаются дальше.</p>
+
+            <div class="week__cols">
+              <div>
+                <p class="week__h">Что разберём</p>
+                <ul class="week__list">
+              <li>криптовалюта и чем она отличается от денег</li>
+              <li>blockchain: механика без перегрузки</li>
+              <li>монеты и токены: BTC, ETH, USDT</li>
+              <li>stablecoin: почему USDT ≈ $1</li>
+              <li>сети: Ethereum, TRON, Solana</li>
+              <li>кошелёк: где на самом деле активы</li>
+              <li>биржа и CEX: зачем нужна</li>
+              <li>DEX: второй тип бирж</li>
+              <li>путь денег: fiat → CEX / P2P / обменник → USDT</li>
+              <li>P2P и обменники: принцип работы</li>
+              <li>KYC: зачем биржи требуют документы</li>
+              <li>маршрут крипты: биржа → сеть → кошелёк → получатель</li>
+              <li>риски: сеть, адрес, seed phrase, scam, необратимость</li>
+              <li>карта восьми недель</li>
+                </ul>
+              </div>
+              <div>
+                <p class="week__h">После недели</p>
+                <p class="week__res">Базовый язык крипты и логика движения средств: от денег до биржи, сети и своего кошелька.</p>
+              </div>
+            </div>
+
+            <p class="week__practice"><b>Практика:</b> создать аккаунт Bybit, пройти KYC, включить 2FA и разобраться в разделах.</p>
+          </div></div>
+        </div>
+      </article>
+
+      <article class="week">
+        <h3><button class="week__head" type="button" aria-expanded="false" aria-controls="w2">
+          <span class="week__n">Неделя 02</span>
+          <span class="week__t">CEX — подробно про Bybit</span>
+          <span class="week__toggle" aria-hidden="true"></span>
+        </button></h3>
+        <div class="week__body" id="w2">
+          <div class="week__body-inner"><div class="week__content">
+            <div class="week__topics"><span class="tag">CEX</span><span class="tag">Bybit</span><span class="tag">KYC</span><span class="tag">2FA</span><span class="tag">P2P</span><span class="tag">USDT</span><span class="tag">Deposit</span><span class="tag">Withdrawal</span><span class="tag">Spot</span></div>
+
+            <p class="week__lead">Централизованная биржа руками: безопасность аккаунта, P2P, покупка, переводы и вывод on-chain.</p>
+
+            <div class="week__cols">
+              <div>
+                <p class="week__h">Что разберём</p>
+                <ul class="week__list">
+              <li>зачем нужна централизованная биржа</li>
+              <li>Bybit, Binance, OKX</li>
+              <li>аккаунт и KYC: верификация и лимиты</li>
+              <li>2FA, anti-phishing code, passkey, trusted devices</li>
+              <li>интерфейс Bybit</li>
+              <li>Funding и Unified Trading: типы счетов</li>
+              <li>покупка крипты за фиат</li>
+              <li>как работает P2P</li>
+              <li>выбор P2P-контрагента</li>
+              <li>основные P2P-риски</li>
+              <li>практическая P2P-сделка</li>
+              <li>Convert и Spot: покупка и обмен</li>
+              <li>переводы между счетами Bybit</li>
+              <li>on-chain deposit</li>
+              <li>on-chain withdrawal</li>
+              <li>выбор сети при выводе</li>
+              <li>TXID и проверка в explorer</li>
+              <li>комиссии и лимиты</li>
+              <li>способы вывода крипты</li>
+              <li>support и appeal</li>
+                </ul>
+              </div>
+              <div>
+                <p class="week__h">После недели</p>
+                <p class="week__res">Купить и обменять крипту на Bybit, понимать счета и подготовить ввод или вывод.</p>
+              </div>
+            </div>
+
+            <p class="week__practice"><b>Практика:</b> пополнить биржу через P2P небольшой суммой — с показом экрана.</p>
+          </div></div>
+        </div>
+      </article>
+
+      <article class="week">
+        <h3><button class="week__head" type="button" aria-expanded="false" aria-controls="w3">
+          <span class="week__n">Неделя 03</span>
+          <span class="week__t">Wallet: custodial / non-custodial</span>
+          <span class="week__toggle" aria-hidden="true"></span>
+        </button></h3>
+        <div class="week__body" id="w3">
+          <div class="week__body-inner"><div class="week__content">
+            <div class="week__topics"><span class="tag">Wallet</span><span class="tag">Seed phrase</span><span class="tag">Private key</span><span class="tag">Address</span><span class="tag">MetaMask</span><span class="tag">Trust Wallet</span><span class="tag">Explorer</span></div>
+
+            <p class="week__lead">От хранения на бирже к своему кошельку: кто на самом деле контролирует активы.</p>
+
+            <div class="week__cols">
+              <div>
+                <p class="week__h">Что разберём</p>
+                <ul class="week__list">
+              <li>custodial и non-custodial</li>
+              <li>как устроен криптокошелёк</li>
+              <li>wallet address</li>
+              <li>public и private key</li>
+              <li>seed phrase и восстановление</li>
+              <li>безопасное хранение seed phrase</li>
+              <li>Trust Wallet, MetaMask</li>
+              <li>один кошелёк, несколько сетей</li>
+              <li>добавление сетей и токенов</li>
+              <li>получение крипты</li>
+              <li>отправка: network, amount, gas, confirmations</li>
+              <li>test transaction</li>
+              <li>blockchain explorer</li>
+              <li>hot, cold и hardware wallets</li>
+                </ul>
+              </div>
+              <div>
+                <p class="week__h">После недели</p>
+                <p class="week__res">Свой кошелёк создан, восстановление проверено, разница с хранением на бирже понятна.</p>
+              </div>
+            </div>
+
+            <p class="week__practice"><b>Практика:</b> создать wallet, сохранить seed phrase, проверить восстановление, вывести небольшую сумму с Bybit, найти её в explorer и отправить часть обратно.</p>
+          </div></div>
+        </div>
+      </article>
+
+      <article class="week">
+        <h3><button class="week__head" type="button" aria-expanded="false" aria-controls="w4">
+          <span class="week__n">Неделя 04</span>
+          <span class="week__t">Карта криптомира</span>
+          <span class="week__toggle" aria-hidden="true"></span>
+        </button></h3>
+        <div class="week__body" id="w4">
+          <div class="week__body-inner"><div class="week__content">
+            <div class="week__topics"><span class="tag">BTC</span><span class="tag">ETH</span><span class="tag">L1 / L2</span><span class="tag">DeFi</span><span class="tag">NFT</span><span class="tag">RWA</span><span class="tag">DePIN</span><span class="tag">DAO</span><span class="tag">AI × Crypto</span></div>
+
+            <p class="week__lead">Карта индустрии: что вообще существует, зачем нужно и как связано между собой.</p>
+
+            <div class="week__cols">
+              <div>
+                <p class="week__h">Что разберём</p>
+                <ul class="week__list">
+              <li>криптоактивы: coin, token, stablecoin, NFT</li>
+              <li>категории: L1/L2, DeFi, utility, governance, RWA, DePIN, meme</li>
+              <li>топ-10 CoinMarketCap</li>
+              <li>stablecoins: USDT, USDC, DAI</li>
+              <li>L1: Bitcoin, Ethereum, Solana, TON, TRON</li>
+              <li>consensus: PoW и PoS</li>
+              <li>L2 и масштабирование: Base, Arbitrum, Optimism</li>
+              <li>smart contracts и oracles</li>
+              <li>CEX и DEX</li>
+              <li>DeFi</li>
+              <li>liquidity и AMM</li>
+              <li>staking, lending и borrowing</li>
+              <li>bridges</li>
+              <li>NFT</li>
+              <li>DAO</li>
+              <li>RWA и DePIN</li>
+              <li>memecoins</li>
+              <li>GameFi, SocialFi, prediction markets</li>
+              <li>crypto × AI и privacy</li>
+              <li>tokenomics: supply, emission, burn, unlock, FDV</li>
+                </ul>
+              </div>
+              <div>
+                <p class="week__h">После недели</p>
+                <p class="week__res">Термины из CoinMarketCap, сервисов и новостей получают место на общей карте.</p>
+              </div>
+            </div>
+
+            <p class="small">Это обзорный модуль «что есть что», а не инвестиционные рекомендации и не инструкция, что покупать.</p>
+          </div></div>
+        </div>
+      </article>
+
+      <article class="week">
+        <h3><button class="week__head" type="button" aria-expanded="false" aria-controls="w5">
+          <span class="week__n">Неделя 05</span>
+          <span class="week__t">Bitcoin, Ethereum и фундамент блокчейна</span>
+          <span class="week__toggle" aria-hidden="true"></span>
+        </button></h3>
+        <div class="week__body" id="w5">
+          <div class="week__body-inner"><div class="week__content">
+            <div class="week__topics"><span class="tag">Bitcoin</span><span class="tag">Ethereum</span><span class="tag">Mining</span><span class="tag">PoW</span><span class="tag">PoS</span><span class="tag">Smart contracts</span><span class="tag">L1 / L2</span><span class="tag">AI</span></div>
+
+            <p class="week__lead">Через Bitcoin и Ethereum: почему blockchain работает без банка и кто держит сеть.</p>
+
+            <div class="week__cols">
+              <div>
+                <p class="week__h">Что разберём</p>
+                <ul class="week__list">
+              <li>зачем был создан Bitcoin</li>
+              <li>устройство Bitcoin: блоки и реестр</li>
+              <li>эмиссия BTC и предел в 21 млн</li>
+              <li>что реально делают майнеры</li>
+              <li>proof of work</li>
+              <li>halving и экономика Bitcoin</li>
+              <li>зачем появился Ethereum</li>
+              <li>smart contracts</li>
+              <li>EVM и gas</li>
+              <li>proof of stake</li>
+              <li>PoW и PoS в сравнении</li>
+              <li>другие механизмы consensus</li>
+              <li>L1 и L2</li>
+              <li>Solana, TON, TRON</li>
+              <li>BTC, ETH, SOL: разное назначение</li>
+              <li>mining и staking</li>
+              <li>почему Ethereum больше нельзя майнить</li>
+              <li>blockchain × AI: GPU-сети, inference, Gonka</li>
+              <li>где blockchain нужен, а где нет</li>
+              <li>scaling и modular blockchains</li>
+                </ul>
+              </div>
+              <div>
+                <p class="week__h">После недели</p>
+                <p class="week__res">Чем отличаются Bitcoin, Ethereum и другие сети и откуда берётся их безопасность.</p>
+              </div>
+            </div>
+          </div></div>
+        </div>
+      </article>
+
+      <article class="week">
+        <h3><button class="week__head" type="button" aria-expanded="false" aria-controls="w6">
+          <span class="week__n">Неделя 06</span>
+          <span class="week__t">DEX — подробно</span>
+          <span class="week__toggle" aria-hidden="true"></span>
+        </button></h3>
+        <div class="week__body" id="w6">
+          <div class="week__body-inner"><div class="week__content">
+            <div class="week__topics"><span class="tag">DEX</span><span class="tag">Swap</span><span class="tag">AMM</span><span class="tag">Liquidity</span><span class="tag">Slippage</span><span class="tag">Approval</span><span class="tag">Uniswap</span><span class="tag">Jupiter</span><span class="tag">Bridges</span></div>
+
+            <p class="week__lead">Работа on-chain: как DEX общается с кошельком и что проверить до подписи.</p>
+
+            <div class="week__cols">
+              <div>
+                <p class="week__h">Что разберём</p>
+                <ul class="week__list">
+              <li>CEX и DEX: архитектура и custody</li>
+              <li>Uniswap, Jupiter, PancakeSwap, Curve</li>
+              <li>connect wallet</li>
+              <li>что происходит после swap</li>
+              <li>smart contract interaction</li>
+              <li>gas и network fee</li>
+              <li>token approval и unlimited approvals</li>
+              <li>liquidity pools</li>
+              <li>AMM</li>
+              <li>liquidity providers</li>
+              <li>price impact</li>
+              <li>slippage</li>
+              <li>агрегаторы: 1inch, Jupiter</li>
+              <li>маршрутизация swap</li>
+              <li>проверка token contract address</li>
+              <li>проверка DEX: домен, TVL, ликвидность</li>
+              <li>phishing, поддельные DEX, honeypots, scam-токены</li>
+              <li>bridges и cross-chain</li>
+              <li>explorer после DEX-транзакции</li>
+              <li>perpetual DEX и Hyperliquid — обзорно</li>
+                </ul>
+              </div>
+              <div>
+                <p class="week__h">После недели</p>
+                <p class="week__res">Проверить площадку и токен, сделать swap, понимая, что именно подписываете.</p>
+              </div>
+            </div>
+
+            <p class="week__practice"><b>Практика:</b> проверить DEX и token contract, подключить wallet, настроить swap, проверить price impact и slippage, обменять $10–20, найти транзакцию в explorer и проверить approvals.</p>
+          </div></div>
+        </div>
+      </article>
+
+      <article class="week">
+        <h3><button class="week__head" type="button" aria-expanded="false" aria-controls="w7">
+          <span class="week__n">Неделя 07</span>
+          <span class="week__t">Торговый терминал и график</span>
+          <span class="week__toggle" aria-hidden="true"></span>
+        </button></h3>
+        <div class="week__body" id="w7">
+          <div class="week__body-inner"><div class="week__content">
+            <div class="week__topics"><span class="tag">Trading terminal</span><span class="tag">BTC-USDT</span><span class="tag">Candles</span><span class="tag">Order book</span><span class="tag">Market</span><span class="tag">Limit</span><span class="tag">TradingView</span><span class="tag">CMC</span></div>
+
+            <p class="week__lead">Интерфейс биржи и график — без обучения трейдингу.</p>
+
+            <div class="week__cols">
+              <div>
+                <p class="week__h">Что разберём</p>
+                <ul class="week__list">
+              <li>как устроен торговый терминал</li>
+              <li>торговая пара: BTC/USDT, ETH/USDT</li>
+              <li>почему движется график цены</li>
+              <li>свечи: open, high, low, close</li>
+              <li>таймфреймы</li>
+              <li>order book: заявки, spread, глубина рынка</li>
+              <li>market и limit order</li>
+              <li>market cap, circulating supply, FDV</li>
+              <li>spot, margin и futures</li>
+              <li>long, short, leverage, liquidation — только риски</li>
+              <li>TradingView: актив, таймфрейм, объём</li>
+              <li>CoinMarketCap и CoinGecko</li>
+                </ul>
+              </div>
+              <div>
+                <p class="week__h">После недели</p>
+                <p class="week__res">Читать график, свечи, стакан, пары и типы заявок — без трейдинга и теханализа.</p>
+              </div>
+            </div>
+
+            <p class="week__practice"><b>Практика:</b> открыть небольшую spot-сделку через limit order и посмотреть, как заявка исполняется.</p>
+          </div></div>
+        </div>
+      </article>
+
+      <article class="week">
+        <h3><button class="week__head" type="button" aria-expanded="false" aria-controls="w8">
+          <span class="week__n">Неделя 08</span>
+          <span class="week__t">Крипторынок как система</span>
+          <span class="week__toggle" aria-hidden="true"></span>
+        </button></h3>
+        <div class="week__body" id="w8">
+          <div class="week__body-inner"><div class="week__content">
+            <div class="week__topics"><span class="tag">Cycles</span><span class="tag">Macro</span><span class="tag">Liquidity</span><span class="tag">BTC dominance</span><span class="tag">Regulation</span><span class="tag">KYC</span><span class="tag">AML</span><span class="tag">Risk</span></div>
+
+            <p class="week__lead">Крипторынок в контексте: циклы, макроэкономика, регулирование и системные риски.</p>
+
+            <div class="week__cols">
+              <div>
+                <p class="week__h">Что разберём</p>
+                <ul class="week__list">
+              <li>почему крипторынок движется циклами</li>
+              <li>циклы BTC: 2013, 2017, 2021, текущий</li>
+              <li>halving и его роль</li>
+              <li>фазы рыночного цикла</li>
+              <li>BTC dominance</li>
+              <li>BTC → ETH → альткоины → мемкоины</li>
+              <li>глобальная ликвидность</li>
+              <li>процентные ставки ФРС</li>
+              <li>инфляция, доллар и облигации</li>
+              <li>risk-on и risk-off</li>
+              <li>ETF и институциональный капитал</li>
+              <li>где рынок сейчас — разбор на момент созвона</li>
+              <li>как оценивать состояние рынка</li>
+              <li>регулирование в мире: США, ЕС, Азия</li>
+              <li>правовой статус криптовалюты в России</li>
+              <li>налоги в РФ: принципы и документы</li>
+              <li>KYC, AML, travel rule</li>
+              <li>релокация и налоговое резидентство</li>
+              <li>системные риски: CEX, депег, контракты, мосты, санкции</li>
+              <li>своя система хранения, переводов и риска</li>
+                </ul>
+              </div>
+              <div>
+                <p class="week__h">После недели</p>
+                <p class="week__res">Видеть крипторынок частью глобальной финансовой системы и знать, что отслеживать.</p>
+              </div>
+            </div>
+
+            <p class="small">Блок «где рынок находится сейчас», а также юридическая и налоговая информация подаются как актуальный на момент занятия обзор, а не как постоянная истина или персональная юридическая либо инвестиционная рекомендация.</p>
+          </div></div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================================
+     PERSONAL SUPPORT
+     ====================================================================== -->
+<section class="section section--light" id="how" style="padding-top: 200px">
+  <div class="container">
+    <div class="grid" style="row-gap: var(--sp-stack); align-items: last baseline">
+      <h2 class="h2 col-half" data-reveal>Не теория, а <span class="hl hl--flat">практика и личные ответы</span></h2>
+      <p class="body how__note" data-reveal style="--reveal-delay:100ms">
+        Теорию можно прочитать где угодно. Сложности начинаются в момент, когда вы один
+        на один со своим экраном и своей суммой.
+      </p>
+    </div>
+
+    <div class="stats" data-reveal>
+      <div class="stat">
+        <div class="stat__n" data-count="16">16</div>
+        <div class="stat__t">Личных созвонов 1:1</div>
+        <p class="stat__d">Два созвона в неделю по часу, только вы и я. Вы заранее готовите вопросы: ситуация, интерфейс, подготовка перевода, хранение.</p>
+      </div>
+      <div class="stat">
+        <div class="stat__n" data-count="8">8<sup>недель</sup></div>
+        <div class="stat__t">Личной связи в чате</div>
+        <p class="stat__d">Основной режим — будни, рабочее время. По выходным доступность ниже. Не 24/7, но без вопросов без ответа.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ======================================================================
+     FOUNDER
+     ====================================================================== -->
+<section class="section section--cinematic section--light" id="about" style="padding-bottom: calc(var(--sp-vast) * 2)">
+  <div class="container">
+
+    <!-- Портрет + имя + тезис + четыре главных доказательства.
+
+         ВНИМАНИЕ: assets/img/author.jpg — 3D-рендер, а не фотография.
+         Продукту такого уровня нужен живой снимок: крупный портрет,
+         естественный свет, без стокового бизнес-кадра. Замените файл
+         (портрет 4:5, минимум 900×1125) — разметка и кроп уже под него.
+
+         Заменив портрет, пересоберите картинку для превью ссылок:
+           sips -s format jpeg -s formatOptions 80 -Z 630 assets/img/author.jpg --out /tmp/og.jpg
+           sips -p 630 1200 --padColor 000000 /tmp/og.jpg --out assets/img/og-cover.jpg -->
+    <div class="founder">
+      <figure class="founder__shot" data-reveal>
+        <img src="assets/img/author.jpg" alt="Сергей Кербер"
+             width="963" height="963" loading="lazy" decoding="async">
+      </figure>
+
+      <div class="founder__intro">
+        <p class="label" data-reveal>Кто ведёт программу</p>
+        <h2 class="h2 founder__name" data-reveal style="--reveal-delay:60ms">Сергей Кербер</h2>
+
+        <p class="lead founder__thesis" data-reveal style="--reveal-delay:100ms">
+          Я несколько лет работаю внутри Web3 — не только как пользователь криптовалюты,
+          но и как человек, который <span class="hl hl--flat">создаёт продукты для этой индустрии</span>.
+        </p>
+
+        <ul class="proof" data-reveal style="--reveal-delay:140ms">
+          <li class="proof__i"><b class="proof__k">11+ лет</b><span class="proof__v">В digital и продуктовой разработке: продукт, интерфейсы, запуски.</span></li>
+          <li class="proof__i"><b class="proof__k">4–5 лет</b><span class="proof__v">Внутри Web3 — как специалист, а не как наблюдатель со стороны.</span></li>
+          <li class="proof__i"><b class="proof__k">KERBER</b><span class="proof__v">Руковожу агентством, которое делает продукты для Web3- и финтех-компаний.</span></li>
+          <li class="proof__i"><b class="proof__k">TON</b><span class="proof__v">Работа с экосистемой TON и собственный продукт внутри неё.</span></li>
+        </ul>
+
+        <!-- Живые профили: проверяемы за десять секунд. LinkedIn и X не добавлены —
+             публичных ссылок на них нет; появятся — допишите сюда строкой. -->
+        <ul class="social" data-reveal style="--reveal-delay:180ms">
+          <li><a href="https://t.me/Andrey_KERBERagency" target="_blank" rel="noopener">Telegram</a></li>
+          <li><a href="https://www.behance.net/kerber-design" target="_blank" rel="noopener">Behance</a></li>
+          <li><a href="https://www.instagram.com/kerber_agency" target="_blank" rel="noopener">Instagram</a></li>
+          <li><a href="https://www.kerber.agency" target="_blank" rel="noopener">kerber.agency</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- KERBER: не строчка в биографии, а доказательство опыта. -->
+    <div class="agency" data-reveal>
+      <div class="agency__head">
+        <p class="agency__logo">KERBER<sup>®</sup></p>
+        <p class="agency__role">Руководитель digital-агентства</p>
+      </div>
+      <p class="agency__line">
+        11+ лет в дизайне и разработке крупных цифровых продуктов.
+        Брендинг, стратегия и UI/UX — значительная часть клиентов работает
+        в Web3 и финтехе.
+      </p>
+    </div>
+
+    <p class="label" data-reveal style="margin-top: var(--sp-block)">Проекты агентства</p>
+    <ul class="clients" data-reveal style="margin-top: var(--sp-stack)">
+      <li class="client" style="--mark-h:17px"><span class="client__mark"><img src="assets/img/logos/tads.svg" alt="TADS" loading="lazy" onerror="this.closest('.client__mark').textContent='T'"></span><b class="client__n">TADS</b><span class="client__d">Айдентика и платформа для B2B-рекламы в Telegram Mini Apps</span></li>
+      <li class="client"><span class="client__mark"><img src="assets/img/logos/ton.svg" alt="TON" loading="lazy" onerror="this.closest('.client__mark').textContent='TP'"></span><b class="client__n">TON.POINT</b><span class="client__d">Бренд, упаковка мероприятий и сайт для международных Web3-событий</span></li>
+      <li class="client"><span class="client__mark"><img src="assets/img/logos/twelvedata.png" alt="Twelve Data" loading="lazy" onerror="this.closest('.client__mark').textContent='TD'"></span><b class="client__n">Twelve&nbsp;Data</b><span class="client__d">UX/UI и дизайн-система для провайдера финансовых API</span></li>
+      <li class="client" style="--mark-h:15px"><span class="client__mark"><img src="assets/img/logos/genesis.svg" alt="Genesis" loading="lazy" onerror="this.closest('.client__mark').textContent='GM'"></span><b class="client__n">Genesis&nbsp;Mobility</b><span class="client__d">UX и мобильное приложение для аренды автомобилей</span></li>
+      <li class="client"><span class="client__mark"><img src="assets/img/logos/ikea.svg" alt="IKEA" loading="lazy" onerror="this.closest('.client__mark').textContent='IK'"></span><b class="client__n">IKEA</b><span class="client__d">Айдентика и сайт для проекта по защите окружающей среды</span></li>
+    </ul>
+
+  </div>
+</section>
+
+<!-- ======================================================================
+     PRICE
+     Блок про личные ошибки автора отсюда убран: между разбором программы
+     и предложением он вставал лишней остановкой. Куча монет и высота экрана
+     остались — предложение стоит на самом заметном развороте страницы.
+     ====================================================================== -->
+<section class="section section--screen section--sunk section--grid" id="price">
+  <div class="container">
+    <div class="sec-head" data-reveal>
+      <h2 class="h2">Один формат<br>участия</h2>
+      <p class="lead">
+        Восемь недель работы со мной лично. Стоимость и условия разбираем на звонке —
+        сначала нужно понять, подходит ли вам этот формат.
+      </p>
+    </div>
+
+    <!-- Один тариф вместо двух. Самостоятельный формат убран: рядом с личным
+         ведением он читался как дешёвая альтернатива тому же самому, хотя
+         это другая услуга. Цены на странице нет — вместо неё призыв к
+         разговору; сумма и порядок расчётов обсуждаются на звонке. -->
+    <div class="tiers tiers--single" style="margin-top: var(--sp-tight)">
+      <article class="tier tier--lead" data-reveal>
+        <p class="tier__sum"><span class="hl hl--flat">Личное сопровождение</span> — восемь недель работы один на один.</p>
+
+        <p class="tier__vol tier__vol--lead">
+          <b>16</b> личных созвонов по часу
+        </p>
+
+        <!-- Первые три пункта видны сразу, остальные — по кнопке. Шесть строк
+             подряд на узкой карточке читались как таблица, а не как перечень.
+             Кнопку показывает скрипт: без него список остаётся раскрытым
+             целиком, и ничего не теряется. -->
+        <div class="tier__more">
+          <p class="tier__more-h">Что входит</p>
+          <ul class="tier__list tier__list--yes" id="tierIncludes">
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 10.5V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2v-3.5l5 3.5V7z"/></svg>16 личных созвонов 1:1 по часу</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 3h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-5 4V5a2 2 0 0 1 2-2z"/></svg>Переписка в чате все восемь недель</li>
+          <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h18a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1h-7v2h3v2H7v-2h3v-2H3a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zm8 3v3H8l4 5 4-5h-3V7z"/></svg>Подключение к экрану, когда это нужно</li>
+          <li class="tier__extra"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 2a9 9 0 1 1-5.6 16.04l-3.7 3.7-1.42-1.42 3.7-3.7A9 9 0 0 1 11 2zm0 3a6 6 0 1 0 0 12 6 6 0 0 0 0-12z"/></svg>Персональный разбор ваших ситуаций</li>
+          <li class="tier__extra"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4v4h6a6 6 0 0 1 0 12h-6v-3h6a3 3 0 0 0 0-6h-6v4L3 9z"/></svg>Обратная связь на ваши решения</li>
+          <li class="tier__extra"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h8l6 6v14H6zm8 1.5V9h5.5zM9 12h9v2H9zm0 4h9v2H9z"/></svg>Конспекты и материалы под ваши задачи</li>
+          </ul>
+          <button class="tier__more-btn" type="button" hidden aria-expanded="false" aria-controls="tierIncludes">
+            Показать все <span class="tier__more-btn__i" aria-hidden="true"></span>
+          </button>
+        </div>
+
+
+        <!-- Визуал правой колонки. Ядро — сам формат, вокруг него монеты
+             и подписи сетей и понятий, с которыми человек столкнётся.
+             Всё нарисовано разметкой и градиентами: ни одной картинки,
+             кроме знаков монет, которые на странице уже есть. -->
+        <div class="tier__art" aria-hidden="true">
+          <svg class="tier__art-l" viewBox="0 0 200 200" preserveAspectRatio="none">
+            <circle cx="100" cy="100" r="46"/>
+            <circle cx="100" cy="100" r="74"/>
+            <path d="M100 100 100 36M100 100 160 76M100 100 136 152M100 100 64 152M100 100 40 76"/>
+          </svg>
+
+          <span class="tier__core">
+            <b>8</b>
+            <i>недель</i>
+            <em>один на один</em>
+          </span>
+
+          <span class="tier__orb" style="--x:50%; --y:18%; --fl:0s"><img src="assets/coins/usdt.png" alt="" loading="lazy"></span>
+          <span class="tier__orb" style="--x:80%; --y:38%; --fl:-1.6s"><img src="assets/coins/eth.png" alt="" loading="lazy"></span>
+          <span class="tier__orb" style="--x:68%; --y:76%; --fl:-3.1s"><img src="assets/coins/sol.png" alt="" loading="lazy"></span>
+          <span class="tier__orb" style="--x:32%; --y:76%; --fl:-2.2s"><img src="assets/coins/trx.png" alt="" loading="lazy"></span>
+          <span class="tier__orb" style="--x:20%; --y:38%; --fl:-4.1s"><img src="assets/coins/btc.png" alt="" loading="lazy"></span>
+
+          <span class="tier__tag" style="--x:20%; --y:9%;  --fl:-0.7s">TRC20</span>
+          <span class="tier__tag" style="--x:82%; --y:14%; --fl:-2.9s">ERC20</span>
+          <span class="tier__tag" style="--x:88%; --y:58%; --fl:-1.3s">Solana</span>
+          <span class="tier__tag" style="--x:74%; --y:92%; --fl:-3.7s">gas</span>
+          <span class="tier__tag" style="--x:26%; --y:93%; --fl:-2.4s">seed</span>
+          <span class="tier__tag" style="--x:11%; --y:62%; --fl:-4.6s">wallet</span>
+        </div>
+
+        <a class="btn btn--primary tier__cta" data-cta href="#call">Узнать подробнее <span class="btn__arrow" aria-hidden="true">→</span></a>
+      </article>
+    </div>
+
+    <div class="tiers__foot" data-reveal>
+      <p class="small">
+        Состав программы, сроки, порядок переноса созвонов
+        и условия участия разбираем на первом звонке —
+        до того, как о чём-то договариваться.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ======================================================================
+     FINAL CTA
+     ====================================================================== -->
+<section class="section section--cinematic section--dark" id="call" style="padding-top: 200px">
+  <div class="container finalcta__grid">
+    <div data-reveal>
+      <h2 class="h2">Давайте сначала <span class="hl hl--flat">разберём вашу ситуацию</span></h2>
+    </div>
+    <div data-reveal style="--reveal-delay:120ms">
+      <p class="body">
+        Познакомимся, разберём вашу ситуацию и задачи и поймём, подходит ли вам этот формат.
+      </p>
+      <div class="cta-row" style="margin-top: var(--sp-block)">
+        <a class="btn btn--primary" data-cta href="#call">Записаться на личный звонок <span class="btn__arrow" aria-hidden="true">→</span></a>
+      </div>
+      <p class="meta" style="margin-top: 18px">30–60 минут · online</p>
+      <p class="meta meta--proof" style="margin-top: 10px">
+        Ведёт лично Сергей Кербер · 4–5 лет в Web3 · руководитель агентства KERBER
+      </p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ======================================================================
+     FOOTER
+     ====================================================================== -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__top">
+      <a class="wordmark" href="./">
+        <span class="wordmark__glyph" aria-hidden="true"></span>
+        <span>Восемь недель <span class="wordmark__sub">с криптой</span></span>
+      </a>
+      <nav class="footer__links" aria-label="Навигация в подвале">
+        <a href="./">Главная</a>
+        <a href="personal">Личное сопровождение</a>
+        <a href="business">Консалтинг</a>
+        <a href="contacts">Контакты</a>
+        <a data-cta href="#call">Telegram</a>
+      </nav>
+    </div>
+    <!-- Одна юридическая ссылка вместо четырёх. Оферта, согласие и реквизиты
+         убраны: сайт больше не заключает договор и не принимает оплату, цена и
+         условия обсуждаются в переписке. Выложенная оферта с незаполненными
+         реквизитами хуже, чем её отсутствие. Политика остаётся: технические
+         журналы хостинга возникают при любом обращении к сайту, даже без форм. -->
+    <div class="footer__law">
+      <nav class="footer__docs" aria-label="Юридические документы">
+        <a href="privacy">Политика обработки персональных данных</a>
+      </nav>
+    </div>
+
+    <div class="footer__bottom">
+      <p class="footer__legal">
+        Информационно-образовательный формат. Не является инвестиционной, юридической,
+        налоговой или финансовой рекомендацией. Участник самостоятельно принимает решения
+        и совершает операции. Доступ к средствам, кошелькам, seed-фразам и приватным
+        ключам не передаётся.
+      </p>
+      <p class="footer__copy">
+        Design by <a class="footer__by" href="https://www.kerber.agency" target="_blank" rel="noopener">KERBER</a>
+        <span class="footer__sep" aria-hidden="true">·</span>
+        © <span id="year">2026</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- Куча монет закрывает страницу снизу. В блоке со стоимостью она лезла
+       на юридическую сноску, а внизу подвала ей ничего не мешает: под ней
+       уже нет содержимого. -->
+  <canvas class="pit footer__pit" data-coinpit="settled" aria-hidden="true"></canvas>
+</footer>
+
+
+
+
+<script>
+/* Прелоадер, который действительно ждёт загрузку, а не крутится заданное время.
+
+   Шкала складывается из настоящих событий: каждая таблица стилей, каждый скрипт
+   и каждая неотложенная картинка засчитываются, когда браузер сообщил о их
+   готовности, плюс два общих рубежа — готовность шрифтов и событие load.
+   Полоса не может обогнать реальность: она показывает долю уже случившегося.
+
+   Предохранитель на восемь секунд: если сеть подвисла, шторка уходит всё равно.
+   Держать человека перед чёрным экраном из-за одной недогруженной картинки
+   хуже, чем показать страницу без неё. */
+(function () {
+  var root = document.documentElement;
+  var pl = document.getElementById('pl');
+  if (!pl) return;
+
+  function release() {
+    if (pl.dataset.gone) return;
+    pl.dataset.gone = '1';
+    root.classList.remove('is-loading');
+    try { sessionStorage.setItem('pl', '1'); } catch (e) {}
+    if (root.className.indexOf('pl-seen') > -1) { pl.remove(); return; }
+    pl.classList.add('is-done');
+    var gone = false;
+    function drop() { if (gone) return; gone = true; pl.remove(); }
+    pl.addEventListener('transitionend', drop);
+    setTimeout(drop, 600);
+  }
+
+  if (root.className.indexOf('pl-seen') > -1) { release(); return; }
+
+  var fill = document.getElementById('plFill');
+  var num  = document.getElementById('plNum');
+
+  var sheets  = [].slice.call(document.querySelectorAll('link[rel="stylesheet"]'));
+  var scripts = [].slice.call(document.querySelectorAll('script[src]'));
+  var imgs    = [].slice.call(document.querySelectorAll('img:not([loading="lazy"])'));
+  var total   = sheets.length + scripts.length + imgs.length + 2;   // + шрифты + load
+
+  var fontsDone = false, loadDone = false;
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () { fontsDone = true; });
+  } else { fontsDone = true; }
+  window.addEventListener('load', function () { loadDone = true; });
+
+  function done() {
+    var n = 0, i;
+    /* У применённой таблицы стилей доступен sheet; у чужого домена доступ к
+       правилам закрыт, но само наличие объекта уже означает, что она пришла. */
+    for (i = 0; i < sheets.length; i++) { try { if (sheets[i].sheet) n++; } catch (e) { n++; } }
+    for (i = 0; i < scripts.length; i++) { if (scripts[i].getAttribute('data-ok') || !scripts[i].defer || loadDone) n++; }
+    for (i = 0; i < imgs.length; i++) { if (imgs[i].complete) n++; }
+    if (fontsDone) n++;
+    if (loadDone) n++;
+    return n;
+  }
+
+  var shown = 0;
+  var deadline = Date.now() + 8000;
+  var released = false;
+
+  /* Предохранитель живёт отдельно от цикла и на таймере, а не на кадрах.
+     В фоновой вкладке requestAnimationFrame не вызывается вовсе: страница,
+     открытая по ссылке «в новой вкладке», осталась бы под чёрной шторкой
+     навсегда — до тех пор, пока на неё не переключатся. */
+  setTimeout(function () { if (!released) { released = true; release(); } }, 8000);
+
+  (function tick() {
+    var real = Math.min(1, done() / total);
+    /* Показанное только растёт: перепроверка не должна дёргать полосу назад. */
+    shown = Math.max(shown, real);
+    var pct = Math.round(shown * 100);
+    fill.style.width = pct + '%';
+    num.textContent = pct + '%';
+
+    if (released) return;
+    if (shown >= 1 || Date.now() > deadline) {
+      fill.style.width = '100%';
+      num.textContent = '100%';
+      released = true;
+      setTimeout(release, 160);
+      return;
+    }
+    /* Таймер, а не кадры: шестнадцати обновлений в секунду полосе достаточно,
+       зато цикл доходит до конца и в невидимой вкладке. */
+    setTimeout(tick, 60);
+  })();
+})();
+</script>
+
+<script src="assets/js/warptext.js?v=400" defer></script>
+<script src="assets/js/coinpit.js?v=400"></script>
+<script src="assets/js/main.js?v=400"></script>
+</body>
+</html>
