@@ -130,10 +130,10 @@
 </script>
 <noscript><style>html.is-loading, html.is-loading body { overflow: auto !important; } .pl { display: none !important; }</style></noscript>
 
-<link rel="stylesheet" href="assets/css/tokens.css?v=400">
-<link rel="stylesheet" href="assets/css/styles.css?v=400">
-<link rel="stylesheet" href="assets/css/pages.css?v=400">
-<link rel="stylesheet" href="assets/css/responsive.css?v=400">
+<link rel="stylesheet" href="assets/css/tokens.css?v=403">
+<link rel="stylesheet" href="assets/css/styles.css?v=403">
+<link rel="stylesheet" href="assets/css/pages.css?v=403">
+<link rel="stylesheet" href="assets/css/responsive.css?v=403">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='none' stroke='%23FFFFFF' stroke-width='2'/><circle cx='16' cy='16' r='6' fill='%23C1FF0F'/></svg>">
 </head>
 <body>
@@ -141,7 +141,6 @@
 <div class="pl" id="pl" role="status" aria-live="polite" aria-label="Загрузка страницы">
   <span class="pl__t">Восемь недель с криптой</span>
   <span class="pl__rail"><i class="pl__fill" id="plFill"></i></span>
-  <span class="pl__n" id="plNum">0%</span>
 </div>
 
 <a class="skip" href="#main">К основному содержанию</a>
@@ -164,7 +163,7 @@
     </nav>
 
     <div class="header__actions">
-      <a class="btn btn--primary btn--sm" data-cta href="#call">Записаться<span class="btn__long"> на звонок</span></a>
+      <a class="btn btn--primary btn--sm" data-cta href="#call">Записаться<span class="btn__long"> на созвон</span></a>
       <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="drawer" aria-label="Открыть меню">
         <span class="burger__lines" aria-hidden="true"><span></span><span></span></span>
       </button>
@@ -181,7 +180,7 @@
   </nav>
   <div class="drawer__foot">
     <p class="small">30–60 минут · online · без обязательств</p>
-    <a class="btn btn--primary" data-cta href="#call">Записаться на личный звонок</a>
+    <a class="btn btn--primary" data-cta href="#call">Записаться на созвон</a>
   </div>
 </div>
 
@@ -209,7 +208,7 @@
     <p class="hero__claim" data-reveal style="--reveal-delay:120ms">Для тех, кто хочет понимать, что происходит в Web3, и принимать решения осознанно — за восемь недель личной работы</p>
 
     <div class="cta-row" data-reveal style="--reveal-delay:220ms">
-      <a class="btn btn--primary" data-cta href="#call">Записаться на личный звонок <span class="btn__arrow" aria-hidden="true">→</span></a>
+      <a class="btn btn--primary" data-cta href="#call">Записаться на созвон <span class="btn__arrow" aria-hidden="true">→</span></a>
     </div>
 
   </div>
@@ -427,7 +426,7 @@
           один на один с экраном, когда что-то идёт не так.
         </p>
         <div class="cta-row" style="margin-top:32px">
-          <a class="btn btn--primary" data-cta href="#call">Записаться на личный звонок <span class="btn__arrow" aria-hidden="true">→</span></a>
+          <a class="btn btn--primary" data-cta href="#call">Записаться на созвон <span class="btn__arrow" aria-hidden="true">→</span></a>
           <a class="btn btn--ghost" href="#program">Посмотреть программу</a>
         </div>
       </div>
@@ -1361,7 +1360,7 @@
     <div class="sec-head" data-reveal>
       <h2 class="h2">Один формат<br>участия</h2>
       <p class="lead">
-        Восемь недель работы со мной лично. Стоимость и условия разбираем на звонке —
+        Восемь недель работы со мной лично. Стоимость и условия разбираем на созвоне —
         сначала нужно понять, подходит ли вам этот формат.
       </p>
     </div>
@@ -1369,7 +1368,7 @@
     <!-- Один тариф вместо двух. Самостоятельный формат убран: рядом с личным
          ведением он читался как дешёвая альтернатива тому же самому, хотя
          это другая услуга. Цены на странице нет — вместо неё призыв к
-         разговору; сумма и порядок расчётов обсуждаются на звонке. -->
+         разговору; сумма и порядок расчётов обсуждаются на созвоне. -->
     <div class="tiers tiers--single" style="margin-top: var(--sp-tight)">
       <article class="tier tier--lead" data-reveal>
         <p class="tier__sum"><span class="hl hl--flat">Личное сопровождение</span> — восемь недель работы один на один.</p>
@@ -1436,7 +1435,7 @@
     <div class="tiers__foot" data-reveal>
       <p class="small">
         Состав программы, сроки, порядок переноса созвонов
-        и условия участия разбираем на первом звонке —
+        и условия участия разбираем на первом созвоне —
         до того, как о чём-то договариваться.
       </p>
     </div>
@@ -1457,7 +1456,7 @@
         Познакомимся, разберём вашу ситуацию и задачи и поймём, подходит ли вам этот формат.
       </p>
       <div class="cta-row" style="margin-top: var(--sp-block)">
-        <a class="btn btn--primary" data-cta href="#call">Записаться на личный звонок <span class="btn__arrow" aria-hidden="true">→</span></a>
+        <a class="btn btn--primary" data-cta href="#call">Записаться на созвон <span class="btn__arrow" aria-hidden="true">→</span></a>
       </div>
       <p class="meta" style="margin-top: 18px">30–60 минут · online</p>
       <p class="meta meta--proof" style="margin-top: 10px">
@@ -1523,16 +1522,24 @@
 
 
 <script>
-/* Прелоадер, который действительно ждёт загрузку, а не крутится заданное время.
+/* Прелоадер ждёт три настоящих рубежа — и ни одного лишнего.
 
-   Шкала складывается из настоящих событий: каждая таблица стилей, каждый скрипт
-   и каждая неотложенная картинка засчитываются, когда браузер сообщил о их
-   готовности, плюс два общих рубежа — готовность шрифтов и событие load.
-   Полоса не может обогнать реальность: она показывает долю уже случившегося.
+   Прежняя версия считала в том числе событие load, а оно наступает только
+   после всех картинок. Куча монет на первом экране запрашивает полсотни
+   знаков через new Image(), и load ждал их все: полоса замирала на восьмидесяти
+   процентах и держала чёрный экран, хотя текст и шрифты были давно готовы.
 
-   Предохранитель на восемь секунд: если сеть подвисла, шторка уходит всё равно.
-   Держать человека перед чёрным экраном из-за одной недогруженной картинки
-   хуже, чем показать страницу без неё. */
+   Теперь рубежи такие: применились стили, готовы шрифты, разобрана разметка.
+   Этого достаточно, чтобы страница выглядела законченной. Монеты догружаются
+   уже под нарисованной страницей и ничего не задерживают.
+
+   Процента больше нет. Он выглядел точным измерением, но точность была
+   ложной: три рубежа не дают ста делений. Осталась полоса — она честно
+   показывает, что процесс идёт, и не обещает большего.
+
+   Потолок полторы секунды: если сеть тормозит, показываем страницу как есть.
+   Держать человека перед заставкой дольше вреднее, чем показать её без
+   пары отложенных картинок. */
 (function () {
   var root = document.documentElement;
   var pl = document.getElementById('pl');
@@ -1554,66 +1561,43 @@
   if (root.className.indexOf('pl-seen') > -1) { release(); return; }
 
   var fill = document.getElementById('plFill');
-  var num  = document.getElementById('plNum');
+  var done = { css: false, fonts: false, dom: false };
 
-  var sheets  = [].slice.call(document.querySelectorAll('link[rel="stylesheet"]'));
-  var scripts = [].slice.call(document.querySelectorAll('script[src]'));
-  var imgs    = [].slice.call(document.querySelectorAll('img:not([loading="lazy"])'));
-  var total   = sheets.length + scripts.length + imgs.length + 2;   // + шрифты + load
-
-  var fontsDone = false, loadDone = false;
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(function () { fontsDone = true; });
-  } else { fontsDone = true; }
-  window.addEventListener('load', function () { loadDone = true; });
-
-  function done() {
-    var n = 0, i;
-    /* У применённой таблицы стилей доступен sheet; у чужого домена доступ к
-       правилам закрыт, но само наличие объекта уже означает, что она пришла. */
-    for (i = 0; i < sheets.length; i++) { try { if (sheets[i].sheet) n++; } catch (e) { n++; } }
-    for (i = 0; i < scripts.length; i++) { if (scripts[i].getAttribute('data-ok') || !scripts[i].defer || loadDone) n++; }
-    for (i = 0; i < imgs.length; i++) { if (imgs[i].complete) n++; }
-    if (fontsDone) n++;
-    if (loadDone) n++;
-    return n;
+  function step() {
+    var n = (done.css ? 1 : 0) + (done.fonts ? 1 : 0) + (done.dom ? 1 : 0);
+    fill.style.width = Math.round(n / 3 * 100) + '%';
+    if (n === 3) setTimeout(release, 140);
   }
 
-  var shown = 0;
-  var deadline = Date.now() + 8000;
-  var released = false;
-
-  /* Предохранитель живёт отдельно от цикла и на таймере, а не на кадрах.
-     В фоновой вкладке requestAnimationFrame не вызывается вовсе: страница,
-     открытая по ссылке «в новой вкладке», осталась бы под чёрной шторкой
-     навсегда — до тех пор, пока на неё не переключатся. */
-  setTimeout(function () { if (!released) { released = true; release(); } }, 8000);
-
-  (function tick() {
-    var real = Math.min(1, done() / total);
-    /* Показанное только растёт: перепроверка не должна дёргать полосу назад. */
-    shown = Math.max(shown, real);
-    var pct = Math.round(shown * 100);
-    fill.style.width = pct + '%';
-    num.textContent = pct + '%';
-
-    if (released) return;
-    if (shown >= 1 || Date.now() > deadline) {
-      fill.style.width = '100%';
-      num.textContent = '100%';
-      released = true;
-      setTimeout(release, 160);
-      return;
-    }
-    /* Таймер, а не кадры: шестнадцати обновлений в секунду полосе достаточно,
-       зато цикл доходит до конца и в невидимой вкладке. */
-    setTimeout(tick, 60);
+  /* Стили: у применённой таблицы доступен объект sheet. У стороннего домена
+     доступ к правилам закрыт, но само наличие объекта уже значит, что она
+     пришла — поэтому исключение считается успехом, а не ошибкой. */
+  var sheets = [].slice.call(document.querySelectorAll('link[rel="stylesheet"]'));
+  (function css() {
+    var ok = sheets.every(function (l) { try { return !!l.sheet; } catch (e) { return true; } });
+    if (ok) { done.css = true; step(); return; }
+    setTimeout(css, 40);
   })();
+
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () { done.fonts = true; step(); });
+  } else { done.fonts = true; }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { done.dom = true; step(); });
+  } else { done.dom = true; }
+
+  step();
+
+  /* Предохранитель на таймере, а не на кадрах: в фоновой вкладке
+     requestAnimationFrame не вызывается вовсе, и страница, открытая
+     «в новой вкладке», осталась бы под чёрной шторкой. */
+  setTimeout(function () { fill.style.width = '100%'; release(); }, 1500);
 })();
 </script>
 
-<script src="assets/js/warptext.js?v=400" defer></script>
-<script src="assets/js/coinpit.js?v=400"></script>
-<script src="assets/js/main.js?v=400"></script>
+<script src="assets/js/warptext.js?v=403" defer></script>
+<script src="assets/js/coinpit.js?v=403"></script>
+<script src="assets/js/main.js?v=403"></script>
 </body>
 </html>

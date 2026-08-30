@@ -50,20 +50,68 @@
 .intro__copy .lead { max-width: 46ch; }
 .intro__copy .cta-row { margin-top: var(--sp-block); }
 
-/* Портрет кругом: форма мягче карточки и не спорит с прямоугольной сеткой
-   остальной страницы. */
-.intro__shot {
+/* Вторичный призыв не спорит с первым: та же геометрия, но без заливки
+   и без рамки. Две одинаково контрастные кнопки рядом заставляют выбирать
+   там, где выбор не нужен. */
+.btn--ghost {
+  background: none;
+  border-color: transparent;
+  color: var(--c-ink-muted);
+  padding-inline: 4px;
+}
+.btn--ghost:hover { color: var(--c-ink); border-color: transparent; }
+
+/* --------------------------------------------------------------------------
+   СХЕМА НА ПЕРВОМ ЭКРАНЕ
+
+   Рисует порядок работы, который обещает заголовок: задача → разбор → два
+   равновесных исхода. Оба узла внизу одинакового веса намеренно — «технология
+   не нужна» такой же законный результат, как и обратный.
+
+   Всё разметкой и одним SVG на три линии: ни картинок, ни свечений.
+   -------------------------------------------------------------------------- */
+.map {
+  position: relative;
   margin: 0;
   aspect-ratio: 1;
-  border-radius: 50%;
-  overflow: hidden;
-  background: var(--c-surface);
-  border: 1px solid var(--c-line);
+  max-width: 460px;
+  justify-self: end;
+  width: 100%;
 }
-.intro__shot img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  object-position: 50% 22%;
+.map__l {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  fill: none; stroke: var(--c-line-strong); stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+.map__node {
+  position: absolute; left: var(--x); top: var(--y);
+  transform: translate(-50%, -50%);
+  display: grid; justify-items: center; gap: 3px;
+  padding: 10px 16px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--c-line);
+  background: var(--c-paper);
+  font-family: var(--f-mono); font-size: var(--t-subtext);
+  color: var(--c-ink-muted);
+  text-align: center; white-space: nowrap;
+}
+/* Задача — начало маршрута, поэтому она единственная набрана искрой. */
+.map__node--task {
+  border-color: var(--c-spark);
+  color: var(--c-spark);
+}
+.map__node--core {
+  padding: 16px 22px;
+  border-radius: var(--r-lg);
+  background: var(--c-paper-sunk);
+}
+.map__node--core b {
+  font-family: var(--f-display); font-weight: 500;
+  font-size: var(--t-h4); color: var(--c-ink);
+}
+.map__node--core i {
+  font-style: normal; font-size: .6875rem;
+  letter-spacing: .04em; color: var(--c-ink-faint);
 }
 
 /* --------------------------------------------------------------------------
@@ -119,6 +167,25 @@
   position: relative; top: .62em;
 }
 .dir__cta { align-self: start; margin-top: var(--sp-stack); }
+
+/* Реакция на курсор. Карточка — единственное решение, которое просит главная,
+   и она должна отвечать на наведение. Без свечений: рамка контрастнее,
+   подъём на два пикселя, стрелка уезжает вправо. */
+.dir {
+  transition: border-color var(--d-fast) var(--e-out), transform var(--d-fast) var(--e-out);
+}
+.dir:hover { border-color: var(--c-line-strong); transform: translateY(-2px); }
+@media (prefers-reduced-motion: reduce) {
+  .dir { transition: border-color var(--d-fast) var(--e-out); }
+  .dir:hover { transform: none; }
+}
+
+/* Вторичная строка под списком: то, что не вошло в три главных пункта. */
+.dir__more {
+  margin: 0;
+  font-size: var(--t-subtext); line-height: var(--lh-subtext);
+  color: var(--c-ink-faint);
+}
 
 /* --------------------------------------------------------------------------
    Две колонки текста
@@ -362,9 +429,12 @@
    FAQ построен на разметке недель программы: тот же аккордеон, тот же
    скрипт, тот же вид. Отличается только тем, что колонка номера уже.
    -------------------------------------------------------------------------- */
-.faq .week__head,
-.faq .week__content { grid-template-columns: 48px minmax(0, 1fr) auto; }
+.faq .week__head { grid-template-columns: 48px minmax(0, 1fr) auto; }
 .faq .week__content { grid-template-columns: 48px minmax(0, 1fr); }
+/* Содержимое встаёт во вторую колонку напрямую. Раньше первую занимал пустой
+   span — распорка, которая ничего не значила и попадала в дерево доступности
+   как пустой элемент. */
+.faq .week__cols { grid-column: 2; }
 
 /* ==========================================================================
    АДАПТАЦИЯ НОВЫХ БЛОКОВ
@@ -389,7 +459,9 @@
   /* Портрет над текстом: рядом он ужимается до размера, в котором лицо
      перестаёт читаться. */
   .intro__grid { grid-template-columns: minmax(0, 1fr); }
-  .intro__shot { max-width: 320px; order: -1; }
+  /* Схема уходит ПОД текст, а не над ним: на узком экране сверху должно быть
+     то, ради чего человек пришёл — заголовок и оба призыва. */
+  .map { order: 1; justify-self: center; max-width: 380px; }
   .intro__copy .h1,
   .intro__grid--wide .intro__copy { max-width: none; }
 
@@ -408,6 +480,9 @@
 
 @media (max-width: 600px) {
   .pillars--four { grid-template-columns: minmax(0, 1fr); }
-  .intro { padding-top: clamp(96px, 12vh, 132px); }
+  .intro { padding-top: clamp(96px, 12vh, 132px); padding-bottom: clamp(40px, 5vh, 64px); }
+  /* Схема сжимается, чтобы первый экран целиком помещался в 844px: с ней
+     на 380px герой выходил за экран, и низ схемы приходилось доскроливать. */
+  .map { max-width: 290px; }
   .step { grid-template-columns: minmax(0, 1fr); row-gap: 6px; }
 }

@@ -34,10 +34,10 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap"></noscript>
 
-<link rel="stylesheet" href="assets/css/tokens.css?v=400">
-<link rel="stylesheet" href="assets/css/styles.css?v=400">
-<link rel="stylesheet" href="assets/css/pages.css?v=400">
-<link rel="stylesheet" href="assets/css/responsive.css?v=400">
+<link rel="stylesheet" href="assets/css/tokens.css?v=403">
+<link rel="stylesheet" href="assets/css/styles.css?v=403">
+<link rel="stylesheet" href="assets/css/pages.css?v=403">
+<link rel="stylesheet" href="assets/css/responsive.css?v=403">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='none' stroke='%23FFFFFF' stroke-width='2'/><circle cx='16' cy='16' r='6' fill='%23C1FF0F'/></svg>">
 </head>
 <body>
@@ -86,28 +86,46 @@
      1. ПЕРВЫЙ ЭКРАН
      За пять секунд: кто, с чем помогает, кому и что делать дальше.
      ====================================================================== -->
-<section class="section section--screen intro" id="top">
+<section class="section section--screen section--grid intro" id="top">
   <div class="container intro__grid">
     <div class="intro__copy">
-      <p class="label" data-reveal>Web3-сопровождение и консалтинг</p>
+      <p class="label" data-reveal>Web3-сопровождение и&nbsp;консалтинг</p>
       <h1 class="h1" data-reveal style="--reveal-delay:60ms">
-        Начинаем не с&nbsp;хайпа, а&nbsp;с&nbsp;<span class="hl hl--flat">вашей задачи</span>
+        Начинаем не&nbsp;с&nbsp;хайпа,<br>а&nbsp;с&nbsp;<span class="hl hl--flat">вашей задачи</span>
       </h1>
       <p class="lead" data-reveal style="--reveal-delay:120ms">
         Помогаю людям системно разобраться в&nbsp;криптовалютах, а&nbsp;компаниям —
-        понять, где Web3 и&nbsp;AI действительно создают ценность, а&nbsp;где только
-        усложняют продукт.
+        понять, где Web3 и&nbsp;AI создают ценность, а&nbsp;где только усложняют продукт.
       </p>
       <div class="cta-row" data-reveal style="--reveal-delay:180ms">
         <a class="btn btn--primary" href="#directions">Выбрать направление <span class="btn__arrow" aria-hidden="true">→</span></a>
-        <a class="btn" href="contacts">Обсудить мою задачу</a>
+        <a class="btn btn--ghost" href="contacts">Обсудить мою задачу</a>
       </div>
     </div>
 
-    <!-- Портрет в круге. ВНИМАНИЕ: assets/img/author.jpg — 3D-рендер,
-         а не фотография. До публикации заменить живым снимком. -->
-    <figure class="intro__shot" data-reveal style="--reveal-delay:100ms">
-      <img src="assets/img/author.jpg" alt="Сергей Кербер" width="963" height="963" loading="eager" decoding="async">
+    <!-- Схема вместо портрета.
+
+         Портрет был самым крупным пятном первого экрана и перетягивал внимание
+         с того, ради чего сюда пришли. К тому же он 3D-рендер: ставить его
+         доказательством личности нечестно. Он остался ниже, в блоке «Обо мне»,
+         где к нему есть подпись и контекст.
+
+         Схема не украшение: она рисует ровно тот порядок работы, который
+         обещает заголовок. Задача сверху, разбор в середине, внизу два равных
+         исхода — и «технология помогает», и «технология не нужна». Второй
+         исход нарисован таким же по весу намеренно: это и есть позиция. -->
+    <figure class="map" data-reveal style="--reveal-delay:100ms" aria-hidden="true">
+      <svg class="map__l" viewBox="0 0 200 200" preserveAspectRatio="none">
+        <path d="M100 42 100 92M100 108 46 154M100 108 154 154"/>
+      </svg>
+
+      <span class="map__node map__node--task" style="--x:50%; --y:21%">Ваша задача</span>
+      <span class="map__node map__node--core" style="--x:50%; --y:50%">
+        <b>Разбор</b>
+        <i>экономика · ограничения · сроки</i>
+      </span>
+      <span class="map__node" style="--x:23%; --y:77%">Web3 и&nbsp;AI помогают</span>
+      <span class="map__node" style="--x:77%; --y:77%">Технология не&nbsp;нужна</span>
     </figure>
   </div>
 </section>
@@ -154,14 +172,15 @@
           Персональное сопровождение, обучение и&nbsp;практическая работа
           с&nbsp;криптовалютами под ваши цели.
         </p>
+        <!-- Три пункта, а не шесть. Шесть почти равнозначных строк читаются
+             как список требований, а не как обещание результата: глаз их
+             не сравнивает, а пролистывает. Остальное ушло во вторую строку. -->
         <ul class="dir__list">
           <li>персональный маршрут под цель и&nbsp;уровень</li>
-          <li>сложные темы простым языком</li>
           <li>практика и&nbsp;разбор ваших ситуаций</li>
-          <li>ответы на&nbsp;вопросы по&nbsp;ходу работы</li>
           <li>сопровождение при первых действиях</li>
-          <li>понимание рисков и&nbsp;ограничений</li>
         </ul>
+        <p class="dir__more">А&nbsp;также сложные темы простым языком, ответы по&nbsp;ходу работы и&nbsp;понимание рисков.</p>
         <a class="btn btn--primary dir__cta" href="personal">Перейти к&nbsp;личному сопровождению <span class="btn__arrow" aria-hidden="true">→</span></a>
       </article>
 
@@ -173,13 +192,11 @@
           под конкретные задачи компании.
         </p>
         <ul class="dir__list">
-          <li>исследование бизнес-задачи</li>
           <li>оценка применимости технологии</li>
           <li>продуктовая и&nbsp;техническая логика</li>
-          <li>аналитика рынка и&nbsp;решений</li>
-          <li>проектирование вариантов реализации</li>
           <li>подбор и&nbsp;координация специалистов</li>
         </ul>
+        <p class="dir__more">А&nbsp;также исследование задачи, аналитика рынка и&nbsp;проектирование вариантов реализации.</p>
         <a class="btn btn--primary dir__cta" href="business">Перейти к&nbsp;консалтингу <span class="btn__arrow" aria-hidden="true">→</span></a>
       </article>
     </div>
@@ -243,12 +260,6 @@
           профильных мероприятий и&nbsp;в&nbsp;развитии Web3-продуктов.
         </p>
 
-        <ul class="proof" data-reveal style="--reveal-delay:140ms">
-          <li class="proof__i"><b class="proof__k">Агентства</b><span class="proof__v"><span class="fill">[ПОДТВЕРДИТЬ: названия и годы]</span></span></li>
-          <li class="proof__i"><b class="proof__k">Венчурная студия</b><span class="proof__v"><span class="fill">[ПОДТВЕРДИТЬ: точная роль и состав продуктов]</span></span></li>
-          <li class="proof__i"><b class="proof__k">Стартапы</b><span class="proof__v"><span class="fill">[ПОДТВЕРДИТЬ: названия и статус]</span></span></li>
-          <li class="proof__i"><b class="proof__k">TON</b><span class="proof__v"><span class="fill">[ПОДТВЕРДИТЬ: проекты и мероприятия]</span></span></li>
-        </ul>
 
         <ul class="social" data-reveal style="--reveal-delay:180ms">
           <li><a href="https://t.me/Andrey_KERBERagency" target="_blank" rel="noopener">Telegram</a></li>
@@ -279,33 +290,14 @@
       на&nbsp;аутсорсе.
     </p>
 
-    <!-- Кейсы. Каждый отвечает на четыре вопроса: задача, что сделано,
-         роль команды, результат. Результаты в процентах не указывать,
-         пока они не подтверждены и не согласованы с клиентом. -->
-    <ul class="cases" data-reveal style="--reveal-delay:120ms">
-      <li class="case">
-        <p class="case__c"><span class="fill">[ПОДТВЕРДИТЬ: клиент или обезличенное описание]</span></p>
-        <p class="case__task">Задача: <span class="fill">[ПОДТВЕРДИТЬ]</span></p>
-        <p class="case__do">Работа: <span class="fill">[ПОДТВЕРДИТЬ]</span></p>
-        <p class="case__res">Результат: <span class="fill">[ПОДТВЕРДИТЬ]</span></p>
-      </li>
-      <li class="case">
-        <p class="case__c"><span class="fill">[ПОДТВЕРДИТЬ: клиент или обезличенное описание]</span></p>
-        <p class="case__task">Задача: <span class="fill">[ПОДТВЕРДИТЬ]</span></p>
-        <p class="case__do">Работа: <span class="fill">[ПОДТВЕРДИТЬ]</span></p>
-        <p class="case__res">Результат: <span class="fill">[ПОДТВЕРДИТЬ]</span></p>
-      </li>
-      <li class="case">
-        <p class="case__c"><span class="fill">[ПОДТВЕРДИТЬ: клиент или обезличенное описание]</span></p>
-        <p class="case__task">Задача: <span class="fill">[ПОДТВЕРДИТЬ]</span></p>
-        <p class="case__do">Работа: <span class="fill">[ПОДТВЕРДИТЬ]</span></p>
-        <p class="case__res">Результат: <span class="fill">[ПОДТВЕРДИТЬ]</span></p>
-      </li>
-    </ul>
 
-    <p class="meta" data-reveal style="margin-top: var(--sp-block)">
-      <a href="https://www.kerber.agency" target="_blank" rel="noopener">Подробнее об&nbsp;агентстве →</a>
-    </p>
+    <!-- Кейсов здесь нет намеренно. Пока ни один не подтверждён и не согласован
+         с клиентом, три пустые карточки хуже честного описания формата: они
+         обещают доказательства, которых нет. Вернуть, когда появятся
+         согласованные к публикации. -->
+    <div class="cta-row" data-reveal style="margin-top: var(--sp-block)">
+      <a class="btn" href="https://www.kerber.agency" target="_blank" rel="noopener">Подробнее об&nbsp;агентстве <span class="btn__arrow" aria-hidden="true">→</span></a>
+    </div>
   </div>
 </section>
 
@@ -359,32 +351,6 @@
      снят: 60–120 секунд, с субтитрами, работает без звука.
      ====================================================================== -->
 
-<!-- ======================================================================
-     9. ОТЗЫВЫ
-     Публиковать только реальные отзывы с разрешением на использование.
-     ====================================================================== -->
-<section class="section">
-  <div class="container">
-    <div class="sec-head" data-reveal>
-      <h2 class="h2">Что говорят те, с&nbsp;кем работали</h2>
-      <p class="lead">Отзыв должен подтверждать конкретную пользу, а&nbsp;не&nbsp;общее «понравилось».</p>
-    </div>
-    <ul class="reviews" data-reveal style="margin-top: var(--sp-block)">
-      <li class="review">
-        <p class="review__q"><span class="fill">[ПОДТВЕРДИТЬ: реальный отзыв, 40–80 слов, с разрешением на публикацию]</span></p>
-        <p class="review__a"><span class="fill">[имя, должность, компания]</span></p>
-      </li>
-      <li class="review">
-        <p class="review__q"><span class="fill">[ПОДТВЕРДИТЬ: реальный отзыв, 40–80 слов, с разрешением на публикацию]</span></p>
-        <p class="review__a"><span class="fill">[имя, должность, компания]</span></p>
-      </li>
-      <li class="review">
-        <p class="review__q"><span class="fill">[ПОДТВЕРДИТЬ: реальный отзыв, 40–80 слов, с разрешением на публикацию]</span></p>
-        <p class="review__a"><span class="fill">[имя, должность, компания]</span></p>
-      </li>
-    </ul>
-  </div>
-</section>
 
 <!-- ======================================================================
      10. FAQ — снимает возражения, а не повторяет обещания
@@ -403,7 +369,6 @@
           <span class="week__toggle" aria-hidden="true"></span>
         </button>
         <div class="week__body is-open" id="q1"><div class="week__body-inner"><div class="week__content">
-          <span></span>
           <div class="week__cols"><p class="week__lead">Курс даёт одинаковую структуру для всех. В&nbsp;сопровождении маршрут строится под вашу цель и&nbsp;уровень, вопросы разбираются по&nbsp;ходу, а&nbsp;не&nbsp;копятся до&nbsp;отдельного занятия.</p></div>
         </div></div></div>
       </li>
@@ -414,7 +379,6 @@
           <span class="week__toggle" aria-hidden="true"></span>
         </button>
         <div class="week__body" id="q2"><div class="week__body-inner"><div class="week__content">
-          <span></span>
           <div class="week__cols"><p class="week__lead">Нет. Работа начинается с&nbsp;разбора текущего уровня, и&nbsp;маршрут строится от&nbsp;него.</p></div>
         </div></div></div>
       </li>
@@ -425,7 +389,6 @@
           <span class="week__toggle" aria-hidden="true"></span>
         </button>
         <div class="week__body" id="q3"><div class="week__body-inner"><div class="week__content">
-          <span></span>
           <div class="week__cols"><p class="week__lead">Да. Это частый сценарий и&nbsp;в&nbsp;личной работе, и&nbsp;в&nbsp;консалтинге: разбираем одну задачу и&nbsp;доводим её&nbsp;до&nbsp;понятного решения.</p></div>
         </div></div></div>
       </li>
@@ -436,7 +399,6 @@
           <span class="week__toggle" aria-hidden="true"></span>
         </button>
         <div class="week__body" id="q4"><div class="week__body-inner"><div class="week__content">
-          <span></span>
           <div class="week__cols"><p class="week__lead">Тогда результатом работы станет мотивированное заключение, почему это решение сейчас не&nbsp;стоит реализовывать, и&nbsp;что имеет смысл делать вместо него. Это нормальный итог, а&nbsp;не&nbsp;неудача.</p></div>
         </div></div></div>
       </li>
@@ -447,7 +409,6 @@
           <span class="week__toggle" aria-hidden="true"></span>
         </button>
         <div class="week__body" id="q5"><div class="week__body-inner"><div class="week__content">
-          <span></span>
           <div class="week__cols"><p class="week__lead">Лично я&nbsp;веду разбор задачи, гипотезы и&nbsp;решения. Реализацию берёт команда агентства или ваша внутренняя команда — в&nbsp;зависимости от&nbsp;формата.</p></div>
         </div></div></div>
       </li>
@@ -458,7 +419,6 @@
           <span class="week__toggle" aria-hidden="true"></span>
         </button>
         <div class="week__body" id="q6"><div class="week__body-inner"><div class="week__content">
-          <span></span>
           <div class="week__cols"><p class="week__lead">От&nbsp;формата и&nbsp;объёма работы. Обсуждаем на&nbsp;первом созвоне, после того как станет понятна задача.</p></div>
         </div></div></div>
       </li>
@@ -469,7 +429,6 @@
           <span class="week__toggle" aria-hidden="true"></span>
         </button>
         <div class="week__body" id="q7"><div class="week__body-inner"><div class="week__content">
-          <span></span>
           <div class="week__cols"><p class="week__lead">Да, и&nbsp;это рекомендованный первый шаг в&nbsp;обоих направлениях.</p></div>
         </div></div></div>
       </li>
@@ -480,7 +439,6 @@
           <span class="week__toggle" aria-hidden="true"></span>
         </button>
         <div class="week__body" id="q8"><div class="week__body-inner"><div class="week__content">
-          <span></span>
           <div class="week__cols"><p class="week__lead">Да. Условия конфиденциальности фиксируются до&nbsp;начала работы.</p></div>
         </div></div></div>
       </li>
@@ -549,6 +507,6 @@
   </div>
 </footer>
 
-<script src="assets/js/main.js?v=400"></script>
+<script src="assets/js/main.js?v=403"></script>
 </body>
 </html>
