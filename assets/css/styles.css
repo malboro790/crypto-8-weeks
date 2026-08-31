@@ -154,6 +154,35 @@ main { overflow-x: clip; }
    ниже сгиба, становится недостижимым. Проверка идёт на каждый ресайз,
    потому что «помещается» зависит от высоты окна, а не от ширины экрана. */
 .is-pinned { position: sticky; top: 0; }
+
+/* Запас в два пикселя под прилипшей полноэкранной секцией.
+
+   Секция ростом ровно в экран, прилипшая к top: 0, садится нижним краем
+   точно на кромку окна — запаса нет вовсе. У высоких секций он есть: им
+   скрипт считает отрицательное смещение с округлением вверх и лишним
+   пикселем. У этих запас неоткуда взять, потому что смещение нулевое.
+
+   Пока экран с чётной плотностью пикселей, доля пикселя при округлении
+   проглатывается. На мониторе с плотностью 1 та же доля превращается
+   в целую видимую строку, и в ней видно то, что стоит за секцией. Отсюда
+   и разница: на встроенном экране ноутбука полосы нет, на внешнем есть.
+
+   Два пикселя роста нижний край не показывают — он и так за сгибом.
+
+   Правило общее для всех прилипающих секций, и это важнее, чем кажется.
+   Прилипать разрешено секциям от 92% высоты экрана — значит секция могла
+   быть короче окна на восемь процентов и, замерев у верхнего края, оставляла
+   под собой постоянную полосу в полсотни пикселей. Не мерцание на кадр,
+   а дыра, висящая всё время, пока секция приклеена. Замерено: на окне 982
+   такая секция не доставала до низа 67 пикселей.
+
+   Теперь любая прилипшая секция ростом не меньше экрана. Высоким правило
+   ничего не меняет: их собственная высота и так больше. */
+/* Селектор с #main — не украшательство: у героя своё правило высоты, и при
+   равной силе побеждало бы оно, потому что стоит ниже по файлу. */
+#main > section.is-pinned {
+  min-height: calc(100svh + 2px);
+}
 /* Отпущенная секция возвращается в поток. Селектор с #main нужен, чтобы
    перебить собственное правило .hero, которое задаёт ему sticky напрямую. */
 #main > section.is-released { position: relative; top: auto; }
@@ -162,6 +191,18 @@ main { overflow-x: clip; }
    component inside it flips without knowing anything about the theme.
    The lavender accent is too pale on white, so this block uses a deeper cut. */
 .section--light {
+  /* Сетка на белом: линия тёмная, краска растворения белая.
+
+     Переопределяются сами градиенты, а не цвета внутри них. var() внутри
+     пользовательского свойства подставляется там, где свойство ОБЪЯВЛЕНО,
+     то есть на :root, и уже подставленное значение наследуется вниз —
+     менять цвет глубже бесполезно, линии остались бы белыми на белом. */
+  --grid-lines:
+    repeating-linear-gradient(to right,  rgba(10, 10, 10, .09) 0 1px, transparent 1px 44px),
+    repeating-linear-gradient(to bottom, rgba(10, 10, 10, .09) 0 1px, transparent 1px 44px);
+  --grid-cover-fade:  radial-gradient(125% 95% at 50% 50%, #FFFFFF 0%, rgba(255, 255, 255, .32) 44%, transparent 68%);
+  --grid-cover-edges: linear-gradient(to bottom, #FFFFFF 0%, transparent 16%, transparent 84%, #FFFFFF 100%);
+  --grid-cover-down:  linear-gradient(to bottom, #FFFFFF 0%, #FFFFFF 24%, rgba(255, 255, 255, .5) 58%, transparent 88%, #FFFFFF 100%);
   background: #FFFFFF;
   color: #0A0A0A;
   --c-ink: #0A0A0A;
@@ -493,9 +534,15 @@ p { margin: 0; max-width: 62ch; }
    по странице, и держать её в двух местах — верный способ развести их
    по шагу при первой же правке. */
 :root {
+  /* Цвет линии и цвет краски вынесены отдельно: сетка теперь ложится и на
+     чёрную секцию, и на светлую. На белом белые линии не видны вовсе, а
+     чёрная краска растворения превратила бы верх и низ блока в грязь. */
+  --grid-ink: rgba(255, 255, 255, .077);
+  --grid-ground: #000000;
+
   --grid-lines:
-    repeating-linear-gradient(to right,  rgba(255, 255, 255, .077) 0 1px, transparent 1px 44px),
-    repeating-linear-gradient(to bottom, rgba(255, 255, 255, .077) 0 1px, transparent 1px 44px);
+    repeating-linear-gradient(to right,  var(--grid-ink) 0 1px, transparent 1px 44px),
+    repeating-linear-gradient(to bottom, var(--grid-ink) 0 1px, transparent 1px 44px);
   /* Растворение сетки — краской поверх линий, а не маской.
 
      Маска гасила слой, а слой ради неё поднимался в отдельный слой
@@ -520,9 +567,9 @@ p { margin: 0; max-width: 62ch; }
      только к самому краю блока и на первом экране читалась как грязь на
      стекле, а не как сетка. Чистое поле под словом сохраняется — в центре
      краска по-прежнему полностью непрозрачная. */
-  --grid-cover-fade:  radial-gradient(125% 95% at 50% 50%, #000 0%, rgba(0, 0, 0, .32) 44%, transparent 68%);
-  --grid-cover-edges: linear-gradient(to bottom, #000 0%, transparent 16%, transparent 84%, #000 100%);
-  --grid-cover-down:  linear-gradient(to bottom, #000 0%, #000 24%, rgba(0, 0, 0, .5) 58%, transparent 88%, #000 100%);
+  --grid-cover-fade:  radial-gradient(125% 95% at 50% 50%, var(--grid-ground) 0%, color-mix(in srgb, var(--grid-ground) 32%, transparent) 44%, transparent 68%);
+  --grid-cover-edges: linear-gradient(to bottom, var(--grid-ground) 0%, transparent 16%, transparent 84%, var(--grid-ground) 100%);
+  --grid-cover-down:  linear-gradient(to bottom, var(--grid-ground) 0%, var(--grid-ground) 24%, color-mix(in srgb, var(--grid-ground) 50%, transparent) 58%, transparent 88%, var(--grid-ground) 100%);
 }
 .hero__bg::after {
   content: "";
