@@ -184,6 +184,18 @@ main { overflow-x: clip; }
    component inside it flips without knowing anything about the theme.
    The lavender accent is too pale on white, so this block uses a deeper cut. */
 .section--light {
+  /* Сетка на белом: линия тёмная, краска растворения белая.
+
+     Переопределяются сами градиенты, а не цвета внутри них. var() внутри
+     пользовательского свойства подставляется там, где свойство ОБЪЯВЛЕНО,
+     то есть на :root, и уже подставленное значение наследуется вниз —
+     менять цвет глубже бесполезно, линии остались бы белыми на белом. */
+  --grid-lines:
+    repeating-linear-gradient(to right,  rgba(10, 10, 10, .09) 0 1px, transparent 1px 44px),
+    repeating-linear-gradient(to bottom, rgba(10, 10, 10, .09) 0 1px, transparent 1px 44px);
+  --grid-cover-fade:  radial-gradient(125% 95% at 50% 50%, #FFFFFF 0%, rgba(255, 255, 255, .32) 44%, transparent 68%);
+  --grid-cover-edges: linear-gradient(to bottom, #FFFFFF 0%, transparent 16%, transparent 84%, #FFFFFF 100%);
+  --grid-cover-down:  linear-gradient(to bottom, #FFFFFF 0%, #FFFFFF 24%, rgba(255, 255, 255, .5) 58%, transparent 88%, #FFFFFF 100%);
   background: #FFFFFF;
   color: #0A0A0A;
   --c-ink: #0A0A0A;
