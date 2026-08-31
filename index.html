@@ -124,9 +124,9 @@
 </script>
 <noscript><style>html.is-loading, html.is-loading body { overflow: auto !important; } .pl { display: none !important; }</style></noscript>
 
-<link rel="stylesheet" href="assets/css/tokens.css?v=376">
-<link rel="stylesheet" href="assets/css/styles.css?v=376">
-<link rel="stylesheet" href="assets/css/responsive.css?v=376">
+<link rel="stylesheet" href="assets/css/tokens.css?v=381">
+<link rel="stylesheet" href="assets/css/styles.css?v=381">
+<link rel="stylesheet" href="assets/css/responsive.css?v=381">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='none' stroke='%23FFFFFF' stroke-width='2'/><circle cx='16' cy='16' r='6' fill='%23C1FF0F'/></svg>">
 </head>
 <body>
@@ -237,7 +237,7 @@
            width="176" height="211" loading="lazy" decoding="async">
     </figure>
 
-    <h2 class="h2 promise__claim" data-reveal style="--reveal-delay:80ms">
+    <h2 class="h2 h2--statement promise__claim" data-reveal style="--reveal-delay:80ms">
       Я помогу вам пройти путь от первого знакомства до лёгкости
       использования криптовалют, как перевод по номеру из банка в банк
     </h2>
@@ -425,7 +425,12 @@
 <!-- ======================================================================
      BANKING VS CRYPTO
      ====================================================================== -->
-<section class="section section--light" style="padding-top: calc(var(--sp-vast) * 1.5); padding-bottom: 0">
+<!-- Нижнее поле было нулевым: под блоком шла ещё одна светлая секция,
+     и пауза набиралась её верхним полем. Теперь следом идёт тёмная,
+     и без своего поля белое обрывалось сразу за последней строкой
+     таблицы. Значение задано переменной, а не числом: она уже
+     подстраивается под ширину экрана. -->
+<section class="section section--light" style="padding-top: calc(var(--sp-vast) * 0.75); padding-bottom: var(--sp-vast)">
   <div class="container">
     <div class="reveal-statement">
       <h2 class="h2" data-reveal>Проблема не в том, что крипта <span class="hl hl--flat">слишком сложная</span></h2>
@@ -1066,7 +1071,10 @@
 <!-- ======================================================================
      OUTCOME
      ====================================================================== -->
-<section class="section section--light" id="how">
+<!-- Верхнее поле вдвое больше обычного: выше кончается тёмная секция,
+     и на границе смены темы обычной паузы мало — белое начиналось
+     сразу под чёрным. -->
+<section class="section section--light" id="how" style="padding-top: calc(var(--sp-section) * 2)">
   <div class="container">
     <h2 class="h2" data-reveal>Через 8 недель вы <span class="hl hl--flat">научитесь</span></h2>
     <p class="lead" data-reveal style="margin-top: var(--sp-stack)">Нужно уверенно пользоваться тем, что вам действительно необходимо.</p>
@@ -1075,18 +1083,30 @@
          Лента прокруткой прятала половину пунктов за краем экрана — а это
          единственное место, где сказано, что человек в итоге будет уметь.
          Графика собрана из тех же .mock, что и в продуктовом блоке. -->
-    <ul class="skills">
+        <ul class="skills">
     <li class="skill">
       <div class="mock mock--theory skill__art" aria-hidden="true">
-        <p class="sk-t">Покупка</p>
-        <div class="sk-r"><span>Оплата</span><b>8 000 ₽</b></div>
+        <p class="sk-t">Обмен</p>
+        <div class="sk-r"><span>Отдаёте</span><b>8 000 ₽</b></div>
         <span class="sk-arrow">↓</span>
         <div class="sk-r sk-r--hot"><img class="sk-coin" src="assets/coins/usdt.png" alt="" loading="lazy"><span>USDT</span><b>100.00</b></div>
         <div class="sk-r sk-r--dim"><span>Курс</span><b>80.00 ₽</b></div>
       </div>
       <div class="skill__copy">
-        <p class="skill__t">Купить USDT</p>
-        <p class="skill__d">Через биржу, с карты или переводом — и понимать, что именно вы купили.</p>
+        <p class="skill__t">Покупать и продавать USDT и обменивать на любой другой актив</p>
+        <p class="skill__d">Пополнить биржу или обменник — и понимать, что именно вы купили.</p>
+      </div>
+    </li>
+    <li class="skill">
+      <div class="mock mock--practice skill__art" aria-hidden="true">
+        <p class="sk-t">Сеть перевода</p>
+        <div class="sk-r sk-r--hot"><span class="sk-net"><img class="sk-coin" src="assets/coins/trx.png" alt="" loading="lazy"> TRC20</span><b>1.0 $</b></div>
+        <div class="sk-r"><span class="sk-net"><img class="sk-coin" src="assets/coins/eth.png" alt="" loading="lazy"> ERC20</span><b>4.2 $</b></div>
+        <div class="sk-r"><span class="sk-net"><img class="sk-coin" src="assets/coins/bnb.png" alt="" loading="lazy"> BEP20</span><b>0.2 $</b></div>
+      </div>
+      <div class="skill__copy">
+        <p class="skill__t">Правильно выбирать сеть перед переводом</p>
+        <p class="skill__d">Один и тот же токен живёт в разных сетях, и между собой они не сообщаются.</p>
       </div>
     </li>
     <li class="skill">
@@ -1098,8 +1118,21 @@
         <div class="sk-r sk-r--hot"><span>К получению</span><b>99.00</b></div>
       </div>
       <div class="skill__copy">
-        <p class="skill__t">Вывести средства с биржи</p>
-        <p class="skill__d">Выбрать сеть, проверить адрес и не потерять сумму на комиссии.</p>
+        <p class="skill__t">Вывести средства с биржи</p>
+        <p class="skill__d">Выбрать сеть, проверить адрес и не потерять сумму при переводе.</p>
+      </div>
+    </li>
+    <li class="skill">
+      <div class="mock mock--theory skill__art" aria-hidden="true">
+        <div class="sk-bar"><span class="sk-dots"></span><span class="sk-url">tronscan.org</span></div>
+        <div class="sk-r sk-r--dim"><span>Кошелёк</span><b>TR7N…9Qv3</b></div>
+        <div class="sk-r"><span>−100.00</span><b>✓ 19 блоков</b></div>
+        <div class="sk-r"><span>+250.00</span><b>✓ 41 блок</b></div>
+        <div class="sk-r"><span>−12.00</span><b>✓ 88 блоков</b></div>
+      </div>
+      <div class="skill__copy">
+        <p class="skill__t">Читать blockchain explorer</p>
+        <p class="skill__d">Видеть свою операцию в сети и понимать, на каком она этапе.</p>
       </div>
     </li>
     <li class="skill">
@@ -1119,7 +1152,7 @@
       </div>
       <div class="skill__copy">
         <p class="skill__t">Создать non-custodial wallet</p>
-        <p class="skill__d">Кошелёк, доступ к которому есть только у вас — и ни у кого больше.</p>
+        <p class="skill__d">Анонимный кошелёк, доступ к которому есть только у вас — и ни у кого больше.</p>
       </div>
     </li>
     <li class="skill">
@@ -1138,57 +1171,33 @@
       </div>
       <div class="skill__copy">
         <p class="skill__t">Хранить seed phrase</p>
-        <p class="skill__d">Двенадцать слов, которые нельзя фотографировать, пересылать и держать в облаке.</p>
+        <p class="skill__d">Двенадцать слов, которые нельзя фотографировать, пересылать и держать в облаке.</p>
       </div>
     </li>
     <li class="skill">
-      <div class="mock mock--practice skill__art" aria-hidden="true">
-        <p class="sk-t">Сеть перевода</p>
-        <div class="sk-r sk-r--hot"><span class="sk-net"><img class="sk-coin" src="assets/coins/trx.png" alt="" loading="lazy"> TRC20</span><b>1.0 $</b></div>
-        <div class="sk-r"><span class="sk-net"><img class="sk-coin" src="assets/coins/eth.png" alt="" loading="lazy"> ERC20</span><b>4.2 $</b></div>
-        <div class="sk-r"><span class="sk-net"><img class="sk-coin" src="assets/coins/bnb.png" alt="" loading="lazy"> BEP20</span><b>0.2 $</b></div>
+      <div class="mock mock--theory skill__art" aria-hidden="true">
+        <p class="sk-t">Доход на остаток</p>
+        <div class="sk-r"><img class="sk-coin" src="assets/coins/usdt.png" alt="" loading="lazy"><span>Баланс</span><b>1 000.00</b></div>
+        <div class="sk-r sk-r--hot"><span>Ставка</span><b>2–4 % годовых</b></div>
+        <div class="sk-r sk-r--dim"><span>За месяц</span><b>+2.50</b></div>
+        <p class="sk-note">ставка плавающая и не гарантирована</p>
       </div>
       <div class="skill__copy">
-        <p class="skill__t">Выбирать сеть перед переводом</p>
-        <p class="skill__d">Один и тот же токен живёт в разных сетях, и между собой они не сообщаются.</p>
+        <p class="skill__t">Положить деньги под 2–4 % годовых в долларе, прямо на своём кошельке</p>
+        <p class="skill__d">Как это работает, какие есть риски и когда этим стоит пользоваться.</p>
       </div>
     </li>
     <li class="skill">
       <div class="mock mock--support skill__art" aria-hidden="true">
-        <p class="sk-t">Проверка адреса</p>
-        <div class="sk-r"><span>В кошельке</span><b><em>TR7N</em>…<em>9Qv3</em></b></div>
-        <div class="sk-r"><span>В переводе</span><b><em>TR7N</em>…<em>9Qv3</em></b></div>
-        <div class="sk-r sk-r--ok"><span>Совпадает</span><b>✓</b></div>
+        <p class="sk-t">Оплата картой</p>
+        <div class="sk-r"><span>Карта</span><b><em>••••</em>&nbsp;<em>0042</em></b></div>
+        <div class="sk-r"><span>Списано</span><b>24.90 €</b></div>
+        <div class="sk-r sk-r--hot"><img class="sk-coin" src="assets/coins/usdt.png" alt="" loading="lazy"><span>USDT</span><b>−27.10</b></div>
+        <p class="sk-note">курс и комиссия конвертации — в момент оплаты</p>
       </div>
       <div class="skill__copy">
-        <p class="skill__t">Проверять адрес получателя</p>
-        <p class="skill__d">Целиком, а не первые четыре символа: подменённый адрес выглядит правдоподобно.</p>
-      </div>
-    </li>
-    <li class="skill">
-      <div class="mock mock--theory skill__art" aria-hidden="true">
-        <div class="sk-bar"><span class="sk-dots"></span><span class="sk-url">tronscan.org</span></div>
-        <div class="sk-r sk-r--dim"><span>Кошелёк</span><b>TR7N…9Qv3</b></div>
-        <div class="sk-r"><span>−100.00</span><b>✓ 19 блоков</b></div>
-        <div class="sk-r"><span>+250.00</span><b>✓ 41 блок</b></div>
-        <div class="sk-r"><span>−12.00</span><b>✓ 88 блоков</b></div>
-      </div>
-      <div class="skill__copy">
-        <p class="skill__t">Читать blockchain explorer</p>
-        <p class="skill__d">Видеть свою операцию в сети и понимать, на каком она этапе.</p>
-      </div>
-    </li>
-    <li class="skill">
-      <div class="mock mock--theory skill__art" aria-hidden="true">
-        <p class="sk-t">Комиссия сети</p>
-        <div class="sk-r"><span>Медленно</span><b>0.4 $</b></div>
-        <div class="sk-r sk-r--hot"><span>Обычно</span><b>1.0 $</b></div>
-        <div class="sk-r"><span>Быстро</span><b>3.6 $</b></div>
-        <p class="sk-note">цена зависит от загрузки сети</p>
-      </div>
-      <div class="skill__copy">
-        <p class="skill__t">Понимать комиссии</p>
-        <p class="skill__d">Из чего складывается цена перевода и почему она меняется в течение дня.</p>
+        <p class="skill__t">Завести crypto-карту и платить ей в интернете или за границей</p>
+        <p class="skill__d">Тратить криптовалюту напрямую, без обмена вручную перед каждой покупкой.</p>
       </div>
     </li>
     <li class="skill">
@@ -1201,7 +1210,7 @@
       </div>
       <div class="skill__copy">
         <p class="skill__t">Видеть базовые риски</p>
-        <p class="skill__d">Какие разрешения вы выдаёте кошельком и как их отзывать.</p>
+        <p class="skill__d">Какие разрешения вы выдаёте кошельком и как их отзывать.</p>
       </div>
     </li>
     <li class="skill">
@@ -1220,7 +1229,7 @@
       </div>
       <div class="skill__copy">
         <p class="skill__t">Понимать устройство индустрии</p>
-        <p class="skill__d">Биржи, кошельки, сети, мосты — что за что отвечает и где чьи деньги.</p>
+        <p class="skill__d">Биржи, кошельки, сети, мосты — что за что отвечает и где чьи деньги.</p>
       </div>
     </li>
     <li class="skill">
@@ -1240,7 +1249,7 @@
       </div>
       <div class="skill__copy">
         <p class="skill__t">Иметь собственную схему</p>
-        <p class="skill__d">Где лежат активы, каким маршрутом ходят и что делать, если что-то пошло не так.</p>
+        <p class="skill__d">Где лежат активы, каким маршрутом ходят и что делать, если что-то пошло не так.</p>
       </div>
     </li>
     </ul>
@@ -1705,8 +1714,8 @@
 })();
 </script>
 
-<script src="assets/js/warptext.js?v=376" defer></script>
-<script src="assets/js/coinpit.js?v=376"></script>
-<script src="assets/js/main.js?v=376"></script>
+<script src="assets/js/warptext.js?v=381" defer></script>
+<script src="assets/js/coinpit.js?v=381"></script>
+<script src="assets/js/main.js?v=381"></script>
 </body>
 </html>
