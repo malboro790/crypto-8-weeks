@@ -2408,3 +2408,84 @@ p { margin: 0; max-width: 62ch; }
 .hero__claim-dim { color: var(--c-ink-muted); }
 /* Кнопка идёт сразу за строкой под заголовком — между ними больше ничего нет. */
 .hero .cta-row { margin-top: clamp(28px, 3vw, 40px); }
+
+/* ==========================================================================
+   PROMISE — обещание крупной строкой и два портрета по углам
+
+   Композиция собрана сеткой в три ряда, а не абсолютным позиционированием:
+   ряды сами держат портреты выше и ниже строки, поэтому наложиться они
+   не могут ни на какой высоте экрана и ни при каком кегле из clamp.
+   ========================================================================== */
+/* Поля меньше обычных для секции: три ряда и без того почти во весь экран. */
+.promise { padding-top: clamp(56px, 7vh, 104px); padding-bottom: clamp(56px, 7vh, 104px); }
+
+.promise__inner {
+  /* Колонка уже контейнера. Из неё берутся сразу две вещи: длина строки
+     и то, насколько портреты отступают от краёв экрана. Одно число вместо
+     отдельного отступа у каждого портрета. */
+  width: min(100%, 62rem);
+  display: grid;
+  gap: clamp(16px, 2.6vh, 44px);
+  align-content: center;
+  justify-items: center;
+}
+
+.promise__claim {
+  margin: 0;
+  max-width: 24ch;
+  text-align: center;
+  /* Между h2 и h1: на кегле h2 фраза перестаёт быть событием экрана,
+     на h1 спорит со словом на первом экране. */
+  font-size: clamp(1.75rem, 1.05rem + 2.35vw, 3.25rem);
+  line-height: 1.18;
+  letter-spacing: var(--ls-h2);
+  text-wrap: pretty;
+}
+
+/* Портреты уходят в противоположные углы колонки — отсюда диагональ. */
+.promise__fig { margin: 0; display: flex; gap: clamp(12px, 1.4vw, 20px); }
+.promise__fig--a { justify-self: end; align-items: flex-start; }
+.promise__fig--b { justify-self: start; flex-direction: column; }
+
+.promise__img {
+  display: block;
+  /* min() от ширины и высоты: на низком экране портрет ужимается сам,
+     иначе три ряда перестают помещаться в один экран раньше всего. */
+  width: clamp(96px, min(11vw, 19vh), 176px);
+  height: auto;
+  aspect-ratio: 5 / 6;
+  object-fit: cover;
+  /* Кадр обрезается снизу, а не по центру: иначе портретная пропорция
+     срезает макушку и оставляет плечи. */
+  object-position: 50% 22%;
+  border-radius: var(--r-md);
+}
+/* Нижний портрет отражён, чтобы оба лица смотрели внутрь, на фразу. */
+.promise__img--mirror { transform: scaleX(-1); }
+
+.promise__cap {
+  /* Подпись держится в колонку под ширину снимка. В строку она растягивает
+     пару почти на пол-экрана, и диагональ между углами перестаёт читаться. */
+  max-width: 17ch;
+  font-size: var(--t-subtext);
+  line-height: 1.45;
+  color: var(--c-ink-faint);
+}
+/* У верхней пары подпись стоит слева от снимка, поэтому равняется по
+   правому краю — к портрету, а не от него. */
+.promise__fig--a .promise__cap { text-align: right; padding-top: 2px; }
+
+@media (max-width: 720px) {
+  /* Диагональ на узком экране не читается: до противоположного угла
+     остаётся полтора сантиметра. Обе пары встают одинаково — снимок,
+     под ним подпись — и центрируются по строке. */
+  .promise__fig { justify-self: center; align-items: center; }
+  /* У верхней пары подпись идёт в разметке перед снимком — на десктопе она
+     слева. Здесь порядок переворачивается, иначе подпись оказалась бы над
+     портретом, а у нижней пары под ним. */
+  .promise__fig--a { flex-direction: column-reverse; }
+  .promise__fig--b { flex-direction: column; }
+  .promise__fig--a .promise__cap { text-align: center; }
+  .promise__fig--b .promise__cap { text-align: center; }
+  .promise__claim { max-width: 18ch; }
+}
