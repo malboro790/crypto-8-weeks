@@ -287,7 +287,8 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--f-display); font-weight: var(--w-
      78px, после чего замирает: на очень широком мониторе фраза иначе
      превращается в вывеску. Наклон 5.42vw и есть та прямая, что проходит
      через обе точки, отрицательный сдвиг — её продолжение влево. */
-  font-size: clamp(1.75rem, -1.625rem + 5.42vw, 4.875rem);
+  --t-statement: clamp(1.75rem, -1.625rem + 5.42vw, 4.875rem);
+  font-size: var(--t-statement);
   line-height: 1.18;
   letter-spacing: var(--ls-h2);
 }
@@ -1046,15 +1047,87 @@ p { margin: 0; max-width: 62ch; }
    SOLUTION
    ========================================================================== */
 
-.solution {
+/* --------------------------------------------------------------------------
+   ЛИЧНЫЙ РЕПЕТИТОР
+
+   Заголовок по центру, под ним ряд из портрета и двух цифр формата, ещё
+   ниже — три карточки в ряд. Прежде блок стоял в две колонки: слева текст
+   с кнопками, справа те же карточки столбиком.
+   -------------------------------------------------------------------------- */
+.solution__top {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: clamp(32px, 5vw, 80px);
-  /* Отбивки сверху нет: секция сама центрирует содержимое по высоте экрана,
-     и внешний отступ сдвигал бы центр. */
+  grid-template-columns: minmax(0, 4fr) minmax(0, 4fr) minmax(0, 4fr);
+  gap: clamp(24px, 3.2vw, 56px);
   align-items: start;
+  margin-top: clamp(32px, 4.4vh, 64px);
 }
-.solution__parts { display: flex; flex-direction: column; }
+
+.tutor__face { position: relative; margin: 0; width: min(100%, 260px); }
+.tutor__face > img {
+  display: block; width: 100%; height: auto;
+  aspect-ratio: 1; object-fit: cover;
+  /* Кадр обрезается выше центра: квадрат иначе срезает макушку. */
+  object-position: 50% 22%;
+  border-radius: var(--r-md);
+}
+/* Монеты берут .sk-node ради готовой раскладки по --x/--y; размер задаём
+   здесь, потому что там он в em от кегля макета, а тут макета нет. */
+.tutor__orb img { width: 34px; height: 34px; }
+
+/* Плашка поверх портрета — единственное место блока, набранное искрой. */
+.tutor__badge {
+  position: absolute; left: 24%; bottom: -20px; z-index: 2;
+  display: flex; align-items: center; gap: 10px;
+  width: max-content; max-width: 21ch;
+  padding: 11px 18px 11px 13px;
+  border-radius: var(--r-pill);
+  background: var(--c-spark); color: #0A0A0A;
+  font-size: var(--t-subtext); font-weight: 500; line-height: 1.3;
+}
+.tutor__badge::before {
+  content: "!";
+  flex: none; width: 20px; height: 20px; border-radius: 50%;
+  background: #0A0A0A; color: var(--c-spark);
+  display: grid; place-items: center;
+  font-size: .8125rem; font-weight: 700; line-height: 1;
+}
+
+.stat__n {
+  margin: 0;
+  font-family: var(--f-display); font-weight: 600;
+  font-size: clamp(1.5rem, 1.05rem + 1.5vw, 2.25rem);
+  line-height: 1.1; letter-spacing: var(--ls-h3);
+  color: var(--c-spark);
+}
+.stat__t {
+  margin-top: 10px;
+  font-family: var(--f-display); font-weight: 500;
+  font-size: var(--t-subtext); color: var(--c-ink);
+}
+.stat__d {
+  margin-top: 12px;
+  font-size: var(--t-subtext); line-height: var(--lh-subtext);
+  color: var(--c-ink-muted);
+}
+
+/* Карточки встают в ряд, картинка над текстом. Линеек между ними больше нет:
+   в столбик они разделяли строки, в ряду делили бы колонки пополам. */
+.solution__parts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(20px, 2.6vw, 44px);
+  margin-top: clamp(32px, 4.4vh, 64px);
+}
+.solution__parts .part {
+  display: block;
+  padding: 0;
+  border-top: 0;
+}
+.solution__parts .part:last-child { border-bottom: 0; }
+.solution__parts .part__art { width: min(100%, 190px); }
+.solution__parts .part__body { margin-top: 22px; }
+.solution__parts .part__d { max-width: none; }
+
 
 .part {
   display: grid;
@@ -2516,7 +2589,7 @@ p { margin: 0; max-width: 62ch; }
   /* Колонка уже контейнера. Из неё берутся сразу две вещи: длина строки
      и то, насколько портреты отступают от краёв экрана. Одно число вместо
      отдельного отступа у каждого портрета. */
-  width: min(100%, 62rem);
+  width: 100%;
   display: grid;
   gap: clamp(16px, 2.6vh, 44px);
   align-content: center;
@@ -2525,7 +2598,13 @@ p { margin: 0; max-width: 62ch; }
 
 .promise__claim {
   margin: 0;
-  max-width: 24ch;
+  /* Во всю ширину сетки: колонка в 24ch ломала фразу на семь строк, и она
+     читалась столбиком, а не фразой. */
+  max-width: none;
+  /* На 15% мельче общей шкалы. Считается от неё, а не переписывается своим
+     clamp: опорные точки 1440 и 1920 остаются общими, меняется только
+     множитель. */
+  font-size: calc(var(--t-statement) * .85);
   text-align: center;
   text-wrap: pretty;
 }
@@ -2576,4 +2655,19 @@ p { margin: 0; max-width: 62ch; }
   .promise__fig--a .promise__cap { text-align: center; }
   .promise__fig--b .promise__cap { text-align: center; }
   .promise__claim { max-width: 18ch; }
+}
+
+@media (max-width: 900px) {
+  /* Три колонки на планшете дают строку в двадцать знаков. Портрет с плашкой
+     остаётся отдельной строкой, цифры формата встают парой под ним. */
+  .solution__top { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tutor__face { grid-column: 1 / -1; }
+  .solution__parts { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .solution__top,
+  .solution__parts { grid-template-columns: minmax(0, 1fr); }
+  /* Плашка перестаёт свисать с портрета: под ней сразу идёт следующий блок,
+     и наложение читалось бы как ошибка вёрстки. */
+  .tutor__badge { position: static; margin-top: 16px; max-width: none; }
 }

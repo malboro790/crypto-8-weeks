@@ -124,9 +124,9 @@
 </script>
 <noscript><style>html.is-loading, html.is-loading body { overflow: auto !important; } .pl { display: none !important; }</style></noscript>
 
-<link rel="stylesheet" href="assets/css/tokens.css?v=381">
-<link rel="stylesheet" href="assets/css/styles.css?v=381">
-<link rel="stylesheet" href="assets/css/responsive.css?v=381">
+<link rel="stylesheet" href="assets/css/tokens.css?v=384">
+<link rel="stylesheet" href="assets/css/styles.css?v=384">
+<link rel="stylesheet" href="assets/css/responsive.css?v=384">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='14' fill='none' stroke='%23FFFFFF' stroke-width='2'/><circle cx='16' cy='16' r='6' fill='%23C1FF0F'/></svg>">
 </head>
 <body>
@@ -480,28 +480,47 @@
      ====================================================================== -->
 <!-- Блок занимает экран целиком и центрируется по высоте: инлайновый
      padding-top тут больше не нужен, иначе содержимое съезжает вниз. -->
-<section class="section section--cinematic section--screen">
+<!-- ======================================================================
+     TUTOR — что это за формат, одним экраном
+
+     Раньше здесь были две колонки: слева заголовок с двумя абзацами и парой
+     кнопок, справа три карточки в столбик. Теперь заголовок по центру,
+     под ним две цифры формата и три карточки в ряд.
+
+     Портрет — тот же файл, что и на втором экране. Монеты вокруг него
+     собраны из того же .sk-node, что и в макетах: у них уже есть медленное
+     дыхание, отдельная анимация не понадобилась.
+     ====================================================================== -->
+<section class="section section--cinematic section--screen tutor">
   <div class="container">
-    <div class="solution">
-      <div class="solution__copy" data-reveal>
-        <h2 class="h2 h2--wide">Два месяца рядом с человеком, который <span class="hl hl--flat">уже прошёл этот путь</span></h2>
-        <p class="lead" style="margin-top:24px">
-          Не курс в записи и не консультация на час.
-          Восемь недель работы один на один: ни групп, ни потоков, ни кураторов —
-          вся работа идёт на ваших задачах.
-        </p>
-        <p class="lead" style="margin-top:24px">
-          Шестнадцать личных созвонов, чат между ними и подключение в момент важной
-          операции. Вы делаете всё своими руками и небольшими суммами — но не остаётесь
-          один на один с экраном, когда что-то идёт не так.
-        </p>
-        <div class="cta-row" style="margin-top:32px">
-          <a class="btn btn--primary" data-cta href="#call">Записаться на личный звонок <span class="btn__arrow" aria-hidden="true">→</span></a>
-          <a class="btn btn--ghost" href="#program">Посмотреть программу</a>
-        </div>
+    <div class="sec-head sec-head--center" data-reveal>
+      <h2 class="h2 h2--statement">Личный репетитор по крипте на 8 недель</h2>
+      <p class="lead">Теорию можно прочитать где угодно. Сложности начинаются в момент, когда вы один на один со своим экраном и своей суммой.</p>
+    </div>
+
+    <div class="solution__top">
+      <figure class="tutor__face" data-reveal>
+        <img src="assets/img/author.jpg" alt="" width="260" height="260" loading="lazy" decoding="async">
+        <span class="sk-node tutor__orb" style="--x:98%; --y:32%"><img src="assets/coins/usdt.png" alt="" loading="lazy"></span>
+        <span class="sk-node tutor__orb" style="--x:114%; --y:56%"><img src="assets/coins/eth.png" alt="" loading="lazy"></span>
+        <span class="sk-node tutor__orb" style="--x:92%; --y:74%"><img src="assets/coins/trx.png" alt="" loading="lazy"></span>
+        <figcaption class="tutor__badge">Акцент на вашей личной задаче в crypto-мире</figcaption>
+      </figure>
+
+      <div class="stat" data-reveal style="--reveal-delay:80ms">
+        <p class="stat__n">8 недель</p>
+        <p class="stat__t">Личной связи в чате</p>
+        <p class="stat__d">Основной режим — будни, рабочее время. По выходным доступность ниже. Между звонками вы изучаете материалы, которые я готовлю под ваши задачи.</p>
       </div>
 
-      <div class="solution__parts" data-reveal style="--reveal-delay:120ms">
+      <div class="stat" data-reveal style="--reveal-delay:160ms">
+        <p class="stat__n">16</p>
+        <p class="stat__t">Личных созвонов 1:1</p>
+        <p class="stat__d">Два созвона в неделю по часу, только вы и я. Вы заранее готовите вопросы: ситуация, интерфейс, подготовка перевода, хранение.</p>
+      </div>
+    </div>
+
+    <div class="solution__parts" data-reveal style="--reveal-delay:220ms">
         <div class="part">
           <!-- Сети и токены: узлы связаны в граф, монеты медленно дышат.
                Это не иллюстрация «крипты вообще», а буквально то, о чём
@@ -563,8 +582,6 @@
           </div>
         </div>
       </div>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -1714,8 +1731,8 @@
 })();
 </script>
 
-<script src="assets/js/warptext.js?v=381" defer></script>
-<script src="assets/js/coinpit.js?v=381"></script>
-<script src="assets/js/main.js?v=381"></script>
+<script src="assets/js/warptext.js?v=384" defer></script>
+<script src="assets/js/coinpit.js?v=384"></script>
+<script src="assets/js/main.js?v=384"></script>
 </body>
 </html>
