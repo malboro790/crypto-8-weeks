@@ -278,6 +278,15 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--f-display); font-weight: var(--w-
 }
 .h2--wide { max-width: 26ch; }
 
+/* Кегль утверждения — между h2 и h1. На кегле h2 фраза перестаёт быть
+   событием экрана, на h1 спорит со словом на первом экране. Одна шкала на
+   все такие экраны: две разные «почти h1» рядом читались бы как сбой. */
+.h2--statement {
+  font-size: clamp(1.75rem, 1.05rem + 2.35vw, 3.25rem);
+  line-height: 1.18;
+  letter-spacing: var(--ls-h2);
+}
+
 /* Interface labels and figures: the same two sizes, set in the mono face. */
 .label {
   font-family: var(--f-mono); font-size: var(--t-subtext);
@@ -577,15 +586,17 @@ p { margin: 0; max-width: 62ch; }
 }
 .section--grid > .container { position: relative; z-index: 1; }
 
-/* Большие паузы вокруг блока о рисках. Заданы здесь, а не инлайном в разметке:
-   инлайновый стиль невозможно переопределить медиазапросом без !important, и на
-   телефоне эти четыреста пикселей сверху и снизу превращались в восемьсот
-   пикселей пустоты вокруг шестисот пикселей содержимого. Уменьшение — ниже,
-   в responsive.css. */
+/* Поля блока о рисках. Заданы здесь, а не инлайном в разметке: инлайновый
+   стиль невозможно переопределить медиазапросом без !important.
+
+   Раньше тут стояли четыреста пикселей сверху и снизу — под прежнюю вёрстку,
+   где заголовок был слева, а плашки занимали семь колонок справа. Сейчас
+   содержимое короткое и стоит по центру: с теми полями секция вытягивалась
+   до 1175px при вьюпорте 982 и переставала быть одним экраном. */
 #security {
-  align-content: start;
-  padding-top: 400px;
-  padding-bottom: 400px;
+  align-content: center;
+  padding-top: clamp(56px, 12vh, 160px);
+  padding-bottom: clamp(56px, 12vh, 160px);
 }
 
 /* Сетка только в нижней части блока. Отдельный класс, а не переопределение
@@ -646,6 +657,12 @@ p { margin: 0; max-width: 62ch; }
    две отдельные полосы. У плоского акцента полосы нет, а запрет остаётся и
    выталкивает длинную фразу за пределы колонки — поэтому снимаем его. */
 .hl--flat { white-space: normal; }
+/* Громкий акцент: искрой набрана сама фраза, а не только полоса под ней.
+   ВНИМАНИЕ: #C1FF0F на белом даёт контраст 1.2:1 — фраза различима как
+   пятно, но не читается как текст. Применять только там, где её дублирует
+   соседняя строка, и только на крупном кегле. */
+.hl--loud { color: var(--c-spark); }
+.hl--loud::after { background: var(--c-spark); }
 .hl--flat::after { display: none; }
 .hl::after {
   content: ""; position: absolute; left: -.04em; right: -.04em; bottom: .04em;
@@ -952,20 +969,38 @@ p { margin: 0; max-width: 62ch; }
    телефона и полутора экранов высоты — при том что говорила ровно то же:
    рисков много и они разные.
    -------------------------------------------------------------------------- */
-.risks {
-  display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-  gap: clamp(28px, 4vw, 72px);
-  align-items: start;
-}
-.risks__copy .lead { margin-top: var(--sp-stack); max-width: 34ch; }
+.risks__copy { text-align: center; }
+.risks__title { margin: 0 auto; max-width: 19ch; }
+.risks__copy .lead { margin: var(--sp-stack) auto 0; max-width: 38ch; }
 
-.risks__cloud {
-  list-style: none; margin: 0; padding: 0;
-  display: flex; flex-wrap: wrap; gap: 10px;
-  /* Строки прижаты к верху колонки, но сама лента чуть опущена: заголовок
-     слева набран крупнее, и без этого плашки вставали выше его первой строки. */
-  padding-top: 6px;
+/* Лента идёт от края до края, поэтому лежит вне .container. */
+.risks__belt {
+  margin-top: clamp(28px, 4.5vh, 64px);
+  display: flex;
+  overflow: hidden;
+}
+.risks__lane {
+  list-style: none; margin: 0;
+  /* Полполя с каждой стороны: на стыке двух дорожек они складываются
+     в тот же зазор, что и между плашками, и шов не виден. */
+  padding: 0 5px;
+  display: flex; gap: 10px;
+  flex: none;
+  animation: risks-run 46s linear infinite;
+}
+/* Под курсором лента останавливается: иначе прочитать плашку, которая
+   заинтересовала, можно только успев за ней. */
+.risks__belt:hover .risks__lane { animation-play-state: paused; }
+
+@keyframes risks-run { to { transform: translateX(-100%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  /* Движение выключено полностью, а не замедлено. Лента становится обычной
+     прокручиваемой строкой, вторая дорожка убирается — она нужна только
+     ради бесшовного повтора. */
+  .risks__belt { overflow-x: auto; }
+  .risks__lane { animation: none; }
+  .risks__lane[aria-hidden="true"] { display: none; }
 }
 .risk {
   display: inline-flex; align-items: center; gap: 8px;
@@ -985,6 +1020,15 @@ p { margin: 0; max-width: 62ch; }
 }
 .risk svg { width: 15px; height: 15px; flex: none; fill: currentColor; opacity: .7; }
 .risk:hover { border-color: var(--c-accent-line); color: var(--c-accent); }
+
+/* В ленте плашка залита, а не обведена: двенадцать рамок подряд на белом
+   собираются в пунктирную линию поперёк экрана. */
+.risks__lane .risk {
+  background: var(--c-paper-sunk);
+  border-color: transparent;
+  box-shadow: none;
+}
+.risks__lane .risk:hover { border-color: var(--c-line-strong); }
 
 /* ==========================================================================
    SOLUTION
@@ -2434,11 +2478,6 @@ p { margin: 0; max-width: 62ch; }
   margin: 0;
   max-width: 24ch;
   text-align: center;
-  /* Между h2 и h1: на кегле h2 фраза перестаёт быть событием экрана,
-     на h1 спорит со словом на первом экране. */
-  font-size: clamp(1.75rem, 1.05rem + 2.35vw, 3.25rem);
-  line-height: 1.18;
-  letter-spacing: var(--ls-h2);
   text-wrap: pretty;
 }
 
