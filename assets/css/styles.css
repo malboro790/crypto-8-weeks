@@ -1059,6 +1059,10 @@ p { margin: 0; max-width: 62ch; }
    ниже — три карточки в ряд. Прежде блок стоял в две колонки: слева текст
    с кнопками, справа те же карточки столбиком.
    -------------------------------------------------------------------------- */
+/* Поля вдвое больше обычных: блок длиннее экрана, и на обычных содержимое
+   начиналось почти от границы смены темы. */
+.tutor { padding-block: calc(var(--sp-section) * 2); }
+
 .solution__top {
   display: grid;
   grid-template-columns: minmax(0, 4fr) minmax(0, 4fr) minmax(0, 4fr);
@@ -1083,7 +1087,9 @@ p { margin: 0; max-width: 62ch; }
 .tutor__badge {
   position: absolute; left: 24%; bottom: -20px; z-index: 2;
   display: flex; align-items: center; gap: 10px;
-  width: max-content; max-width: 21ch;
+  /* Ширины хватает ровно на две строки. На 21ch фраза ломалась на три,
+     и плашка становилась выше портрета, к которому приколота. */
+  width: max-content; max-width: 28ch;
   padding: 11px 18px 11px 13px;
   border-radius: var(--r-pill);
   background: var(--c-spark); color: #0A0A0A;
@@ -1117,20 +1123,39 @@ p { margin: 0; max-width: 62ch; }
 
 /* Карточки встают в ряд, картинка над текстом. Линеек между ними больше нет:
    в столбик они разделяли строки, в ряду делили бы колонки пополам. */
+/* Четыре общие дорожки на все три карточки: картинка, метка, заголовок,
+   описание. Карточка подключается к ним через subgrid, поэтому описания
+   начинаются на одной линии, даже когда заголовок у одной в две строки,
+   а у другой в одну. Иначе выравнивание держалось бы на том, что все
+   заголовки случайно одной длины.
+
+   Зазор между дорожками нулевой — расстояния задают отбивки самих строк,
+   иначе колоночный зазор в сорок пикселей встал бы и между ними. */
 .solution__parts {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(20px, 2.6vw, 44px);
+  grid-template-rows: repeat(4, auto);
+  column-gap: clamp(20px, 2.6vw, 44px);
+  row-gap: 0;
   margin-top: clamp(32px, 4.4vh, 64px);
 }
 .solution__parts .part {
-  display: block;
+  display: grid;
+  /* Колонки базовой карточки — «картинка слева, текст справа». Здесь текст
+     под картинкой, поэтому колонка одна; без сброса метка уезжала вбок. */
+  grid-template-columns: minmax(0, 1fr);
+  grid-row: span 4;
+  grid-template-rows: subgrid;
+  row-gap: 0;
   padding: 0;
   border-top: 0;
 }
+/* Обёртка растворяется, чтобы метка, заголовок и описание стали
+   собственными строками общей сетки. */
+.solution__parts .part__body { display: contents; }
+.solution__parts .part__art { margin-bottom: 22px; }
 .solution__parts .part:last-child { border-bottom: 0; }
 .solution__parts .part__art { width: min(100%, 190px); }
-.solution__parts .part__body { margin-top: 22px; }
 .solution__parts .part__d { max-width: none; }
 
 
@@ -1833,7 +1858,14 @@ p { margin: 0; max-width: 62ch; }
 
 /* Заголовок секции по центру: под ним не колонка с пояснением, а сами
    карточки, и разнос заголовка и текста по половинам тут не работает. */
-.sec-head--center { grid-template-columns: minmax(0, 1fr); text-align: center; justify-items: center; }
+.sec-head--center {
+  grid-template-columns: minmax(0, 1fr);
+  /* Колонка одна, поэтому строки нужно развести самим: column-gap здесь
+     ничего не делает, а сблизившиеся заголовок и абзац читались одним
+     куском текста. */
+  row-gap: clamp(14px, 1.9vh, 24px);
+  text-align: center; justify-items: center;
+}
 
 .tiers--single { grid-template-columns: minmax(0, 1fr); }
 .tiers--single .tier {
