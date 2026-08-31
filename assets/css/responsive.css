@@ -130,6 +130,20 @@
     flex: 0 0 88%;
     scroll-snap-align: center;
   }
+  /* Два формата — тоже не лента. Их сравнивают, а прокрутка прячет вторую
+     карточку за краем; вдобавок у парной рамки стоит overflow: hidden ради
+     одной волосяной границы, и вторая карточка становилась недоступна вовсе.
+     Складываем в колонку — граница между ними сама становится горизонтальной. */
+  .tiers--pair {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1px;
+    overflow: hidden;
+    margin-inline: 0; padding-inline: 0; padding-block: 0;
+    scroll-snap-type: none;
+  }
+  .tiers--pair .tier { flex: none; scroll-snap-align: none; }
+
   /* Одна карточка — не лента: горизонтальная прокрутка с единственным
      элементом только мешает. Возвращаем обычный блок и один столбец внутри. */
   .tiers--single { display: block; margin-inline: 0; padding-inline: 0; padding-block: 0; }
