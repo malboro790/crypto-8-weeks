@@ -278,6 +278,11 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--f-display); font-weight: var(--w-
 }
 .h2--wide { max-width: 26ch; }
 
+/* Тезис под именем набран как остальной текст страницы, а не как лид:
+   рядом с четырьмя короткими доказательствами крупная строка перетягивала
+   на себя весь блок. */
+.lead.founder__thesis { font-size: var(--t-subtext); line-height: var(--lh-subtext); }
+
 /* Кегль утверждения — между h2 и h1. На кегле h2 фраза перестаёт быть
    событием экрана, на h1 спорит со словом на первом экране. Одна шкала на
    все такие экраны: две разные «почти h1» рядом читались бы как сбой. */
@@ -1820,7 +1825,9 @@ p { margin: 0; max-width: 62ch; }
    а третья дорожка здесь — растягивающаяся. Её и растягивало, тем сильнее
    чем короче список, поэтому у карточек разъезжались составы. */
 .tiers--pair .tier__sum  { grid-row: 1; margin-top: 0; }
-.tiers--pair .tier__vol  { grid-row: 2; }
+/* Линия под числом встреч снята: заголовка «что входит» под ней больше нет,
+   и она отделяла строку от пустоты. */
+.tiers--pair .tier__vol  { grid-row: 2; border-bottom: 0; }
 .tiers--pair .tier__more { grid-row: 3; }
 .tiers--pair .tier__cta  { grid-row: 4; align-self: end; justify-self: start; margin-top: var(--sp-block); }
 
@@ -2565,7 +2572,6 @@ p { margin: 0; max-width: 62ch; }
      pretty оставляет естественные переносы и только не пускает одно слово
      в последнюю строку. */
   text-wrap: pretty;
-  color: #FFFFFF;
 }
 
 /* Хвост перечисления. Три уровня яркости в одной фразе: искра — что это,
@@ -2586,18 +2592,30 @@ p { margin: 0; max-width: 62ch; }
 .promise { padding-top: clamp(56px, 7vh, 104px); padding-bottom: clamp(56px, 7vh, 104px); }
 
 .promise__inner {
-  /* Колонка уже контейнера. Из неё берутся сразу две вещи: длина строки
-     и то, насколько портреты отступают от краёв экрана. Одно число вместо
-     отдельного отступа у каждого портрета. */
+  position: relative;
   width: 100%;
-  display: grid;
-  gap: clamp(16px, 2.6vh, 44px);
-  align-content: center;
-  justify-items: center;
+  /* Поля держат место под портреты. Они вынуты из потока и стоят по углам,
+     поэтому строка идёт во всю сетку, а снимки наезжают на неё сверху
+     справа и снизу слева — как в макете. */
+  /* Верхнее и нижнее поля разные, потому что разной высоты сами пары:
+     у верхней подпись сбоку от снимка, у нижней — под ним. Поле подобрано
+     так, чтобы на строку заходила примерно нижняя четверть снимка: глубже
+     он закрывает слово целиком, мельче — наплыв читается как случайность. */
+  padding-top: clamp(96px, 16vh, 160px);
+  padding-bottom: clamp(140px, 22vh, 224px);
 }
 
 .promise__claim {
+  position: relative; z-index: 1;
   margin: 0;
+  /* Инверсия на пересечении со снимком. Буквы набраны белым, а режим
+     наложения — разница: на белом фоне |255 − 255| даёт чёрный, на почти
+     чёрном снимке |255 − 20| — почти белый. Один приём вместо обводки,
+     подложки или второй копии строки, и границу он держит сам.
+
+     Белый цвет здесь не описка: чёрной строку на экране делает наложение. */
+  color: #FFFFFF;
+  mix-blend-mode: difference;
   /* Во всю ширину сетки: колонка в 24ch ломала фразу на семь строк, и она
      читалась столбиком, а не фразой. */
   max-width: none;
@@ -2609,10 +2627,13 @@ p { margin: 0; max-width: 62ch; }
   text-wrap: pretty;
 }
 
-/* Портреты уходят в противоположные углы колонки — отсюда диагональ. */
-.promise__fig { margin: 0; display: flex; gap: clamp(12px, 1.4vw, 20px); }
-.promise__fig--a { justify-self: end; align-items: flex-start; }
-.promise__fig--b { justify-self: start; flex-direction: column; }
+/* Портреты уходят в противоположные углы — отсюда диагональ. */
+.promise__fig {
+  position: absolute; z-index: 0;
+  margin: 0; display: flex; gap: clamp(12px, 1.4vw, 20px);
+}
+.promise__fig--a { top: 0; right: 0; align-items: flex-start; }
+.promise__fig--b { bottom: 0; left: 0; flex-direction: column; }
 
 .promise__img {
   display: block;
@@ -2644,9 +2665,17 @@ p { margin: 0; max-width: 62ch; }
 
 @media (max-width: 720px) {
   /* Диагональ на узком экране не читается: до противоположного угла
-     остаётся полтора сантиметра. Обе пары встают одинаково — снимок,
-     под ним подпись — и центрируются по строке. */
-  .promise__fig { justify-self: center; align-items: center; }
+     остаётся полтора сантиметра. Портреты возвращаются в поток, наплыв
+     и инверсия снимаются: на такой ширине снимок закрыл бы строку целиком,
+     а не задел её краем. */
+  .promise__inner {
+    display: grid;
+    gap: clamp(16px, 2.6vh, 44px);
+    justify-items: center;
+    padding-block: 0;
+  }
+  .promise__fig { position: static; justify-self: center; align-items: center; }
+  .promise__claim { color: var(--c-ink); mix-blend-mode: normal; }
   /* У верхней пары подпись идёт в разметке перед снимком — на десктопе она
      слева. Здесь порядок переворачивается, иначе подпись оказалась бы над
      портретом, а у нижней пары под ним. */
