@@ -1934,6 +1934,9 @@ p { margin: 0; max-width: 62ch; }
 .tiers--pair .tier__vol  {
   grid-row: 2;
   border-bottom: 0;
+  /* Вдвое ближе к названию тарифа: строка с числом созвонов — его первая
+     характеристика, а не следующий раздел карточки. */
+  margin-top: calc(var(--sp-block) / 2);
   /* Тот же кегль, что у пунктов состава под ним: 16 против 17 читалось как
      разнобой, хотя строки стоят вплотную и сравниваются глазом. */
   font-size: var(--t-text);
@@ -2696,6 +2699,33 @@ p { margin: 0; max-width: 62ch; }
      pretty оставляет естественные переносы и только не пускает одно слово
      в последнюю строку. */
   text-wrap: pretty;
+}
+
+/* Приглушённая половина фразы. Не серый цвет, а белый вполсилы — иначе
+   наложение сработало бы против нас. При режиме «разница» видимый тон равен
+   |фон − цвет|: сплошной серый дал бы на белом светло-серый вместо тёмного.
+   Полупрозрачный белый смешивается с фоном до наложения, поэтому на белом
+   он темнеет до серого, а на почти чёрном снимке светлеет — ровно то же
+   поведение, что у основной части строки. */
+.promise__dim { color: rgba(255, 255, 255, .62); }
+
+/* Снимки расходятся при прокрутке: левый ползёт вверх, правый вниз.
+   Отсчёт по прохождению блока через экран, поэтому в середине пути
+   смещение нулевое — выверенный наплыв на строку остаётся тем же,
+   а движение только вокруг него. */
+@keyframes promise-drift-up   { from { transform: translateY(30px);  } to { transform: translateY(-30px); } }
+@keyframes promise-drift-down { from { transform: translateY(-30px); } to { transform: translateY(30px);  } }
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) and (min-width: 721px) {
+    .promise__fig {
+      animation: linear both;
+      animation-timeline: view();
+      animation-range: entry 0% exit 100%;
+    }
+    .promise__fig--a { animation-name: promise-drift-down; }
+    .promise__fig--b { animation-name: promise-drift-up; }
+  }
 }
 
 /* Хвост перечисления. Три уровня яркости в одной фразе: искра — что это,
