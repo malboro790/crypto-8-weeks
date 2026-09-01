@@ -124,9 +124,9 @@
 </script>
 <noscript><style>html.is-loading, html.is-loading body { overflow: auto !important; } .pl { display: none !important; }</style></noscript>
 
-<link rel="stylesheet" href="assets/css/tokens.css?v=419">
-<link rel="stylesheet" href="assets/css/styles.css?v=419">
-<link rel="stylesheet" href="assets/css/responsive.css?v=419">
+<link rel="stylesheet" href="assets/css/tokens.css?v=420">
+<link rel="stylesheet" href="assets/css/styles.css?v=420">
+<link rel="stylesheet" href="assets/css/responsive.css?v=420">
 <!-- Восьмёрка собрана двумя окружностями, а не текстом: шрифт в значке
      вкладки подставляется системный и на разных машинах разный.
      Подложка своя, чёрная со скруглением: на светлой теме белая
@@ -1413,8 +1413,12 @@
       <h2 class="h2">Два формата<br>участия</h2>
     </div>
 
-    <div class="tiers tiers--pair" style="margin-top: var(--sp-block)">
-      <article class="tier" data-reveal>
+    <!-- Проявляется вся пара разом, а не каждая карточка по отдельности:
+     между ними волосяная граница, сделанная зазором на цветной подложке,
+     и пока одна карточка полупрозрачна и сдвинута, сквозь неё видно эту
+     подложку целым серым блоком. -->
+    <div class="tiers tiers--pair" data-reveal style="margin-top: var(--sp-block)">
+      <article class="tier">
         <h3 class="tier__sum">4 недели</h3>
 
         <p class="tier__vol">
@@ -1433,7 +1437,7 @@
         <a class="btn btn--primary tier__cta" data-cta href="#call">Бесплатная консультация <span class="btn__arrow" aria-hidden="true">→</span></a>
       </article>
 
-      <article class="tier" data-reveal style="--reveal-delay:80ms">
+      <article class="tier">
         <h3 class="tier__sum">8 недель</h3>
 
         <p class="tier__vol">
@@ -1746,8 +1750,8 @@
 })();
 </script>
 
-<script src="assets/js/warptext.js?v=419" defer></script>
-<script src="assets/js/coinpit.js?v=419"></script>
-<script src="assets/js/main.js?v=419"></script>
+<script src="assets/js/warptext.js?v=420" defer></script>
+<script src="assets/js/coinpit.js?v=420"></script>
+<script src="assets/js/main.js?v=420"></script>
 </body>
 </html>
