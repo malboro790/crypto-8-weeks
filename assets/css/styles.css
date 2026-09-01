@@ -1210,6 +1210,10 @@ p { margin: 0; max-width: 62ch; }
 }
 .stat__d {
   margin-top: 12px;
+  /* Строка короче колонки. Колонка задана сеткой и равна соседним, но текст
+     в ней короткий: набранный во всю ширину, он читался разреженно, а правый
+     край упирался в разделитель. */
+  max-width: 31ch;
   font-size: var(--t-subtext); line-height: var(--lh-subtext);
   color: var(--c-ink-muted);
 }
