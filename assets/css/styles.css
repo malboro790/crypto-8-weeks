@@ -295,7 +295,9 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--f-display); font-weight: var(--w-
      через обе точки, отрицательный сдвиг — её продолжение влево. */
   --t-statement: clamp(1.75rem, -1.625rem + 5.42vw, 4.875rem);
   font-size: var(--t-statement);
-  line-height: 1.18;
+  /* Плотнее обычного заголовка: на крупном кегле 1.18 разводило строки
+     так, что фраза читалась тремя отдельными, а не одной. */
+  line-height: 1.08;
   letter-spacing: var(--ls-h2);
 }
 
@@ -907,7 +909,9 @@ p { margin: 0; max-width: 62ch; }
   font-family: var(--f-mono); font-size: .6875em;
   font-variant-numeric: tabular-nums;
   padding: 9px 11px; border-radius: 10px;
-  background: rgba(10, 10, 10, .05);
+  /* Белым, а не полупрозрачным чёрным: карточка сама светло-серая, и строки
+     на ней получались серым по серому — лист выглядел выцветшим. */
+  background: #FFFFFF;
   color: rgba(10, 10, 10, .5);
 }
 .tx__row b { font-weight: 500; color: #0A0A0A; }
@@ -1080,7 +1084,13 @@ p { margin: 0; max-width: 62ch; }
   border-color: transparent;
   box-shadow: none;
 }
-.risks__lane .risk:hover { border-color: var(--c-line-strong); }
+/* Наведение на плашки в ленте снято: они ничего не открывают и никуда
+   не ведут, а подсветка под курсором обещает обратное. Остановка самой
+   ленты под курсором остаётся — она нужна, чтобы плашку успеть прочитать. */
+.risks__lane .risk:hover {
+  border-color: transparent;
+  color: var(--c-ink);
+}
 
 /* ==========================================================================
    SOLUTION
@@ -2736,7 +2746,9 @@ p { margin: 0; max-width: 62ch; }
   /* Нижний снимок поднят до предпоследней строки. Последняя строка короткая
      и стоит по центру, а снимок — у левого края: на её высоте они просто
      не встречались, и наплыва не было видно вовсе. */
-  padding-bottom: clamp(130px, 20vh, 205px);
+  /* Значение подобрано по факту: на 22.6vh верхняя кромка снимка уходила
+     в межстрочный просвет и пересечение пропадало совсем. */
+  padding-bottom: clamp(140px, 21.5vh, 220px);
 }
 
 .promise__claim {
@@ -2767,7 +2779,11 @@ p { margin: 0; max-width: 62ch; }
   margin: 0; display: flex; gap: clamp(12px, 1.4vw, 20px);
 }
 .promise__fig--a { top: 0; right: 0; align-items: flex-start; }
-.promise__fig--b { bottom: 0; left: 0; flex-direction: column; }
+/* Нижний снимок сдвинут от края внутрь: у самого края его накрывает только
+   вторая строка, а ближе к середине он попадает и под верхние — там строки
+   длиннее. Без этого сдвига поднимать его было бесполезно: выше он просто
+   выходил из текста. */
+.promise__fig--b { bottom: 0; left: 12%; flex-direction: column; }
 
 .promise__img {
   display: block;
