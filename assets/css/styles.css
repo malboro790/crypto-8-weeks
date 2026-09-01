@@ -539,6 +539,14 @@ p { margin: 0; max-width: 62ch; }
    единственным пятном на странице и перетягивает внимание с заголовка.
    Остался чистый чёрный — как на kerber.agency. */
 .hero__bg {
+  /* Сетка на первом экране заметнее, чем на тёмных секциях ниже: .077
+     против .12. Это единственный экран, где фон работает фактурой,
+     а не подложкой под текст, — там сетка должна читаться, здесь
+     достаточно угадываться. Шаг и рисунок общие, меняется только
+     плотность линии. */
+  --grid-lines:
+    repeating-linear-gradient(to right,  rgba(255, 255, 255, .12) 0 1px, transparent 1px 44px),
+    repeating-linear-gradient(to bottom, rgba(255, 255, 255, .12) 0 1px, transparent 1px 44px);
   position: absolute;
   top: 0; bottom: 0;
   left: 50%; transform: translateX(-50%);
@@ -1086,8 +1094,12 @@ p { margin: 0; max-width: 62ch; }
 
 .solution__top {
   display: grid;
-  grid-template-columns: minmax(0, 4fr) minmax(0, 4fr) minmax(0, 4fr);
-  gap: clamp(24px, 3.2vw, 56px);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* Зазор тот же, что у ряда карточек ниже. Только при совпадении обоих
+     чисел третья колонка встаёт ровно над третьей карточкой; при разных
+     зазорах текст уезжал от неё на девять пикселей. */
+  column-gap: clamp(20px, 2.6vw, 44px);
+  row-gap: clamp(24px, 3.2vw, 56px);
   align-items: start;
   /* Пауза после шапки вдвое больше обычной: шапка стоит по центру, а ряд под
      ней — по колонкам, и на короткой отбивке они читались одним блоком. */
@@ -1132,6 +1144,12 @@ p { margin: 0; max-width: 62ch; }
   display: grid; place-items: center;
   font-size: .8125rem; font-weight: 700; line-height: 1;
 }
+
+/* Класс .stat живёт на странице и до этого блока — в полосе статистики,
+   где у колонок есть разделители и внутренние поля. Здесь ни того, ни
+   другого не нужно: колонки и так разведены сеткой. */
+.solution__top .stat { padding: 0; }
+.solution__top .stat + .stat { border-left: 0; padding-left: 0; }
 
 .stat__n {
   margin: 0;
@@ -1463,7 +1481,13 @@ p { margin: 0; max-width: 62ch; }
 .sk-push__row { display: flex; gap: .4em; margin-top: .7em; }
 .sk-push__no, .sk-push__yes {
   flex: 1; text-align: center;
-  font-size: .52em; padding: .5em; border-radius: .6em;
+  /* Текстовой гарнитурой, а не моноширинной, как весь макет: на таком кегле
+     моноширинная разгоняет кириллицу, и «Разрешить» упиралось в края
+     плашки. Плюс единая высота строки — иначе две кнопки рядом садились
+     на разные базовые линии. */
+  font-family: var(--f-display); font-weight: 500;
+  font-size: .56em; line-height: 1;
+  padding: .62em .5em; border-radius: .62em;
 }
 .sk-push__no  { background: rgba(255, 255, 255, .09); }
 .sk-push__yes { background: var(--c-spark); color: #0A0A0A; font-weight: 600; }
@@ -1493,7 +1517,7 @@ p { margin: 0; max-width: 62ch; }
   opacity: .2; vector-effect: non-scaling-stroke;
 }
 .sk-safe__box {
-  width: 2.6em; height: 2.6em; display: grid; place-items: center;
+  width: 3.2em; height: 3.2em; display: grid; place-items: center;
   border-radius: .7em;
   background: var(--c-spark); color: #0A0A0A;
   z-index: 1;
@@ -1501,8 +1525,10 @@ p { margin: 0; max-width: 62ch; }
 .sk-safe__box svg { width: 1.5em; height: 1.5em; fill: currentColor; }
 .sk-safe__a, .sk-safe__b, .sk-safe__c {
   position: absolute;
-  font-family: var(--f-mono); font-size: .48em;
-  padding: .35em .5em; border-radius: .6em;
+  /* Крупнее прежнего: подписи — половина смысла схемы, а на .48em они
+     читались как служебные пометки под лучами. */
+  font-family: var(--f-mono); font-size: .62em;
+  padding: .42em .6em; border-radius: .6em;
   background: rgba(255, 255, 255, .07);
   white-space: nowrap;
 }
@@ -1511,7 +1537,12 @@ p { margin: 0; max-width: 62ch; }
 .sk-safe__c { left: 6%; bottom: 4%; }
 
 /* --- телефон внутри строки списка --------------------------------------- */
-.skill__art .phone { font-size: 7.4px; width: 74%; margin-inline: auto; }
+/* Кегль телефона в списке умений. Всё внутри макета набрано в em, поэтому
+   размер интерфейса задаётся одним числом. Прежние 7.4px давали подписи
+   в четыре с половиной пикселя — экран читался как пятно, а не как
+   интерфейс. Ширина подобрана под новый кегль: экран телефона держит
+   минимальную высоту в em и вместе с кеглем растёт. */
+.skill__art .phone { font-size: 10px; width: 84%; margin-inline: auto; }
 .phone__pair { display: flex; gap: .4em; margin: .2em 0 .4em; }
 .phone__btn {
   flex: 1; text-align: center;
@@ -1882,8 +1913,18 @@ p { margin: 0; max-width: 62ch; }
 .tiers--pair .tier__sum  { grid-row: 1; margin-top: 0; }
 /* Линия под числом встреч снята: заголовка «что входит» под ней больше нет,
    и она отделяла строку от пустоты. */
-.tiers--pair .tier__vol  { grid-row: 2; border-bottom: 0; }
+.tiers--pair .tier__vol  {
+  grid-row: 2;
+  border-bottom: 0;
+  /* Тот же кегль, что у пунктов состава под ним: 16 против 17 читалось как
+     разнобой, хотя строки стоят вплотную и сравниваются глазом. */
+  font-size: var(--t-text);
+}
 .tiers--pair .tier__more { grid-row: 3; }
+/* Строка с числом созвонов — часть состава, а не отдельный раздел: пауза
+   в тридцать два пикселя разводила их на два блока. Выделение числа
+   и полоса под ним не тронуты — они и держат эту строку главной. */
+.tiers--pair .tier__list { margin-top: var(--sp-stack); }
 .tiers--pair .tier__cta  { grid-row: 4; align-self: end; justify-self: start; margin-top: var(--sp-block); }
 
 /* Заголовок секции по центру: под ним не колонка с пояснением, а сами
@@ -2070,7 +2111,10 @@ p { margin: 0; max-width: 62ch; }
    что именно входит в формат, и список читался как перечисление галочек. */
 .tier__list li svg {
   width: 17px; height: 17px; flex: none;
-  fill: var(--c-spark);
+  /* Тёмно-серые, а не искрой: четыре-пять зелёных значков подряд в карточке
+     перетягивали внимание с текста пунктов, ради которого список и стоит.
+     Искра осталась там, где она что-то решает, — на кнопке под списком. */
+  fill: var(--c-ink-muted);
 }
 
 /* The one line that decides the choice. */
@@ -2788,4 +2832,111 @@ p { margin: 0; max-width: 62ch; }
    одна и перенос только мешает — там он снимается. */
 @media (max-width: 900px) {
   .br-wide { display: none; }
+}
+
+/* --------------------------------------------------------------------------
+   МАКЕТ ОБМЕНА — единственный из макетов, который показывает не состояние,
+   а действие: рубли уходят, USDT приходит.
+
+   Двумя движениями, а не пересчётом чисел: стрелка между строками отбивает
+   такт вниз, по строке с USDT проходит блик слева направо. Текст при этом
+   не трогаем — суммы должны оставаться читаемыми в любой момент цикла,
+   иначе макет превращается в анимацию ради анимации.
+   -------------------------------------------------------------------------- */
+.mock--swap .sk-arrow {
+  animation: sk-swap-tick 3.2s var(--e-out) infinite;
+}
+.mock--swap .sk-r--hot { position: relative; overflow: hidden; }
+.mock--swap .sk-r--hot::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(100deg,
+    transparent 0%,
+    rgba(255, 255, 255, .7) 45%,
+    transparent 72%);
+  transform: translateX(-110%);
+  animation: sk-swap-sweep 3.2s var(--e-out) infinite;
+  pointer-events: none;
+}
+@keyframes sk-swap-tick {
+  0%, 58%, 100% { opacity: .35; transform: translateY(0); }
+  22%           { opacity: 1;   transform: translateY(3px); }
+}
+@keyframes sk-swap-sweep {
+  0%, 28%   { transform: translateX(-110%); }
+  58%, 100% { transform: translateX(110%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  /* Обмен показан статикой: строка с USDT и так подсвечена искрой,
+     смысл макета от снятого движения не теряется. */
+  .mock--swap .sk-arrow { animation: none; opacity: .7; }
+  .mock--swap .sk-r--hot::after { display: none; }
+}
+
+/* --------------------------------------------------------------------------
+   МАКЕТ ДОХОДНОСТИ — два стейблкоина и стеклянные плашки со ставкой.
+
+   Плашки висят на противоположных углах: на одинаковых они сходились бы
+   в середине и наезжали друг на друга. Размытие фона под ними работает
+   ровно там, где плашка заходит на монету, — ради этого она и смещена
+   внутрь, а не отставлена в сторону.
+   -------------------------------------------------------------------------- */
+.yield { justify-content: center; gap: 1.4em; }
+.yield__pair {
+  display: flex; align-items: center; justify-content: center;
+  gap: clamp(8px, 6%, 20px);
+}
+.yield__coin { position: relative; display: block; flex: none; }
+.yield__coin img { display: block; width: 56px; height: 56px; }
+.yield__tag {
+  position: absolute; z-index: 1;
+  right: -12px; bottom: -6px;
+  padding: 3px 8px;
+  border-radius: var(--r-pill);
+  font-family: var(--f-mono); font-weight: 500;
+  font-size: 9.5px; letter-spacing: .02em; white-space: nowrap;
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, .13);
+  border: 1px solid rgba(255, 255, 255, .24);
+  -webkit-backdrop-filter: blur(7px) saturate(150%);
+          backdrop-filter: blur(7px) saturate(150%);
+}
+.yield__coin--b .yield__tag { right: auto; bottom: auto; left: -14px; top: -8px; }
+
+/* --------------------------------------------------------------------------
+   КАРТА — единственный макет, показывающий предмет, а не экран.
+
+   Пропорция 1.586 — та же, что у настоящей карты; при других числах она
+   читается как прямоугольник, а не как карта. Надпись VISA набрана шрифтом
+   сайта: это обозначение платёжной сети, а не воспроизведение логотипа.
+   -------------------------------------------------------------------------- */
+.card { justify-content: center; gap: 1.1em; }
+.card__plate {
+  display: grid;
+  align-content: space-between;
+  aspect-ratio: 1.586;
+  padding: .95em;
+  border-radius: .95em;
+  background: linear-gradient(140deg,
+    var(--c-spark) 0%,
+    color-mix(in srgb, var(--c-spark) 74%, #1E7A00) 100%);
+  color: #0A0A0A;
+  box-shadow: 0 14px 30px -16px rgba(193, 255, 15, .45);
+}
+.card__chip {
+  width: 2em; height: 1.5em; border-radius: .3em;
+  background: rgba(10, 10, 10, .24);
+}
+.card__num {
+  font-family: var(--f-mono); font-weight: 500;
+  font-size: .78em; letter-spacing: .14em;
+}
+.card__row { display: flex; align-items: baseline; justify-content: space-between; gap: .6em; }
+.card__who {
+  font-style: normal; font-family: var(--f-mono);
+  font-size: .52em; letter-spacing: .09em; opacity: .7;
+}
+.card__net {
+  font-style: italic; font-family: var(--f-display); font-weight: 700;
+  font-size: .82em; letter-spacing: -.02em;
 }
