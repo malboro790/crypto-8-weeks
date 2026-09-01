@@ -16,6 +16,18 @@
   var TG_URL = 'https://t.me/Andrey_KERBERagency?text=%D0%94%D0%BE%D0%B1%D1%80%D1%8B%D0%B9%20%D0%B4%D0%B5%D0%BD%D1%8C%21%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%BF%D0%BE%D0%B4%D1%80%D0%BE%D0%B1%D0%BD%D0%B5%D0%B5%20%D1%83%D0%B7%D0%BD%D0%B0%D1%82%D1%8C%20%D0%BF%D1%80%D0%BE%20%D0%BB%D0%B8%D1%87%D0%BD%D0%BE%D0%B5%20%D0%B2%D0%B5%D0%B4%D0%B5%D0%BD%D0%B8%D0%B5%20%D0%BD%D0%B0%202%20%D0%BC%D0%B5%D1%81%D1%8F%D1%86%D0%B0%20%D0%B8%20%D0%B7%D0%B0%D0%BF%D0%B8%D1%81%D0%B0%D1%82%D1%8C%D1%81%D1%8F%20%D0%BD%D0%B0%20%D0%BB%D0%B8%D1%87%D0%BD%D1%8B%D0%B9%20%D0%B7%D0%B2%D0%BE%D0%BD%D0%BE%D0%BA.';
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Диагностические выключатели из адреса: ?fx=nocoins и подобные, ?fx=plain
+     включает все. Нужны, чтобы искать причину рывков прокрутки на устройстве,
+     которого нет под рукой. Без параметра ничего не меняется. */
+  var FX = (function () {
+    var v = (location.search.match(/[?&]fx=([^&]*)/) || [])[1] || '';
+    v = decodeURIComponent(v).replace(/[,+]/g, ' ');
+    if (/\bplain\b/.test(v)) v = 'nocoins noanim noreveal nohead';
+    if (v) document.documentElement.setAttribute('data-fx', v);
+    return ' ' + v + ' ';
+  })();
+  function fxOff(name) { return FX.indexOf(' ' + name + ' ') !== -1; }
   var $  = function (s, c) { return (c || document).querySelector(s); };
   var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
 
@@ -155,6 +167,7 @@
        Между порогами пятьдесят два пикселя: случайные колебания их
        не перекрывают, а осознанная прокрутка перекрывает сразу. */
     function update() {
+      if (fxOff('nohead')) { ticking = false; return; }
       var y = window.scrollY;
       if (header) {
         var stuck = header.classList.contains('is-stuck');
