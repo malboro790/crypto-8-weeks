@@ -512,6 +512,18 @@
   .skill { column-gap: 21px; }
   .skill__copy { padding-right: 36px; }
 
+  /* Цели нажатия не мельче 44 пикселей — размер подушечки пальца.
+     Меню давало 36, ссылки на профили 31: промах по такой цели стоит
+     посетителю ещё одного касания. Растёт только область нажатия,
+     начертание и расстановка остаются прежними. */
+  .drawer__link, .nav__link { min-height: 44px; display: flex; align-items: center; }
+  .social a { min-height: 44px; display: inline-flex; align-items: center; }
+  .social { gap: 0 20px; }
+  .footer__links a { min-height: 44px; display: flex; align-items: center; }
+  .footer__docs a { min-height: 44px; display: inline-flex; align-items: center; }
+  /* .footer__by не трогаем: это ссылка внутри фразы, а не самостоятельная
+     цель — растянутая по высоте, она разорвала бы строку. */
+
   /* Части программы: между пунктами появился воздух — раньше подпись одного
      упиралась в картинку следующего. Поле у самого пункта, а не gap у сетки:
      пункты выстроены по subgrid, и gap развёл бы ещё и строки внутри них. */
