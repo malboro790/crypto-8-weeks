@@ -550,13 +550,13 @@ p { margin: 0; max-width: 62ch; }
    Остался чистый чёрный — как на kerber.agency. */
 .hero__bg {
   /* Сетка на первом экране заметнее, чем на тёмных секциях ниже: .077
-     против .12. Это единственный экран, где фон работает фактурой,
+     против .155. Это единственный экран, где фон работает фактурой,
      а не подложкой под текст, — там сетка должна читаться, здесь
      достаточно угадываться. Шаг и рисунок общие, меняется только
      плотность линии. */
   --grid-lines:
-    repeating-linear-gradient(to right,  rgba(255, 255, 255, .12) 0 1px, transparent 1px 44px),
-    repeating-linear-gradient(to bottom, rgba(255, 255, 255, .12) 0 1px, transparent 1px 44px);
+    repeating-linear-gradient(to right,  rgba(255, 255, 255, .155) 0 1px, transparent 1px 44px),
+    repeating-linear-gradient(to bottom, rgba(255, 255, 255, .155) 0 1px, transparent 1px 44px);
   position: absolute;
   top: 0; bottom: 0;
   left: 50%; transform: translateX(-50%);
