@@ -93,8 +93,14 @@
   /* ---------------------------------------------------------------------- */
   /* Reveal on scroll                                                       */
   /* ---------------------------------------------------------------------- */
+  /* На телефоне проявления нет вовсе: движение при переходе между экранами
+     там снято. Наблюдателя не заводим — это полсотни отслеживаемых блоков
+     и переход у каждого, всё поверх прокрутки. Класс ставим сразу, чтобы
+     содержимое не зависело от стилей. */
+  var noReveal = window.matchMedia('(max-width: 720px)').matches;
+
   var io = null;
-  if ('IntersectionObserver' in window && !reduceMotion) {
+  if ('IntersectionObserver' in window && !reduceMotion && !noReveal) {
     /* threshold 0 — a block reveals the moment any part of it enters the
        viewport. A percentage threshold would keep blocks taller than the
        screen invisible until scrolled deep into, leaving a blank band at the
