@@ -1837,9 +1837,10 @@ p { margin: 0; max-width: 62ch; }
 .founder__shot img {
   width: 100%; height: 100%;
   object-fit: cover;
-  /* Портрет в кадре смещён вверх: кроп 4:5 из квадрата не должен срезать
-     макушку. */
-  object-position: 50% 22%;
+  /* Смещать кадр больше не нужно: файл уже обрезан под 4:5 с головой
+     в верхней трети. Смещение осталось бы поверх готового реза и увело
+     бы лицо из кадра. */
+  object-position: 50% 50%;
 }
 .founder__name { margin-top: 10px; }
 .founder__thesis { margin-top: 20px; max-width: 34ch; }
