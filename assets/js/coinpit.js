@@ -96,7 +96,7 @@
     // The loop parks itself once the pile is asleep, so a mark that finishes
     // loading after that first paint has to ask for its own redraw.
     img.onload = function () { measure(img, i); if (!running) draw(); };
-    img.src = 'assets/coins/' + name + '.png';
+    img.src = 'assets/coins/' + name + '.webp';
     return img;
   }
 
@@ -434,9 +434,15 @@
       var w2 = Math.round(box.width), h2 = Math.round(box.height);
       if (w2 === lastW && h2 === lastH) return;
 
-      /* Порог в пару пикселей: дробные значения высоты на телефоне прыгают
-         сами по себе, и без него холст «дёргался» на ровном месте. */
+      /* Порог по ширине — пара пикселей: дробные значения прыгают сами.
+
+         По высоте порог гораздо больше. Телефон шлёт изменение высоты окна
+         и в покое, без участия пальца, а каждая обработка меняет размер
+         холста — то есть очищает его. Куча монет при этом на кадр пропадает.
+         Отличить настоящий поворот экрана от дрожания можно только величиной:
+         подкладка панелей — это десятки пикселей, дрожание — единицы. */
       var widthChanged = Math.abs(w2 - lastW) > 2;
+      if (!widthChanged && Math.abs(h2 - lastH) < 24) { lastW = w2; lastH = h2; return; }
       lastW = w2; lastH = h2;
       resize();
       if (widthChanged) {
