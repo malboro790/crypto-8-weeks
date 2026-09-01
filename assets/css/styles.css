@@ -1096,7 +1096,7 @@ p { margin: 0; max-width: 62ch; }
 /* Поля вдвое больше обычных: блок длиннее экрана, и на обычных содержимое
    начиналось почти от границы смены темы. */
 .tutor {
-  padding-top: calc(var(--sp-section) * 3);
+  padding-top: calc(var(--sp-section) * 3.9);
   padding-bottom: calc(var(--sp-section) * 2);
 }
 
