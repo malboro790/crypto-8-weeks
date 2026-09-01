@@ -2484,10 +2484,7 @@ p { margin: 0; max-width: 62ch; }
   .clients { grid-template-columns: 1fr 1fr; }
   .client:nth-child(odd) { border-left: 0; padding-left: 0; }
 }
-@media (max-width: 430px) {
-  .clients { grid-template-columns: 1fr; }
-  .client { border-left: 0 !important; padding-left: 0 !important; }
-}
+
 /* ==========================================================================
    VIDEO — a 16:9 well that holds a poster now and a player later
    ========================================================================== */
