@@ -221,7 +221,7 @@ main { overflow-x: clip; }
   /* Полоса выделения остаётся кислотной, но буквы поверх неё — чёрные. */
   --c-spark: #C1FF0F;
   --c-spark-ink: #0A0A0A;
-  --c-alarm: #C0392B;
+  --c-alarm: #DC2626;
   --c-neutral-tint: rgba(10, 10, 10, .06);
   --c-neutral-line: rgba(10, 10, 10, .16);
   /* The dark-theme pair is far too light on white — the green reads 1.87:1. */
@@ -362,13 +362,18 @@ p { margin: 0; max-width: 62ch; }
    то есть в двух точках, где человек решает написать. Остальные кнопки
    на сайте белые, и это не забывчивость: если искрой красить всё подряд,
    она перестаёт означать «сюда». */
+/* Искра на трёх главных призывах: первый экран, карточки тарифов и финальный
+   блок. На тёмной секции --c-accent белый, и кнопка внизу страницы вышла бы
+   белой — тем же цветом, что и текст вокруг неё. */
 .hero .btn--primary,
+#call .btn--primary,
 .tier__cta.btn--primary {
   background: var(--c-spark);
   border-color: var(--c-spark);
   color: #0A0A0A;
 }
 .hero .btn--primary:hover,
+#call .btn--primary:hover,
 .tier__cta.btn--primary:hover {
   background: color-mix(in srgb, var(--c-spark) 86%, #000);
   border-color: color-mix(in srgb, var(--c-spark) 86%, #000);
@@ -383,6 +388,12 @@ p { margin: 0; max-width: 62ch; }
 
 /* Their header controls: shorter, 10px radius, 13px label at 600. */
 .btn--sm { height: 40px; padding: 0 20px; border-radius: var(--r-md); font-size: var(--t-subtext); font-weight: 600; }
+/* Короткая подпись кнопки в шапке. Полная не помещается, когда шапке
+   не хватает места, а обрубать фразу на слове нельзя: «Бесплатная»
+   без «консультации» ничего не обещает. Поэтому две подписи, и видна
+   всегда ровно одна. */
+.btn__short { display: none; }
+
 .btn__arrow { font-family: var(--f-mono); font-weight: 400; transition: transform var(--d-fast) var(--e-out); }
 .btn:hover .btn__arrow { transform: translateX(3px); }
 .cta-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
@@ -684,7 +695,10 @@ p { margin: 0; max-width: 62ch; }
    Полоса под фразой вполовину прозрачнее самих букв: сплошная того же
    цвета читалась вторым блоком краски под первым. */
 .hl--loud { color: var(--c-alarm); }
-.hl--loud::after { background: color-mix(in srgb, var(--c-alarm) 50%, transparent); }
+/* Селектор с двумя классами намеренно: у .hl::after ровно та же
+   специфичность, и оно объявлено ниже — при одном классе полоса оставалась
+   искрой под красными буквами. */
+.hl.hl--loud::after { background: color-mix(in srgb, var(--c-alarm) 50%, transparent); }
 .hl--flat::after { display: none; }
 .hl::after {
   content: ""; position: absolute; left: -.04em; right: -.04em; bottom: .04em;
@@ -1075,7 +1089,9 @@ p { margin: 0; max-width: 62ch; }
   grid-template-columns: minmax(0, 4fr) minmax(0, 4fr) minmax(0, 4fr);
   gap: clamp(24px, 3.2vw, 56px);
   align-items: start;
-  margin-top: clamp(32px, 4.4vh, 64px);
+  /* Пауза после шапки вдвое больше обычной: шапка стоит по центру, а ряд под
+     ней — по колонкам, и на короткой отбивке они читались одним блоком. */
+  margin-top: clamp(64px, 8.8vh, 128px);
 }
 
 .tutor__face { position: relative; margin: 0; width: min(100%, 260px); }
@@ -2644,7 +2660,12 @@ p { margin: 0; max-width: 62ch; }
    поэтому маленькие: воздух уже набран внутри. */
 #promise {
   min-height: 0;
-  padding-block: clamp(24px, 3vh, 48px);
+  /* Верхнее поле в десять раз больше нижнего — и это осознанно. Выше кончается
+     тёмный экран, и белое начиналось сразу с портрета: снимок оказывался
+     впритык к границе смены темы. Снизу столько воздуха не нужно, там
+     содержимое уже кончилось. */
+  padding-top: clamp(240px, 30vh, 330px);
+  padding-bottom: clamp(24px, 3vh, 48px);
 }
 
 .promise__inner {
