@@ -424,4 +424,15 @@
 @media (max-width: 1600px) {
   .promise__fig--b { left: 8%; }
   .promise__inner { padding-bottom: clamp(180px, 26vh, 260px); }
+
+  /* Плашка на портрете ужимается вся целиком — и кегль, и поля, и кружок
+     со знаком. Портрет тут меньше, а плашка оставалась прежней и занимала
+     почти всю его ширину, читаясь не подписью к снимку, а отдельным блоком. */
+  .tutor__badge {
+    font-size: .84rem;
+    max-width: 25ch;
+    padding: 9px 14px 9px 10px;
+    gap: 8px;
+  }
+  .tutor__badge::before { width: 17px; height: 17px; font-size: .6875rem; }
 }
