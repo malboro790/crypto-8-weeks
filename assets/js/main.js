@@ -118,6 +118,25 @@
   }
 
   /* ---------------------------------------------------------------------- */
+  /* Движение за пределами экрана останавливается                           */
+  /* ---------------------------------------------------------------------- */
+  (function idleMotion() {
+    if (!('IntersectionObserver' in window) || reduceMotion) return;
+    var els = $$('.risks__lane, .part__art .sk-node, .mock--swap .sk-arrow, .mock--swap .sk-r--hot');
+    if (!els.length) return;
+
+    /* Запас в пол-экрана: анимация оживает до того, как блок покажется,
+       и зритель никогда не видит её стоящей. */
+    var mo = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        en.target.classList.toggle('is-idle', !en.isIntersecting);
+      });
+    }, { rootMargin: '50% 0px' });
+
+    els.forEach(function (el) { el.classList.add('is-idle'); mo.observe(el); });
+  })();
+
+  /* ---------------------------------------------------------------------- */
   /* Header: stuck state                                                    */
   /* ---------------------------------------------------------------------- */
   (function chrome() {
