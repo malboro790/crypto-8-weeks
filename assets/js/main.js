@@ -140,7 +140,7 @@
   /* ---------------------------------------------------------------------- */
   (function idleMotion() {
     if (!('IntersectionObserver' in window) || reduceMotion) return;
-    var els = $$('.risks__lane, .part__art .sk-node, .mock--swap .sk-arrow, .mock--swap .sk-r--hot');
+    var els = $$('.risks__lane, .part__art .sk-node, .mock--swap .sk-arrow, .mock--swap .sk-r--hot, .tier__orb, .tier__tag');
     if (!els.length) return;
 
     /* Запас в пол-экрана: анимация оживает до того, как блок покажется,

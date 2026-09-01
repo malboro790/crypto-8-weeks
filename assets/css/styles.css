@@ -3075,7 +3075,9 @@ p { margin: 0; max-width: 62ch; }
 .risks__lane.is-idle,
 .part__art .sk-node.is-idle,
 .mock--swap .sk-arrow.is-idle,
-.mock--swap .sk-r--hot.is-idle::after { animation-play-state: paused; }
+.mock--swap .sk-r--hot.is-idle::after,
+.tier__orb.is-idle,
+.tier__tag.is-idle { animation-play-state: paused; }
 
 /* --------------------------------------------------------------------------
    ДИАГНОСТИЧЕСКИЕ ВЫКЛЮЧАТЕЛИ
