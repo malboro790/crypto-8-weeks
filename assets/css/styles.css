@@ -221,7 +221,7 @@ main { overflow-x: clip; }
   /* Полоса выделения остаётся кислотной, но буквы поверх неё — чёрные. */
   --c-spark: #C1FF0F;
   --c-spark-ink: #0A0A0A;
-  --c-alarm: #DC2626;
+  --c-alarm: #E61305;
   --c-neutral-tint: rgba(10, 10, 10, .06);
   --c-neutral-line: rgba(10, 10, 10, .16);
   /* The dark-theme pair is far too light on white — the green reads 1.87:1. */
