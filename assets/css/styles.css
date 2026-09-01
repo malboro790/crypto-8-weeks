@@ -3076,3 +3076,33 @@ p { margin: 0; max-width: 62ch; }
 .part__art .sk-node.is-idle,
 .mock--swap .sk-arrow.is-idle,
 .mock--swap .sk-r--hot.is-idle::after { animation-play-state: paused; }
+
+/* --------------------------------------------------------------------------
+   ДИАГНОСТИЧЕСКИЕ ВЫКЛЮЧАТЕЛИ
+
+   Включаются только адресом: ?fx=nocoins, ?fx=noanim, ?fx=noreveal,
+   ?fx=nohead или ?fx=plain — всё сразу. Без параметра ни одно правило
+   не срабатывает, обычный посетитель их не видит.
+
+   Нужны они, чтобы искать причину рывков прокрутки на устройстве, которого
+   у меня нет: открыть страницу с выключателем и посмотреть, осталась ли
+   тряска. Это разбор по одному, а не догадки.
+   -------------------------------------------------------------------------- */
+[data-fx~="nocoins"] .hero__pit { display: none; }
+
+[data-fx~="noanim"] .risks__lane,
+[data-fx~="noanim"] .part__art .sk-node,
+[data-fx~="noanim"] .mock--swap .sk-arrow,
+[data-fx~="noanim"] .mock--swap .sk-r--hot::after,
+[data-fx~="noanim"] .promise__fig { animation: none; }
+
+[data-fx~="noreveal"] [data-reveal] { opacity: 1; transform: none; transition: none; }
+
+[data-fx~="nohead"] .header,
+[data-fx~="nohead"] .header.is-stuck {
+  background: transparent;
+  -webkit-backdrop-filter: none;
+          backdrop-filter: none;
+  border-bottom-color: transparent;
+  padding-block: 14px;
+}
