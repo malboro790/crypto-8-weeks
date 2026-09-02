@@ -136,9 +136,9 @@
   }
 
   /* ---------------------------------------------------------------------- */
-  /* Рост первого экрана: замеряется один раз                               */
+  /* Высота окна замеряется один раз                                        */
   /* ---------------------------------------------------------------------- */
-  (function freezeHero() {
+  (function freezeViewportHeight() {
     /* Меряем только при смене ШИРИНЫ. Высота окна на телефоне гуляет сама —
        её меняют панели браузера при каждой прокрутке, — и если идти за ней,
        раскладка пересчитывается посреди жеста. Ширина так не меняется:
@@ -147,7 +147,7 @@
     function measure() {
       if (window.innerWidth === w) return;
       w = window.innerWidth;
-      document.documentElement.style.setProperty('--hero-h', window.innerHeight + 'px');
+      document.documentElement.style.setProperty('--vph', window.innerHeight + 'px');
     }
     measure();
     window.addEventListener('resize', measure);
