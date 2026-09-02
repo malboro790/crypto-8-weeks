@@ -391,10 +391,29 @@
     start();
   }
   var hero = canvas.parentElement;
-  hero.addEventListener('pointermove', movePointer, { passive: true });
-  hero.addEventListener('pointerleave', function () { pointer.active = false; });
-  hero.addEventListener('touchmove', movePointer, { passive: true });
-  hero.addEventListener('touchend', function () { pointer.active = false; });
+
+  /* Расталкивание пальцем — только там, где есть настоящий указатель.
+
+     В стилях у холста стоит pointer-events: none на тач-устройствах, и это
+     выглядело достаточной защитой. Но обработчики висят не на холсте,
+     а на самом первом экране — запрет на холсте их не касается вовсе.
+     В итоге на телефоне каждое движение пальца по первому экрану толкало
+     монеты и будило физику: два с половиной десятка тел пересчитывались
+     шестьдесят раз в секунду прямо во время прокрутки, а куча
+     разъезжалась от простого пролистывания.
+
+     Пальцу расталкивать монеты незачем: он пришёл прокручивать страницу.
+     Поэтому на тач-устройствах не вешаем обработчики совсем — не гасим
+     эффект внутри, а не заводим его. Куча по-прежнему падает при загрузке
+     и замирает, просто трогать её теперь нельзя. */
+  var coarse = window.matchMedia('(hover: none)').matches ||
+               window.matchMedia('(pointer: coarse)').matches;
+  if (!coarse) {
+    hero.addEventListener('pointermove', movePointer, { passive: true });
+    hero.addEventListener('pointerleave', function () { pointer.active = false; });
+    hero.addEventListener('touchmove', movePointer, { passive: true });
+    hero.addEventListener('touchend', function () { pointer.active = false; });
+  }
 
   /* --- lifecycle -------------------------------------------------------- */
   resize();
