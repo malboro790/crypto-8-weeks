@@ -3120,6 +3120,15 @@ p { margin: 0; max-width: 62ch; }
 
 [data-fx~="noreveal"] [data-reveal] { opacity: 1; transform: none; transition: none; }
 
+/* Шапка перестаёт быть закреплённой и уезжает вместе со страницей.
+
+   Проверка догадки: на iOS панели браузера при прокрутке меняют видимую
+   область, а закреплённый элемент привязан к другой системе координат
+   и в этот момент смещается относительно содержимого. Если с этим
+   выключателем рывков нет, причина найдена. */
+[data-fx~="nofixed"] .header { position: absolute; }
+[data-fx~="nofixed"] .drawer { position: absolute; }
+
 [data-fx~="nohead"] .header,
 [data-fx~="nohead"] .header.is-stuck {
   background: transparent;
