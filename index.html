@@ -24,15 +24,15 @@
 <meta property="og:title" content="Восемь недель с криптой">
 <meta property="og:description" content="8 недель один на один: 16 личных созвонов, чат между ними и помощь в момент вашей первой операции.">
 <meta property="og:url" content="https://8weekscrypto.com/">
-<meta property="og:image" content="https://8weekscrypto.com/assets/img/og-cover.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Сергей Кербер — автор программы «Восемь недель с криптой»">
+<meta property="og:image" content="https://8weekscrypto.com/assets/img/og-cover-8weeks.jpg">
+<meta property="og:image:width" content="1536">
+<meta property="og:image:height" content="1024">
+<meta property="og:image:alt" content="Восемь недель с криптой — 8 недель один на один: 16 личных созвонов, чат между ними и помощь в момент вашей первой операции">
 <meta property="og:locale" content="ru_RU">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Восемь недель с криптой">
 <meta name="twitter:description" content="8 недель один на один: 16 личных созвонов, чат между ними и помощь в момент вашей первой операции.">
-<meta name="twitter:image" content="https://8weekscrypto.com/assets/img/og-cover.jpg">
+<meta name="twitter:image" content="https://8weekscrypto.com/assets/img/og-cover-8weeks.jpg">
 
 <!-- Разметка данных. Здесь только то, что написано на самой странице: ни цены,
      ни даты старта на сайте нет, а выдумывать их в разметке нельзя — поисковик
@@ -57,7 +57,7 @@
       "description": "Персональная программа: понять, как устроена крипта, и научиться самостоятельно покупать, хранить и переводить активы. Без трейдинга, сигналов и обещаний доходности.",
       "inLanguage": "ru",
       "url": "https://8weekscrypto.com/",
-      "image": "https://8weekscrypto.com/assets/img/og-cover.jpg",
+      "image": "https://8weekscrypto.com/assets/img/og-cover-8weeks.jpg",
       "provider": { "@id": "https://8weekscrypto.com/#author" },
       "author": { "@id": "https://8weekscrypto.com/#author" },
       "teaches": [
@@ -136,9 +136,9 @@
 </script>
 <noscript><style>html.is-loading, html.is-loading body { overflow: auto !important; } .pl { display: none !important; }</style></noscript>
 
-<link rel="stylesheet" href="assets/css/tokens.css?v=481">
-<link rel="stylesheet" href="assets/css/styles.css?v=481">
-<link rel="stylesheet" href="assets/css/responsive.css?v=481">
+<link rel="stylesheet" href="assets/css/tokens.css?v=482">
+<link rel="stylesheet" href="assets/css/styles.css?v=482">
+<link rel="stylesheet" href="assets/css/responsive.css?v=482">
 <!-- Восьмёрка собрана двумя окружностями, а не текстом: шрифт в значке
      вкладки подставляется системный и на разных машинах разный.
      Подложка своя, чёрная со скруглением: на светлой теме белая
@@ -1366,9 +1366,10 @@
          край реза выше пояса. Меняя файл, режьте так же — иначе поедет
          не рамка, а само кадрирование.
 
-         Заменив портрет, пересоберите картинку для превью ссылок:
-           sips -s format jpeg -s formatOptions 80 -Z 630 assets/img/founder.jpg --out /tmp/og.jpg
-           sips -p 630 1200 --padColor 000000 /tmp/og.jpg --out assets/img/og-cover.jpg -->
+         Картинка для превью ссылок с этим снимком больше не связана:
+         превью — отдельный баннер assets/img/og-cover-8weeks.jpg, 1536x1024.
+         Меняя его, поменяйте и og:image:width / og:image:height в шапке,
+         иначе Telegram отведёт под превью место не той пропорции. -->
     <div class="founder">
       <figure class="founder__shot" data-reveal>
         <img src="assets/img/founder.jpg" alt="Сергей Кербер"
@@ -1782,8 +1783,8 @@
 })();
 </script>
 
-<script src="assets/js/warptext.js?v=481" defer></script>
-<script src="assets/js/coinpit.js?v=481" defer></script>
-<script src="assets/js/main.js?v=481" defer></script>
+<script src="assets/js/warptext.js?v=482" defer></script>
+<script src="assets/js/coinpit.js?v=482" defer></script>
+<script src="assets/js/main.js?v=482" defer></script>
 </body>
 </html>
