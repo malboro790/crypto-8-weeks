@@ -23,7 +23,7 @@
   var FX = (function () {
     var v = (location.search.match(/[?&]fx=([^&]*)/) || [])[1] || '';
     v = decodeURIComponent(v).replace(/[,+]/g, ' ');
-    if (/\bplain\b/.test(v)) v = 'nocoins noanim noreveal nohead';
+    if (/\bplain\b/.test(v)) v = 'nocoins noanim noreveal nohead nofixed';
     if (v) document.documentElement.setAttribute('data-fx', v);
     return ' ' + v + ' ';
   })();
