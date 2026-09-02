@@ -545,7 +545,31 @@
      ширины, то есть при повороте. Высота окна его больше не трогает —
      разрывать петлю нужно именно здесь. 100svh остаётся запасным значением
      до первого запуска скрипта. */
-  .hero { min-height: var(--hero-h, 100svh); }
+  .hero { min-height: var(--vph, 100svh); }
+
+  /* Все отступы, считанные от высоты окна, переведены на замороженное
+     число. Их немного, но именно они делали раскладку подвижной: замер
+     показал, что при изменении высоты окна с 852 на 700 меняли размер
+     пять блоков, а высота документа — на 67 пикселей. Среди них оба места,
+     на которые жалуется владелец: второй экран и блок репетитора.
+
+     Доли те же, что были: 7% высоты окна так и остались семью процентами.
+     Разница в том, что число теперь берётся из замороженной величины,
+     а не из живой. Вид на загрузке не меняется — меняется только то,
+     что он перестаёт зависеть от панелей браузера. */
+  .hero { padding-top: clamp(104px, calc(var(--vph, 100svh) * .12), 148px);
+          padding-bottom: clamp(56px, calc(var(--vph, 100svh) * .07), 96px); }
+  #promise { padding-top: calc((clamp(240px, calc(var(--vph, 100svh) * .30), 330px) + 30px) * 1.2 / 2);
+             padding-bottom: clamp(24px, calc(var(--vph, 100svh) * .03), 48px); }
+  .promise__inner { padding-top: clamp(96px, calc(var(--vph, 100svh) * .16), 160px);
+                    gap: clamp(16px, calc(var(--vph, 100svh) * .026), 44px); }
+  .promise__img { width: clamp(96px, min(11vw, calc(var(--vph, 100svh) * .19)), 176px); }
+  #security { padding-top: clamp(40px, calc(var(--vph, 100svh) * .08), 104px);
+              padding-bottom: clamp(40px, calc(var(--vph, 100svh) * .08), 104px); }
+  .risks__belt { margin-top: clamp(28px, calc(var(--vph, 100svh) * .045), 64px); }
+  .solution__top { margin-top: clamp(64px, calc(var(--vph, 100svh) * .088), 128px); }
+  .solution__parts { margin-top: clamp(32px, calc(var(--vph, 100svh) * .044), 64px); }
+  .sec-head--center { row-gap: clamp(14px, calc(var(--vph, 100svh) * .019), 24px); }
 
   /* Шапка без фильтра подложки.
 
