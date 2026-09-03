@@ -194,9 +194,22 @@
 
        Между порогами пятьдесят два пикселя: случайные колебания их
        не перекрывают, а осознанная прокрутка перекрывает сразу. */
+    /* Прокрутку читаем у того, кто её ведёт.
+
+       На тач-устройствах прокручивается не документ, а тело страницы:
+       окно стоит на месте, и window.scrollY там всегда ноль. Читать его
+       значило бы никогда не узнать, что страница ушла вниз, — шапка
+       осталась бы прозрачной над белыми секциями, где её текст белый.
+
+       Одно выражение работает в обоих случаях: когда документ прокручен,
+       у тела ноль, когда прокручено тело — ноль у окна. */
+    function scrolled() {
+      return window.scrollY || document.body.scrollTop || 0;
+    }
+
     function update() {
       if (fxOff('nohead')) { ticking = false; return; }
-      var y = window.scrollY;
+      var y = scrolled();
       if (header) {
         var stuck = header.classList.contains('is-stuck');
         header.classList.toggle('is-stuck', y > (stuck ? 12 : 64));
@@ -208,7 +221,12 @@
       ticking = true;
       requestAnimationFrame(update);
     }
+    /* Слушаем оба: событие прокрутки у элемента не всплывает до окна,
+       поэтому при прокрутке тела window о ней не узнает. Какой из двух
+       реально работает — решает медиазапрос, и он может смениться
+       поворотом экрана, так что подписываемся на оба сразу. */
     window.addEventListener('scroll', onScroll, { passive: true });
+    document.body.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
     update();
   })();
