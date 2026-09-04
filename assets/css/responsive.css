@@ -760,15 +760,16 @@
    Отключается для сравнения: ?fx=novc
    -------------------------------------------------------------------------- */
 @media (max-width: 900px) and (hover: none) {
-  #security { content-visibility: auto; contain-intrinsic-size: auto 268px; }
-  #program  { content-visibility: auto; contain-intrinsic-size: auto 2087px; }
-  #how      { content-visibility: auto; contain-intrinsic-size: auto 2073px; }
-  #about    { content-visibility: auto; contain-intrinsic-size: auto 1795px; }
-  #price    { content-visibility: auto; contain-intrinsic-size: auto 1038px; }
+  #scenarios { content-visibility: auto; contain-intrinsic-size: auto 1279px; }
+  #security  { content-visibility: auto; contain-intrinsic-size: auto  268px; }
+  #learn     { content-visibility: auto; contain-intrinsic-size: auto  652px; }
+  #tutor     { content-visibility: auto; contain-intrinsic-size: auto 2055px; }
+  #program   { content-visibility: auto; contain-intrinsic-size: auto 2087px; }
+  #how       { content-visibility: auto; contain-intrinsic-size: auto 2073px; }
+  #about     { content-visibility: auto; contain-intrinsic-size: auto 1795px; }
+  #price     { content-visibility: auto; contain-intrinsic-size: auto 1038px; }
+  #three     { content-visibility: auto; contain-intrinsic-size: auto  653px; }
+  #call      { content-visibility: auto; contain-intrinsic-size: auto  299px; }
 
-  [data-fx~="novc"] #security,
-  [data-fx~="novc"] #program,
-  [data-fx~="novc"] #how,
-  [data-fx~="novc"] #about,
-  [data-fx~="novc"] #price { content-visibility: visible; }
+  [data-fx~="novc"] #main > section { content-visibility: visible; }
 }
