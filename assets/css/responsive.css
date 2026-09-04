@@ -505,6 +505,34 @@
   .client { padding-right: 14px; }
   .client:nth-child(odd) { border-left: 0; padding-left: 0; }
   .client:nth-child(even) { border-left: 1px solid var(--c-line); padding-left: 14px; }
+  /* Последний клиент остаётся в ряду один, и его линия обрывалась
+     на середине сетки. Растягиваем сам пункт на оба столбца — тогда
+     и линия под ним идёт во всю ширину. */
+  .client:last-child:nth-child(odd) { grid-column: 1 / -1; padding-right: 0; }
+
+  /* Верхнее поле блока «Через 8 недель» в полтора раза больше: 0.75 -> 1.125.
+     Нижнее не трогаем. Высота содержимого при этом не меняется, поэтому
+     заявленный размер для пропуска отрисовки остаётся верным. */
+  #learn { padding-top: calc(var(--sp-vast) * 1.125); }
+
+  /* Программа: верхнее поле как было, нижнее в полтора раза больше —
+     просвет между последней неделей и белым блоком. Пятисот пикселей
+     с десктопа здесь не нужно: там они держат прилипание, а на телефоне
+     прилипания нет. */
+  #program {
+    padding-top: var(--sp-cinematic);
+    padding-bottom: calc(var(--sp-cinematic) * 1.5);
+  }
+
+  /* Блок репетитора выравнивается по центру целиком: заголовок таким и был,
+     а цифры, подписи, макеты и части программы стояли по левому краю
+     и на узком экране читались как незаконченный столбец. */
+  #tutor .stat,
+  #tutor .part { text-align: center; }
+  #tutor .part__art { margin-inline: auto; }
+  #tutor .tutor__face { justify-self: center; }
+  #tutor .stat__d,
+  #tutor .part__d { margin-inline: auto; }
 
   /* Умения: отступ от картинки в полтора раза больше, текст не доходит
      до правого края экрана. Поле — на тексте, а не на строке, чтобы линейки
@@ -766,7 +794,7 @@
   #tutor     { content-visibility: auto; contain-intrinsic-size: auto 2055px; }
   #program   { content-visibility: auto; contain-intrinsic-size: auto 2087px; }
   #how       { content-visibility: auto; contain-intrinsic-size: auto 2073px; }
-  #about     { content-visibility: auto; contain-intrinsic-size: auto 1795px; }
+  #about     { content-visibility: auto; contain-intrinsic-size: auto 1775px; }
   #price     { content-visibility: auto; contain-intrinsic-size: auto 1038px; }
   #three     { content-visibility: auto; contain-intrinsic-size: auto  653px; }
   #call      { content-visibility: auto; contain-intrinsic-size: auto  299px; }
