@@ -474,8 +474,10 @@
    -------------------------------------------------------------------------- */
 @media (max-width: 720px) {
 
-  /* Поле над блоком обещания — вдвое меньше. Оно отводило снимок от границы
-     смены темы, но на телефоне отводило на треть экрана. */
+  /* Поле над блоком обещания вчетверо меньше исходного. Оно отводило снимок
+     от границы смены темы, но на телефоне отводило на треть экрана. Сначала
+     уменьшил вдвое, потом ещё вдвое — теперь около восьмидесяти пикселей,
+     столько же, сколько между остальными блоками. */
   #promise { padding-top: calc((clamp(240px, 30vh, 330px) + 30px) * 1.2 / 2); }
 
   /* Поле под строкой держало место под наплыв снимка. На телефоне наплыва
@@ -533,6 +535,12 @@
   #tutor .tutor__face { justify-self: center; }
   #tutor .stat__d,
   #tutor .part__d { margin-inline: auto; }
+  /* Поле было только справа — им текст отводили от края, пока блок стоял
+     по левому краю. При выравнивании по центру одностороннее поле уводит
+     строку влево на половину своей ширины: выравнивание центральное,
+     а центр не тот. Снимаем — теперь строку держит сама середина колонки. */
+  #tutor .part__t,
+  #tutor .part__d { padding-right: 0; }
 
   /* Умения: отступ от картинки в полтора раза больше, текст не доходит
      до правого края экрана. Поле — на тексте, а не на строке, чтобы линейки
@@ -621,7 +629,7 @@
      что он перестаёт зависеть от панелей браузера. */
   .hero { padding-top: clamp(104px, calc(var(--vph, 100svh) * .12), 148px);
           padding-bottom: clamp(56px, calc(var(--vph, 100svh) * .07), 96px); }
-  #promise { padding-top: calc((clamp(240px, calc(var(--vph, 100svh) * .30), 330px) + 30px) * 1.2 / 2);
+  #promise { padding-top: calc((clamp(240px, calc(var(--vph, 100svh) * .30), 330px) + 30px) * 1.2 / 4);
              padding-bottom: clamp(24px, calc(var(--vph, 100svh) * .03), 48px); }
   .promise__inner { padding-top: clamp(96px, calc(var(--vph, 100svh) * .16), 160px);
                     gap: clamp(16px, calc(var(--vph, 100svh) * .026), 44px); }
@@ -791,7 +799,7 @@
   #scenarios { content-visibility: auto; contain-intrinsic-size: auto 1279px; }
   #security  { content-visibility: auto; contain-intrinsic-size: auto  268px; }
   #learn     { content-visibility: auto; contain-intrinsic-size: auto  652px; }
-  #tutor     { content-visibility: auto; contain-intrinsic-size: auto 2055px; }
+  #tutor     { content-visibility: auto; contain-intrinsic-size: auto 2014px; }
   #program   { content-visibility: auto; contain-intrinsic-size: auto 2087px; }
   #how       { content-visibility: auto; contain-intrinsic-size: auto 2073px; }
   #about     { content-visibility: auto; contain-intrinsic-size: auto 1775px; }
