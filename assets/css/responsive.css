@@ -783,8 +783,11 @@
    на них приходится 793 узла из 1261. Первые экраны не трогаем вовсе,
    там всего по двенадцать узлов и трогать нечего.
 
-   Размер каждой секции указан заранее и по факту — снят на 375 пикселях
-   ширины. Указывать нужно высоту СОДЕРЖИМОГО, а не всей секции: пока
+   Размер каждой секции указан заранее и по факту — снят на 393 пикселях
+   ширины: столько у распространённых нынче айфонов, и столько у того,
+   на котором это проверяет владелец. Сначала я снял на 375 и промахнулся
+   суммарно на 362 пикселя, а у одной секции на 149: высота содержимого
+   зависит от ширины, потому что от неё зависит перенос строк. Указывать нужно высоту СОДЕРЖИМОГО, а не всей секции: пока
    отрисовка пропущена, это число заменяет содержимое, а поля секции
    добавляются сверху. Дважды промахнулся, прежде чем это понял — сперва
    поставил полную высоту, потом полную с включённым свойством, и суммарная
@@ -796,15 +799,15 @@
    Отключается для сравнения: ?fx=novc
    -------------------------------------------------------------------------- */
 @media (max-width: 900px) and (hover: none) {
-  #scenarios { content-visibility: auto; contain-intrinsic-size: auto 1279px; }
-  #security  { content-visibility: auto; contain-intrinsic-size: auto  268px; }
+  #scenarios { content-visibility: auto; contain-intrinsic-size: auto 1205px; }
+  #security  { content-visibility: auto; contain-intrinsic-size: auto  245px; }
   #learn     { content-visibility: auto; contain-intrinsic-size: auto  652px; }
-  #tutor     { content-visibility: auto; contain-intrinsic-size: auto 2014px; }
-  #program   { content-visibility: auto; contain-intrinsic-size: auto 2087px; }
-  #how       { content-visibility: auto; contain-intrinsic-size: auto 2073px; }
-  #about     { content-visibility: auto; contain-intrinsic-size: auto 1775px; }
-  #price     { content-visibility: auto; contain-intrinsic-size: auto 1038px; }
-  #three     { content-visibility: auto; contain-intrinsic-size: auto  653px; }
+  #tutor     { content-visibility: auto; contain-intrinsic-size: auto 2020px; }
+  #program   { content-visibility: auto; contain-intrinsic-size: auto 2015px; }
+  #how       { content-visibility: auto; contain-intrinsic-size: auto 1924px; }
+  #about     { content-visibility: auto; contain-intrinsic-size: auto 1778px; }
+  #price     { content-visibility: auto; contain-intrinsic-size: auto 1014px; }
+  #three     { content-visibility: auto; contain-intrinsic-size: auto  624px; }
   #call      { content-visibility: auto; contain-intrinsic-size: auto  299px; }
 
   [data-fx~="novc"] #main > section { content-visibility: visible; }
